@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Waterfall flow</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: "Droid Serif","Helvetica Neue",Helvetica,Arial,sans-serif;
+            font-size: 14px;
+        }
+        .clearfix:after{
+            content: "";
+            display: block;
+            clear: both;
+        }
+        input,button,select,textarea{
+            outline:none;border: none;
+        }
+        a{
+            text-decoration: none;
+        }
+        ul,li{
+            list-style: none;
+        }
+        img{
+            border: none;
+        }
+        .wrap {
+            position: relative;
+            min-width: 440px;
+            width: 90%;
+            margin: 0 auto;
+        }
+        .item {
+            width: 200px;
+            margin: 10px;
+            position: absolute;
+            transition: all 0.5s ease-out;
+            font-size: 50px;
+            color: #fff;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div class="wrap"></div>
+<script src="jquery-2.0.3.min.js"></script><script>
+var WaterFall = {
+    init: function(){
+        // 添加 item 盒子
+        this.addItem();
+        // 添加好盒子就开始布局
+        this.layout();
+        // 改变窗口时执行
+        this.resize();
+    },
+    addItem: function(){
+        var wrap = $('.wrap');
+        // 生成30个div 随机高度 和 颜色
+        var item = '';
+        for (var i = 0; i < 100; i++) {
+            item +='<div class="item" style="height:'+parseInt(Math.random() * 200 + 100)+'px;background-color:'+this.getRandColor()+'">'+i+'</div>';
+        }
+        wrap.append(item);
+    },
+    layout: function(){
+        var elHeight = [];
+        // 计算每一行可以存放几个 item 总宽 / item宽度
+        var countWidth =  Math.floor( $('.wrap').width() / $('.item').width()); 
+        // 初始化添加 第一行高度的下标  
+        for (var i = 0; i < countWidth; i++) {
+            elHeight[i] = 0;
+        }
+        // 循环 所有item  
+        $('.item').each(function(index, el) {
+            // apply 传入数组 取得最小的高度
+            var minValue = Math.min.apply(this, elHeight);
+            console.log(minValue)
+            // 然后获取当前高度的索引
+            var minIndex = elHeight.indexOf(minValue)
+            // 修改当前的top 和 left 
+            $(this).css({
+                top: elHeight[minIndex],    // 获取当前索引对应的高度
+                left: $(this).outerWidth(true) * minIndex    // 当前的left值为 索引 * 宽度（位于第几个）
+            })
+            // 当前索引的高度 += 当前 item 的高度 （比如计算第二排高度时， 就等于上一个的 top + 当前的高度）elHeight[0] += 90  下一次高度就为90 
+            elHeight[minIndex] += $(this).outerHeight(true);
+        });
+    },
+    resize: function(){
+        $(window).resize(function() {
+            WaterFall.layout();
+        });
+    },
+    getRandColor: function(){
+        var str = '7890abcdef';
+        var colorStr = '#';
+        for(var i =0; i < 6; i++){
+            colorStr += str[ Math.floor(Math.random() * str.length) ];
+        }
+        return colorStr;
+    }
+}
+WaterFall.init(); // 执行
+</script>
+</body>
+</html>
