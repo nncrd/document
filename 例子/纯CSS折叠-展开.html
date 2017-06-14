@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>纯CSS折叠/展开</title>
+    <style type="text/css">
+        ul{
+            width:300px;
+            margin:0 auto;
+        }
+        li{
+            list-style: none;
+            min-height:37px;
+            width:100%;
+            border-radius: 4px;
+            margin-bottom: 3px;
+            background-color: rgb(245,245,245);
+            border:1px solid #ddd;
+        }
+        li>div{
+            height:0;
+            overflow:hidden;
+            border-top:1px solid #ddd;
+            border-radius: 0 0 4px 4px;
+            margin-bottom: -1px;
+            transition:height 0.6s;
+            background-color: white;
+        }
+        label{
+            position: absolute;
+            width:300px;
+            height: 37px;
+            overflow:hidden;
+        }
+        .radio + label{
+            background-color: red;
+        }
+        .radio + label{
+            background-color: red;
+        }
+        input{
+            width:0;
+            margin:0;
+            height:37px;
+            visibility: hidden;
+        }
+        input[name='collapseradio']:checked+label{
+            width:0;
+        }
+        input.radio1:checked+.radio2+label{
+            width:300px;
+        }
+        input.radio2:checked ~ .collapse-group{
+            margin-bottom: 0;
+            height:200px;
+        }
+        input.radio1:checked ~ .collapse-group{
+            height:0px;
+        } 
+        label::before{
+            position: absolute;
+            line-height: 37px;
+            cursor: pointer;
+            height:0;
+        }
+        #collapsecheck1 ~ label::before{
+            content:"选项卡1";
+        }
+        #collapsecheck2 ~ label::before{
+            content:"选项卡2";
+        }
+        #collapsecheck3 ~ label::before{
+            content:"选项卡3";
+        }
+        input:checked ~ label::before{
+            text-decoration: underline;
+        }
+        label:hover::before{
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <section>
+        <ul>
+            <li>
+                <input type="radio" id="collapsecheck1" class="radio1" name="collapseradio">
+                <label for="collapsecheck1"></label>
+                <input type="radio" id="collapseradio1" class="radio2" name="collapseradio">
+                <label for="collapseradio1"></label>
+                <div class="collapse-group">
+                    <p>1111</p>
+                </div>
+            </li>
+            <li>
+                <input type="radio" id="collapsecheck2" class="radio1" name="collapseradio">
+                <label for="collapsecheck2"></label>
+                <input type="radio" id="collapseradio2" class="radio2" name="collapseradio">
+                <label for="collapseradio2"></label>
+                <div class="collapse-group">
+                    <p>2222</p>
+                </div>
+            </li>
+            <li>
+                <input type="radio" id="collapsecheck3" class="radio1" name="collapseradio">
+                <label for="collapsecheck3"></label>
+                <input type="radio" id="collapseradio3" class="radio2" name="collapseradio">
+                <label for="collapseradio3"></label>
+                <div class="collapse-group">
+                    <p>2333</p>
+                </div>
+            </li>
+        </ul>
+    </section>
+</body>
+</html>
