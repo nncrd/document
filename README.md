@@ -6,6 +6,7 @@
 
 - [例子](../../tree/master/例子)
   - [canvas小游戏](../../tree/master/例子/canvas小游戏)
+  - [echart表格Demo](../../tree/master/例子/echartDemo)
   - [CSS图案](../../tree/master/例子/图案.html)
   - [瀑布流式布局](../../tree/master/例子/瀑布流式布局.html)
   - [纯CSS折叠-展开](../../tree/master/例子/纯CSS折叠-展开.html)
@@ -16,5 +17,5 @@
   - [4.ComputedPropertiesAndWatchers](../../tree/master/vue2demo/4.ComputedPropertiesAndWatchers)
   - [5.ClassAndStyleBindings](../../tree/master/vue2demo/5.ClassAndStyleBindings)
   - [6.ConditionalRendering](../../tree/master/vue2demo/6.ConditionalRendering)
-  - [7.ListRendering](../../tree/master/vue2demo/7.ListRendering)  
+  - [7.ListRendering](../../tree/master/vue2demo/7.ListRendering)
   - [js/vue.js](../../tree/master/vue2demo/js/vue.js)
