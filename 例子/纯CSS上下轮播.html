@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>纯CSS上下轮播</title>
+    <style type="text/css">
+        *{padding: 0;margin: 0;}
+        .out{
+            width: 200px;
+            height: 100px;
+            margin: 20px auto;
+            overflow: hidden;
+            text-align: center;
+      margin-top:100px;
+      border:solid 1px #999;
+        }
+        .con{
+            width: 200px;
+            height: 800px;
+            overflow: hidden;
+            animation: move 5s linear infinite normal;
+            animation-fill-mode:forwards;
+        }
+        .con:hover{
+            animation-play-state:paused;
+            -webkit-animation-play-state:paused;
+        }
+        .con li{
+            list-style: none;
+            overflow: hidden;
+        }
+        .con img{
+            float: left;
+            width: 200px;
+            height: 100px;
+        }
+        @keyframes move{
+            0%{transform:translateY(0px);}
+            100%{transform:translateY(-720px);}
+        }
+        .out input{
+            display: none;
+        }
+        li div{
+            width: 198px;
+            height: 100px;
+            border:solid 1px red;
+        }
+    </style>
+</head>
+<body>
+    <div class="out">
+        <ul class="con">
+            <!--<li><img src="img/01.jpg" alt=""></li>
+            <li><img src="img/02.jpg" alt=""></li>
+            <li><img src="img/03.jpg" alt=""></li>
+            <li><img src="img/04.jpg" alt=""></li>
+            <li><img src="img/05.jpg" alt=""></li>
+            <li><img src="img/06.jpg" alt=""></li>
+            <li><img src="img/07.jpg" alt=""></li>
+            <li><img src="img/08.jpg" alt=""></li> -->
+            <li><div>1111</div></li>
+            <li><div>2222</div></li>
+            <li><div>3333</div></li>
+            <li><div>4444</div></li>
+            <li><div>5555</div></li>
+            <li><div>6666</div></li>
+            <li><div>7777</div></li>
+            <li><div>8888</div></li>         
+        </ul>
+    </div>
+</body>
+</html>
