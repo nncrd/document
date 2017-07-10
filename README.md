@@ -11,6 +11,7 @@
   - [瀑布流式布局](../../tree/master/例子/瀑布流式布局.html)
   - [纯CSS折叠-展开](../../tree/master/例子/纯CSS折叠-展开.html)
   - [纯CSS上下轮播](../../tree/master/例子/纯CSS上下轮播.html)
+  - [百度地图demo](../../tree/master/例子/百度地图demo.html)
 - [vue2demo](../../tree/master/vue2demo)
   - [1.Introduction](../../tree/master/vue2demo/1.Introduction)
   - [2.TheVueInstance](../../tree/master/vue2demo/2.TheVueInstance)
