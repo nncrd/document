@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+  <style type="text/css">
+  body, html,#allmap {width: 100%;height: 95%;overflow: hidden;margin:0;font-family:"微软雅黑";}
+  #r-result{ margin:10px;width: 100%;text-align: center;}
+  #r-result label{width:100px;height:30px;border-radius:2px;border:solid 1px #999;padding:5px;cursor: pointer;color: #666}
+  #r-result label:hover{background: rgba(196,0,0,0.2);color:white;border-color: rgba(196,0,0,0.6);}
+  #r-result label:active{background: rgba(196,0,0,0.5);color:white;border-color: rgba(196,0,0,0.6);}
+  </style>
+  <title>百度地图</title>
+</head>
+<body>
+  <div id="allmap"></div>
+  <div id="r-result">
+    <label onclick="add_control();"/>添加控件</label>
+    <label onclick="delete_control();"/>删除控件</label>
+    <label onclick="add_overlay();"/>添加覆盖物</label>
+    <label onclick="remove_overlay();"/>删除覆盖物</label>
+    <label onclick="polygon.enableEditing();polygon.enableEditing();">开启线、面编辑功能</label>
+    <label onclick="polygon.disableEditing();polygon.disableEditing();">关闭线、面编辑功能</label>
+  </div>
+</body>
+</html>
+<script type="text/javascript">
+  // 百度地图API功能
+  function loadJScript(){
+    var script=document.createElement("script");
+    script.type="text/javascript";
+    script.src="http://api.map.baidu.com/api?v=2.0&ak=re3f4g5s33VSAEOe29DtXXiGjubbaybb&callback=init"
+    document.body.appendChild(script);
+    var script=document.createElement("script");
+    script.type="text/javascript";
+    script.src="http://api.map.baidu.com/library/AreaRestriction/1.2/src/AreaRestriction_min.js"
+    document.body.appendChild(script);
+  }  
+  //添加控件和比例尺
+  function add_control(){
+    map.addControl(top_left_control);        
+    map.addControl(top_left_navigation);     
+    map.addControl(top_right_navigation);    
+  }
+  //移除控件和比例尺
+  function delete_control(){
+    map.removeControl(top_left_control);     
+    map.removeControl(top_left_navigation);  
+    map.removeControl(top_right_navigation); 
+  }
+  //添加覆盖物
+  function add_overlay(){
+    map.addOverlay(polygon);            //增加多边形
+    map.addOverlay(marker);            //增加圆   
+    marker.setAnimation(BMAP_ANIMATION_BOUNCE); //跳动的动画   
+    map.addOverlay(marker2);              // 将标注添加到地图中 
+  }
+  //清除覆盖物
+  function remove_overlay(){
+    map.clearOverlays();         
+  }
+  function init(){
+    map = new BMap.Map("allmap",{minZoom:10,maxZoom:18});    // 创建Map实例,设置地图允许的最小/大级别
+    var point = new BMap.Point(116.4035,39.915) //设置中心点坐标
+    map.centerAndZoom(point, 13);  // 初始化地图,设置地图级别
+    //map.addControl(new BMap.MapTypeControl());   //添加地图类型控件
+    map.setCurrentCity("南宁");          // 设置地图显示的城市 此项是必须设置的
+    map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
+    map.disableDragging();     //禁止拖拽
+
+    top_left_control = new BMap.ScaleControl({anchor: BMAP_ANCHOR_TOP_LEFT});// 左上角，添加比例尺
+    top_left_navigation = new BMap.NavigationControl();  //左上角，添加默认缩放平移控件
+    top_right_navigation = new BMap.NavigationControl({anchor: BMAP_ANCHOR_TOP_RIGHT, type: BMAP_NAVIGATION_CONTROL_SMALL}); //右上角，仅包含平移和缩放按钮
+    /*缩放控件type有四种类型:
+  BMAP_NAVIGATION_CONTROL_SMALL：仅包含平移和缩放按钮；BMAP_NAVIGATION_CONTROL_PAN:仅包含平移按钮；BMAP_NAVIGATION_CONTROL_ZOOM：仅包含缩放按钮*/
+
+    setTimeout(function(){
+      map.enableDragging();   //1秒后开启拖拽
+      //map.enableInertialDragging();   //1秒后开启惯性拖拽
+    }, 1000);
+
+    setTimeout(function(){
+      map.panTo(new BMap.Point(108.322062,22.832031));   //2秒后移动到南宁      
+    }, 2000);
+
+    //将地图显示范围设定在指定区域，地图拖出该区域后会重新弹回。
+    var b = new BMap.Bounds(new BMap.Point(108.263708,22.859275),new BMap.Point(108.393208,22.804982));
+    try { 
+      BMapLib.AreaRestriction.setBounds(map, b);
+    } catch (e) {
+      alert(e);
+    }
+
+    setTimeout(function(){
+      map.setZoom(15);   
+    }, 3000);  //3秒后放大到15级   
+
+    marker = new BMap.Marker(new BMap.Point(108.322062,22.832031)); // 创建点
+    var sContent =
+      "<div style='width:500px'><h4>南宁火车站</h4>" + 
+      "<img style='float:right;margin:4px' id='imgDemo' src='http://k.zol-img.com.cn/dcbbs/3009/a3008709_s.jpg' width='240' height='180' title='南宁火车站'/>" + 
+      "<p style='margin:0;line-height:1.5;font-size:13px;text-indent:2em'>南宁站位于广西壮族自治区南宁市西乡塘区中华   路28号，邮政编码530011。建于1951年，隶属南宁铁路局管辖。2013年4月24日，南宁站实行扩能改造，2015年4月全部完成，改造后拥有7个站台（13个站台面），13条轨道。南宁站接入柳南客专、南崇客专（即将开工），南广高铁、南昆客专，湘桂铁路，南昆铁路。未来，南宁铁路局将会对南宁站迎来一轮提升客运能力的大规模改造。</p></div>";
+    var infoWindow = new BMap.InfoWindow(sContent);  // 创建信息窗口对象
+    marker.addEventListener("click", function(){          
+      this.openInfoWindow(infoWindow);
+      //图片加载完毕重绘infowindow
+      document.getElementById('imgDemo').onload = function (){
+        infoWindow.redraw();   //防止在网速较慢，图片未加载时，生成的信息框高度比图片的总高度小，导致图片部分被隐藏
+      }
+    });
+    marker.enableDragging();           // 可拖拽
+    var label = new BMap.Label("我是文字标注哦",{offset:new BMap.Size(20,-20)});
+    marker.setLabel(label);
+     //创建小狐狸
+    var pt = new BMap.Point(108.32822,22.826035);
+    var myIcon = new BMap.Icon("http://lbsyun.baidu.com/jsdemo/img/fox.gif", new BMap.Size(300,157));
+    marker2 = new BMap.Marker(pt,{icon:myIcon});  // 创建标注
+    marker2.onclick=function(){alert("醉卧沙场君莫笑，古来征战几人回")}
+    marker2.enableDragging();           // 可拖拽
+    polygon = new BMap.Polygon([
+      new BMap.Point(108.263708,22.859275),
+      new BMap.Point(108.393208,22.859275),
+      new BMap.Point(108.393208,22.804982),
+      new BMap.Point(108.263708,22.804982)
+    ], {fillColor:"rgba(0,0,255,0.2)",strokeColor:"blue", strokeWeight:2, strokeOpacity:0.3});  //创建多边形
+
+  }
+  window.onload=loadJScript;
+</script>
