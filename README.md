@@ -21,4 +21,4 @@
   - [6.ConditionalRendering](../../tree/master/vue2demo/6.ConditionalRendering)
   - [7.ListRendering](../../tree/master/vue2demo/7.ListRendering)
   - [js/vue.js](../../tree/master/vue2demo/js/vue.js) 
-- [工作](../../tree/master/work)
+- [工作](../../tree/master/work/src)
