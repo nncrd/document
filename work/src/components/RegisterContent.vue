@@ -1,26 +1,27 @@
 <template>
-  <div>
+  <div>    
     <div style="padding:15px;">
-      <input type="text" placeholder="地点">
-      <input type="text" placeholder="单位">
+      <h3>{{message}}</h3>
+      <input type="text" v-if="message === '工作人员注册'" placeholder="地点">
+      <input type="text" v-if="message === '工作人员注册'" placeholder="单位">
       <input type="text" placeholder="手机号">
       <input type="text" placeholder="姓名">	    
       <x-button @click.native="showPlugin" type="primary">提交</x-button>
     </div>
-     <div v-transfer-dom v-show="show1">
+     <div v-transfer-dom v-show="confirmBox">
       <confirm v-model="show"
       :title = "title"
       @on-cancel="onCancel"
       @on-confirm="onConfirm"
       @on-show="onShow"
       @on-hide="onHide">
-        <p style="text-align:center;">内容</p>
+        <p style="text-align:center;">确定提交</p>
       </confirm>
     </div>   
   </div>
 </template>
 <style scoped>
-@import '../assets/css/RegisterStaff.css'
+@import '../assets/css/RegisterContent.css'
 </style>
 <script>
 import { Confirm, XButton ,TransferDomDirective as TransferDom} from 'vux'
@@ -35,11 +36,12 @@ export default{
   data () {
     return {
       show: false,
-      show1:false,
+      confirmBox:false,
       title:"提示"
     }
   },
-  methods: {
+  props:["message"],
+  methods: {    
     onCancel () {
       console.log('on cancel')
     },
@@ -56,7 +58,7 @@ export default{
       console.log('on show')
     },
     showPlugin () {
-      this.show1 = true;
+      this.confirmBox = true;
       this.show = true;
     }
   }

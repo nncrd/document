@@ -1,5 +1,7 @@
 <template>
   <div>
+    <x-header title="注册页面"></x-header>
+    <br>
     <div class="register">
       <img class="logo" src="../assets/vux_logo.png">
       <h3></h3>
@@ -8,24 +10,28 @@
         <tab :line-width=2 active-color='#41b883' v-model="index">
           <tab-item class="vux-center" :selected="activeType === item" v-for="(item, index) in registerType" @click="activeType = item" :key="index">{{item}}</tab-item>
         </tab>
-        <swiper v-model="index" height="30rem" :show-dots="false">
+        <swiper v-model="index" height="25rem" :show-dots="false">
           <swiper-item v-for="(item, index) in registerType" :key="index">
-            <div class="tab-swiper vux-center">{{item}}内容</div>
-            <register-staff></register-staff>
+            <div class="tab-swiper vux-center"></div>
+            <register-content :message="item"></register-content>
           </swiper-item>
         </swiper>
       </div>
     </div>    
   </div>
 </template>
-
+<style>
+</style>
 <script>
 const list = () => ['普通人员注册', '工作人员注册']
-import registerStaff from './registerStaff'
-import {Group, Cell, Tab, TabItem, Sticky, Divider, XButton, Swiper, SwiperItem} from 'vux'
+import RegisterContent from './RegisterContent'
+import {Group, Cell, Tab, TabItem, Sticky, Divider, XButton, Swiper, SwiperItem, XHeader, Actionsheet, TransferDom, ButtonTab, ButtonTabItem} from 'vux'
 export default {
+  directives: {
+    TransferDom
+  },
   components: {  
-    registerStaff,  
+    RegisterContent,  
     Group,
     Cell,
     Tab,
@@ -34,7 +40,11 @@ export default {
     Divider,
     XButton,
     Swiper,
-    SwiperItem    
+    SwiperItem,
+    XHeader,
+    Actionsheet,
+    ButtonTab,
+    ButtonTabItem    
   },
   data () {
     return {
