@@ -5,13 +5,17 @@ import FastClick from 'fastclick'
 import VueRouter from 'vue-router'
 import App from './App'
 import Register from './components/RegisterVux'
+import SuccessMsg from './components/SuccessMsg'
 
 Vue.use(VueRouter)
 
 const routes = [{
   path: '/',
   component: Register
-}]
+},{
+  path: '/SuccessMsg',
+  component: SuccessMsg
+},]
 
 const router = new VueRouter({
   routes
