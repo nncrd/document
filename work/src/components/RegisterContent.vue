@@ -24,6 +24,9 @@
 @import '../assets/css/RegisterContent.css'
 </style>
 <script>
+import Vue from 'vue'
+import VueRouter from 'vue-router'
+Vue.use(VueRouter)
 import { Confirm, XButton ,TransferDomDirective as TransferDom} from 'vux'
 export default{
   directives: {
@@ -50,6 +53,7 @@ export default{
       if (msg) {
         alert(msg)
       }
+      this.$router.push({path:'/SuccessMsg', params: { data: '222' }})
     },
     onHide () {
       console.log('on hide')

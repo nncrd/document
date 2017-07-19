@@ -1,19 +1,18 @@
 <template>
   <div>
-    <msg :title="注册成功" :description="内容详情，可根据实际需要安排，如果换行则不超过规定长度，居中展现<a href="javascript:void(0);">文字链接</a>" :buttons="buttons" :icon="icon"></msg>
+    <x-header title="注册页面"></x-header>
+    {{data}}
   </div>
 </template>
-
-
-
 <script>
-import { Msg, Divider, XButton } from 'vux'
+import { Msg, Divider, XButton ,XHeader} from 'vux'
 
 export default {
   components: {
     Msg,
     Divider,
-    XButton
+    XButton,
+    XHeader
   },
   methods: {
     changeIcon () {
@@ -36,6 +35,7 @@ export default {
   },
   data () {
     return {
+      data:'111',
       description: 'msg description',
       icon: '',
       buttons: [{
