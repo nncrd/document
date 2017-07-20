@@ -1,9 +1,12 @@
 <template>
   <div>
     <x-header title="注册页面"></x-header>
-    {{data}}
+    <div>
+      <msg :title="title" :description="description" :buttons="buttons" :icon="icon"></msg>
+    </div>
   </div>
 </template>
+
 <script>
 import { Msg, Divider, XButton ,XHeader} from 'vux'
 
@@ -35,16 +38,16 @@ export default {
   },
   data () {
     return {
-      data:'111',
-      description: 'msg description',
+      title:'注册成功！',
+      description: '内容详情',
       icon: '',
       buttons: [{
         type: 'primary',
-        text: 'primary button',
+        text: '推荐操作',
         onClick: this.changeIcon.bind(this)
       }, {
         type: 'default',
-        text: 'secondary button',
+        text: '辅助操作',
         link: '/demo'
       }]
     }
