@@ -10,7 +10,7 @@
   #r-result label:hover{background: rgba(196,0,0,0.2);color:white;border-color: rgba(196,0,0,0.6);}
   #r-result label:active{background: rgba(196,0,0,0.5);color:white;border-color: rgba(196,0,0,0.6);}
   #pictureDetail{cursor:pointer;position:absolute;width:100%;height:100%;top:0;left:0;z-index:10000;background:rgba(0,0,0,0.7);}
-  #pictureDetail div{width:40%;height:50%;border:double 3px #000;margin:10% auto;padding:5px;background: #fff;text-align:center}
+  #pictureDetail div{width:40%;border:double 3px #000;margin:10% auto;padding:5px;background: #fff;text-align:center}
   #pictureDetail img{max-width: 100%;max-height: 100%;}
   </style>
   <title>百度地图</title>
@@ -62,7 +62,7 @@
   function remove_overlay(){
     map.clearOverlays();         
   }
-  function xb(obj){
+  function checkPicture(obj){
     document.getElementsByTagName('body')[0].innerHTML+='<div id="pictureDetail" onclick="xb2()"><div><img src="http://k.zol-img.com.cn/dcbbs/3009/a3008709_s.jpg"></img></div></div>'
   }
   function xb2(){
@@ -107,7 +107,7 @@
     marker = new BMap.Marker(new BMap.Point(108.322062,22.832031)); // 创建点
     var sContent =
       "<div style='width:500px'><h4>南宁火车站</h4>" + 
-      "<img style='cursor:pointer;float:right;margin:4px' id='imgDemo' src='http://k.zol-img.com.cn/dcbbs/3009/a3008709_s.jpg' width='240' height='180' title='南宁火车站' onclick='xb(this)'/>" + 
+      "<img style='cursor:pointer;float:right;margin:4px' id='imgDemo' src='http://k.zol-img.com.cn/dcbbs/3009/a3008709_s.jpg' width='240' height='180' title='南宁火车站' onclick='checkPicture(this)'/>" + 
       "<p style='margin:0;line-height:1.5;font-size:13px;text-indent:2em'>南宁站位于广西壮族自治区南宁市西乡塘区中华   路28号，邮政编码530011。建于1951年，隶属南宁铁路局管辖。2013年4月24日，南宁站实行扩能改造，2015年4月全部完成，改造后拥有7个站台（13个站台面），13条轨道。南宁站接入柳南客专、南崇客专（即将开工），南广高铁、南昆客专，湘桂铁路，南昆铁路。未来，南宁铁路局将会对南宁站迎来一轮提升客运能力的大规模改造。</p></div>";
     
     var infoWindow = new BMap.InfoWindow(sContent);  // 创建信息窗口对象
