@@ -1,10 +1,13 @@
-input {
-  border:solid 1px #41b883;
+/*input {
+  border:solid 1px #35495e;
   height:2.5rem;
   margin: .5rem 0;
   border-radius:5px;
   font-size: 1.2rem;
   display: block;
   width: 100%;
+  text-align: center;
+}*/
+input {
   text-align: center;
 }

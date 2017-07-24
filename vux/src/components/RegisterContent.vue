@@ -1,12 +1,21 @@
 <template>
   <div>    
-    <div style="padding:15px;">
-      <h3>{{message}}</h3>
-      <input type="text" v-if="message === '工作人员注册'" placeholder="地点">
-      <input type="text" v-if="message === '工作人员注册'" placeholder="单位">
-      <input type="text" placeholder="手机号">
-      <input type="text" placeholder="姓名">	    
-      <x-button @click.native="showPlugin" type="primary">提交</x-button>
+    <div>
+      <group title="" v-if="message === '工作人员注册'">
+        <selector placeholder="请选择地址" v-model="address" title="地址" name="district" :options="addressList" @on-change="onChange"></selector>
+      </group> 
+      <group title="" v-if="message === '工作人员注册'">
+        <selector placeholder="请选择单位" v-model="department" title="单位" name="district" :options="departmentList" @on-change="onChange"></selector>
+      </group> 
+      <group title="">
+        <x-input title="手机号码" name="mobile" placeholder="请输入手机号码" keyboard="number" is-type="china-mobile"></x-input>
+      </group> 
+      <group title="">
+        <x-input title="姓名" name="username" placeholder="请输入姓名" is-type="china-name"></x-input>
+      </group>   
+      <box gap="10px 10px">  
+        <x-button @click.native="showPlugin" type="primary">提交</x-button>
+      </box>
     </div>
      <div v-transfer-dom v-show="confirmBox">
       <confirm v-model="show"
@@ -27,20 +36,28 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 Vue.use(VueRouter)
-import { Confirm, XButton ,TransferDomDirective as TransferDom} from 'vux'
+import {Selector, XInput, Box, Group,Confirm, XButton ,TransferDomDirective as TransferDom} from 'vux'
 export default{
   directives: {
     TransferDom
   },
   components: {
     XButton,
-    Confirm
+    Confirm,
+    XInput, 
+    Group,
+    Box,
+    Selector
   },
   data () {
     return {
       show: false,
       confirmBox:false,
-      title:"提示"
+      title:"提示",
+      address: '',
+      department: '',
+      addressList: [{key: 'nn', value: '南宁'}, {key: 'gl', value: '桂林'}, {key: 'lz', value: '柳州'}],
+      departmentList: [{key: 'gtj', value: '国土局'}, {key: 'slt', value: '水利厅'}]
     }
   },
   props:["message"],
@@ -53,7 +70,12 @@ export default{
       if (msg) {
         alert(msg)
       }
-      this.$router.push({path:'/SuccessMsg', params: { data: '222' }})
+      if(this.message === '普通人员注册'){
+        this.$router.push({name:'SuccessMsg', params: { title: '注册成功' , icon:''}})
+      }
+      else{
+        this.$router.push({name:'SuccessMsg', params: { title: '注册失败' , icon:'warn'}})
+      }
     },
     onHide () {
       console.log('on hide')
@@ -64,6 +86,9 @@ export default{
     showPlugin () {
       this.confirmBox = true;
       this.show = true;
+    },
+    onChange (val) {
+      console.log(val)
     }
   }
 }

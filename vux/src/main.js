@@ -14,6 +14,7 @@ const routes = [{
   component: Register
 },{
   path: '/SuccessMsg',
+  name: 'SuccessMsg',
   component: SuccessMsg
 },]
 

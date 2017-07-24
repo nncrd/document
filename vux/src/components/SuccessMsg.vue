@@ -2,14 +2,13 @@
   <div>
     <x-header title="注册页面"></x-header>
     <div>
-      <msg :title="title" :description="description" :buttons="buttons" :icon="icon"></msg>
+      <msg :title='title' :description="description" :buttons="buttons" :icon="icon"></msg>
     </div>
   </div>
 </template>
 
 <script>
 import { Msg, Divider, XButton ,XHeader} from 'vux'
-
 export default {
   components: {
     Msg,
@@ -38,17 +37,17 @@ export default {
   },
   data () {
     return {
-      title:'注册成功！',
+      title: this.$route.params.title,
       description: '内容详情',
-      icon: '',
+      icon: this.$route.params.icon,
       buttons: [{
         type: 'primary',
-        text: '推荐操作',
+        text: '确认',
         onClick: this.changeIcon.bind(this)
       }, {
         type: 'default',
-        text: '辅助操作',
-        link: '/demo'
+        text: '返回',
+        link: '/'
       }]
     }
   }

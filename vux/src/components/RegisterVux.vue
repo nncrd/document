@@ -7,7 +7,7 @@
       <h3></h3>
       <divider>账号注册</divider>
       <div>
-        <tab :line-width=2 active-color='#41b883' v-model="index">
+        <tab :line-width=2 active-color='#35495e' v-model="index">
           <tab-item class="vux-center" :selected="activeType === item" v-for="(item, index) in registerType" @click="activeType = item" :key="index">{{item}}</tab-item>
         </tab>
         <swiper v-model="index" height="25rem" :show-dots="false">
