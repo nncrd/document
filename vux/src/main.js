@@ -6,7 +6,7 @@ import VueRouter from 'vue-router'
 import App from './App'
 import Register from './components/RegisterVux'
 import SuccessMsg from './components/SuccessMsg'
-import eventReporter from './components/eventReporter'
+import EventReporter from './components/EventReporter'
 
 Vue.use(VueRouter)
 
@@ -18,9 +18,9 @@ const routes = [{
   name: 'SuccessMsg',
   component: SuccessMsg
 },{
-  path: '/eventReporter',
-  name: 'eventReporter',
-  component: eventReporter
+  path: '/EventReporter',
+  name: 'EventReporter',
+  component: EventReporter
 }]
 
 const router = new VueRouter({

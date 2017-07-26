@@ -9,3 +9,4 @@
 #pictureBtn{
   text-align:center;margin:0 0 .5em
 }
+#mainMap {width: 100%;height: 88%;overflow: hidden;margin:0;font-family:"微软雅黑";}

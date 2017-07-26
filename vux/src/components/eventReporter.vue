@@ -27,6 +27,7 @@
         @on-click-left="showMap = false"
         @on-click-right="showMap = false">
         </popup-header>
+        <div id="mainMap"></div>
       </popup>
     </div>
     <group :title="eventContent">  
@@ -61,6 +62,9 @@ export default {
   },
   components: {
     Divider, XButton ,XHeader, XTextarea, Group, XInput ,Datetime,Box, TransferDom, Previewer, Flexbox, FlexboxItem, Popup, PopupHeader
+  },
+  mounted(){
+    this.loadJScript();
   },
   methods: {
     onEvent (event) {
@@ -109,7 +113,26 @@ export default {
       this.imglist=[]
     },
     fetchPoint(){
-      this.showMap=true
+      this.showMap=true;      
+      this.initMap();
+    },
+    loadJScript(){
+      var script=document.createElement("script");
+      script.type="text/javascript";
+      script.src="http://api.map.baidu.com/api?v=2.0&ak=re3f4g5s33VSAEOe29DtXXiGjubbaybb&callback=init"
+      document.body.appendChild(script);
+      var script=document.createElement("script");
+      script.type="text/javascript";
+      script.src="http://api.map.baidu.com/library/AreaRestriction/1.2/src/AreaRestriction_min.js"
+      document.body.appendChild(script);
+    },
+    initMap(){
+      var map = new BMap.Map("mainMap",{minZoom:10,maxZoom:18});    // 创建Map实例,设置地图允许的最小/大级别
+      var point = new BMap.Point(116.4035,39.915) //设置中心点坐标
+      map.centerAndZoom(point, 13);  // 初始化地图,设置地图级别
+      //map.addControl(new BMap.MapTypeControl());   //添加地图类型控件
+      map.setCurrentCity("南宁");          // 设置地图显示的城市 此项是必须设置的
+      map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
     }
   },
   data () {
