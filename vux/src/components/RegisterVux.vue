@@ -2,35 +2,37 @@
   <div>
     <x-header title="注册页面"></x-header>
     <br>
-    <div class="register">
-      <img class="logo" src="../assets/vux_logo.png">
+    <div>
+      <div class="registerLogo">
+        <img class="logo" src="../assets/logo.png">
+      </div>
       <h3></h3>
       <divider>账号注册</divider>
-      <div>
-        <tab :line-width=2 active-color='#35495e' v-model="index">
-          <tab-item class="vux-center" :selected="activeType === item" v-for="(item, index) in registerType" @click="activeType = item" :key="index">{{item}}</tab-item>
-        </tab>
-        <swiper v-model="index" height="25rem" :show-dots="false">
-          <swiper-item v-for="(item, index) in registerType" :key="index">
-            <div class="tab-swiper vux-center"></div>
-            <register-content :message="item"></register-content>
-          </swiper-item>
-        </swiper>
-      </div>
+      <register-content :message="msg"></register-content>
     </div>    
   </div>
 </template>
 <style>
 </style>
 <script>
-const list = () => ['普通人员注册', '工作人员注册']
 import RegisterContent from './RegisterContent'
-import {Group, Cell, Tab, TabItem, Sticky, Divider, XButton, Swiper, SwiperItem, XHeader, Actionsheet, TransferDom, ButtonTab, ButtonTabItem} from 'vux'
+import {Group, Cell, Tab, TabItem, Sticky, Divider, XButton, Swiper, SwiperItem, XHeader, TransferDom} from 'vux'
+
+import Vue from 'vue'
+import 'vue-awesome/icons/flag' 
+// or import all icons if you don't care about bundle size 
+import 'vue-awesome/icons' 
+/* Register component with one of 2 methods */ 
+import Icon from 'vue-awesome/components/Icon' 
+// globally (in your main .js file) 
+Vue.component('icon', Icon)
+
 export default {
   directives: {
     TransferDom
   },
   components: {  
+    Icon,
     RegisterContent,  
     Group,
     Cell,
@@ -41,16 +43,11 @@ export default {
     XButton,
     Swiper,
     SwiperItem,
-    XHeader,
-    Actionsheet,
-    ButtonTab,
-    ButtonTabItem    
+    XHeader 
   },
   data () {
     return {
-      msg: 'Hello World!',
-      registerType: list(),
-      activeType: '普通人员注册',
+      msg: '工作人员注册',
       index: 0,
     }
   }
@@ -58,7 +55,7 @@ export default {
 </script>
 
 <style scoped>
-.register {
+.registerLogo {
   text-align: center;
 }
 .logo {

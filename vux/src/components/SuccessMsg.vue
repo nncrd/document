@@ -32,13 +32,14 @@ export default {
       }
       if (this.icon === 'waiting') {
         this.icon = 'success'
+        this.$router.push({name:'eventReporter', params: { title: '注册成功', test:'事件'}})
       }
     }
   },
   data () {
     return {
       title: this.$route.params.title,
-      description: '内容详情',
+      description: this.$route.params.description,
       icon: this.$route.params.icon,
       buttons: [{
         type: 'primary',

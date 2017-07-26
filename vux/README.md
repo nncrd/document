@@ -1,4 +1,4 @@
-# vux-project
+# emo
 
 > A Vue.js project
 

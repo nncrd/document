@@ -1,0 +1,11 @@
+#mapFetch{
+  text-align:center;
+  margin:1em 0;
+}
+#mapFetch svg{
+  margin-bottom:-.3em;
+  color:#1aad19;
+}
+#pictureBtn{
+  text-align:center;margin:0 0 .5em
+}

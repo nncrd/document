@@ -8,6 +8,9 @@
   width: 100%;
   text-align: center;
 }*/
-input {
+/*input {
   text-align: center;
+}*/
+#registerForm .weui-label{
+  width:85px;
 }

@@ -6,6 +6,7 @@ import VueRouter from 'vue-router'
 import App from './App'
 import Register from './components/RegisterVux'
 import SuccessMsg from './components/SuccessMsg'
+import eventReporter from './components/eventReporter'
 
 Vue.use(VueRouter)
 
@@ -16,7 +17,11 @@ const routes = [{
   path: '/SuccessMsg',
   name: 'SuccessMsg',
   component: SuccessMsg
-},]
+},{
+  path: '/eventReporter',
+  name: 'eventReporter',
+  component: eventReporter
+}]
 
 const router = new VueRouter({
   routes
@@ -29,5 +34,7 @@ Vue.config.productionTip = false
 /* eslint-disable no-new */
 new Vue({
   router,
-  render: h => h(App)
+  //render: h => h(App)
+  template: '<App/>',
+  components: { App }
 }).$mount('#app-box')
