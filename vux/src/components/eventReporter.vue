@@ -15,9 +15,10 @@
         <icon name='map-marker'scale='1.5'></icon>
         <x-button mini plain type="primary" @click.native='fetchPoint'>地图取点</x-button>
       </label>
+      <p v-show='eventLon'>选中点坐标：（{{eventLon}}，{{eventLat}}）</p>
     </div>
     <div v-transfer-dom>
-      <popup v-model="showMap" height="60%">
+      <popup v-model="showMap" height="100%">
         <!-- group already has a top border, so we need to hide header's bottom border-->
         <popup-header
         :left-text="leftText"
@@ -39,12 +40,14 @@
         <previewer :list="imglist" ref="previewer" :options="options"></previewer>
       </div>
       <div id="pictureBtn">
-          <x-button mini plain type="primary" @click.native='addPic'>添加图片</x-button>
-          <x-button mini plain type="default" @click.native='cleanPic'>清除图片</x-button>
+        <input type="file" id="fileImg" name="file" multiple="multiple" required="required" accept="image/*" @change="addPic"/>
+        <label for="fileImg">添加图片</label>
+        <x-button mini plain type="default" @click.native='cleanPic'>清除图片</x-button>
+        <h4>{{fileValue}}</h4>
       </div>
     </group>
-    <group title="请输入视频链接，多个地之以“，”隔开">      
-      <x-textarea :placeholder="eventLink" name="videoAddress" v-model="linkContent" @on-enter="inputClick"></x-textarea>
+    <group title="请输入视频链接，多个地址以“，”隔开">      
+      <x-textarea :placeholder="eventLink" name="videoAddress" v-model="linkContent"></x-textarea>
     </group>
     <box gap="1em 1em">  
       <x-button @click.native="eventSubmit" type="primary">提交</x-button>
@@ -64,17 +67,11 @@ export default {
     Divider, XButton ,XHeader, XTextarea, Group, XInput ,Datetime,Box, TransferDom, Previewer, Flexbox, FlexboxItem, Popup, PopupHeader
   },
   mounted(){
-    this.loadJScript();
+    this.initMap();
   },
-  methods: {
-    onEvent (event) {
-      console.log('on', event)
-    },
-    inputClick(){
-
-    },
+  methods: {  
     timeChange(){
-
+      alert(this.timeData)
     },
     eventSubmit(){
 
@@ -82,58 +79,74 @@ export default {
     show (index) {
       this.$refs.previewer.show(index)
     },
-    addPic(){
-      this.imglist=[{
-        src: 'https://ooo.0o0.ooo/2017/05/17/591c271ab71b1.jpg',
-        w: 800,
-        h: 400
-      },
-      {
-        src: 'https://ooo.0o0.ooo/2017/05/17/591c271acea7c.jpg',
-      }, 
-      {
-        src: 'https://ooo.0o0.ooo/2017/06/15/59425a592b949.jpeg',
-      }, 
-      {
-        src: 'https://ooo.0o0.ooo/2017/06/15/59425a592b949.jpeg',
-      }, 
-      {
-        src: 'https://ooo.0o0.ooo/2017/05/17/591c271ab71b1.jpg',
-      }, 
-      {
-        src: 'https://ooo.0o0.ooo/2017/05/17/591c271acea7c.jpg',
-      }]
+    addPic(e){
+      const files = e.target.files
+      if(!files.length) {
+        return;
+      } 
+      else if(files.length + this.imglist.length > 6) {
+        window.alert("每次最多只能上传6张图片");
+        return;
+      } 
+      if(typeof FileReader == 'undefined'){
+        this.fileValue="你的浏览器不支持FileReader接口！功能无法正常使用！"
+      }
+      for(var i=0;i<files.length;i++){
+        if(!/image\/\w+/.test(files[i].type)){
+          alert("请选择图片！");
+          return;
+        }   
+        var reader = new FileReader();        
+        reader.readAsDataURL(files[i]); //将文件以Data URL形式读入页面
+        var _this=this 
+        reader.onload=function(e){  
+          var arr={'src':this.result};
+          _this.imglist.push(arr);
+        }            
+      }
     },
     cleanPic(){
-      /*alert(this.imglist)
-      for (var i in this.imglist) {
-        delete this.imglist[i];
-      }
-      delete this.imglist*/
       this.imglist=[]
     },
     fetchPoint(){
-      this.showMap=true;      
-      this.initMap();
-    },
-    loadJScript(){
-      var script=document.createElement("script");
-      script.type="text/javascript";
-      script.src="http://api.map.baidu.com/api?v=2.0&ak=re3f4g5s33VSAEOe29DtXXiGjubbaybb&callback=init"
-      document.body.appendChild(script);
-      var script=document.createElement("script");
-      script.type="text/javascript";
-      script.src="http://api.map.baidu.com/library/AreaRestriction/1.2/src/AreaRestriction_min.js"
-      document.body.appendChild(script);
-    },
+      this.showMap=true;
+    },    
     initMap(){
-      var map = new BMap.Map("mainMap",{minZoom:10,maxZoom:18});    // 创建Map实例,设置地图允许的最小/大级别
-      var point = new BMap.Point(116.4035,39.915) //设置中心点坐标
-      map.centerAndZoom(point, 13);  // 初始化地图,设置地图级别
+      var map = new BMap.Map("mainMap",{minZoom:7,maxZoom:18});    // 创建Map实例,设置地图允许的最小/大级别
+      var point = new BMap.Point(105.553232,26.590884) //设置中心点坐标
+      map.centerAndZoom(point, 7);  // 初始化地图,设置地图级别
       //map.addControl(new BMap.MapTypeControl());   //添加地图类型控件
       map.setCurrentCity("南宁");          // 设置地图显示的城市 此项是必须设置的
-      map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
-    }
+      map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放      
+      var marker = new BMap.Marker(new BMap.Point(105.803232,26.190884))// 创建点
+      var _this=this
+      map.addEventListener("click",function(e){//监听点击地图事件
+        _this.eventLon=e.point.lng;
+        _this.eventLat=e.point.lat;
+        marker.point={'lng':e.point.lng,'lat':e.point.lat}
+        map.addOverlay(marker);            //显示点     
+      });
+      this.getBoundary(map)
+    },
+    getBoundary(map){       
+    var bdary = new BMap.Boundary();
+    bdary.get("广西", function(rs){       //获取行政区域
+      map.clearOverlays();        //清除地图覆盖物       
+      var count = rs.boundaries.length; //行政区域的点有多少个
+      if (count === 0) {
+        alert('未能获取当前输入行政区域');
+        return ;
+      }
+      var pointArray = [];
+      for (var i = 0; i < count; i++) {
+        var ply = new BMap.Polygon(rs.boundaries[i], {strokeWeight: 2, strokeColor: "#ff0000",fillColor:"rgba(255,255,255,0.4)"}); //建立多边形覆盖物
+        map.addOverlay(ply);  //添加覆盖物
+        pointArray = pointArray.concat(ply.getPath());
+      }    
+      //map.setViewport(pointArray);    //调整视野   
+      //map.panTo(new BMap.Point(105.203232,27.190884));
+    });   
+  }
   },
   data () {
     return {
@@ -145,9 +158,10 @@ export default {
       timeData:'',
       eventAddress:'事件地点',
       eventOccurAddress:'地点',
-      eventLon:'经度',
-      eventLat:'纬度',
+      eventLon:'',
+      eventLat:'',
       eventPic:'事件图片',
+      fileValue:'',
       eventLink:'链接',
       linkContent:'',
       eventContent:'事件内容',

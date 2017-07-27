@@ -6,7 +6,28 @@
   margin-bottom:-.3em;
   color:#1aad19;
 }
-#pictureBtn{
-  text-align:center;margin:0 0 .5em
+#mapFetch p{
+  margin:.5em 0;
 }
-#mainMap {width: 100%;height: 88%;overflow: hidden;margin:0;font-family:"微软雅黑";}
+#pictureBtn{
+  text-align:center;
+  margin:.5em 0;
+}
+#mainMap {
+  width: 100%;
+  height: 88%;
+  overflow: hidden;
+  margin:0;
+}
+#fileImg {
+  display:none
+}
+#fileImg+label {    
+  color: #1aad19;
+  border: 1px solid #1aad19;
+  display: inline-block;
+  padding: 0 1.32em;
+  line-height: 2.3;
+  font-size: 13px;
+  border-radius: 5px;
+}
