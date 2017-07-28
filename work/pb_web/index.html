@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>浦北县地质灾害气象条件监测预警系统</title>
+    <link href="static/materialize/css/materialize.min.css" rel="stylesheet" type="text/css">
+    <link href="http://ogbcvxavq.bkt.clouddn.com/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css" href="http://ogbcvxavq.bkt.clouddn.com/sweet-alert.css">
+    <script src="http://ogbcvxavq.bkt.clouddn.com/js/sweet-alert.min.js"></script>
+    <script>
+      "use strict";
+      let urlHead = '../../';
+//      let urlHead = 'http://localhost:8080/pb-web/';
+//      let urlHead = 'http://222.216.111.50:9380//pb-web/';
+      function checkPicture(obj){
+        $("#pictureDetail").show()
+        let src=obj.src.split('/thumbnail')[0]
+        $("#pictureDetail img").attr('src',src)
+      }
+      function closePicture(){
+        $("#pictureDetail").hide()
+      }
+    </script>
+    <style>
+      html,body,#app,main,.left-block,.middle-block,.right-block{height: 100%;background: #fafafa;}
+      #pictureDetail{cursor:pointer;position:absolute;width:100%;height:100%;top:0;left:0;z-index:10000;background:rgba(0,0,0,0.7);display: none}
+    #pictureDetail div{width:40%;max-height: 60%;overflow-y: auto;border:double 3px #000;margin:10% auto;padding:5px;background: #fff;text-align:center;border-radius: 5px}
+    #pictureDetail img{max-width: 100%;max-height: 100%;border-radius: 5px}
+    </style>
+  </head>
+  <body>
+    <div id="app"></div>
+    <!-- built files will be auto injected -->
+    <div id="pictureDetail" onclick='closePicture()'><div><img src=""></img></div></div>
+    <script src="http://ogbcvxavq.bkt.clouddn.com/js/jquery-2.1.4.min.js"></script>
+    <script src="static/materialize/js/materialize.min.js"></script>
+    <script src="https://cdn.bootcss.com/bluebird/3.5.0/bluebird.min.js"></script>
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=5hoPHGpq1xipcsN3xpGNijO0S1K5QVkG"></script>
+    <script type="text/javascript" src="static/js/info_box.js"></script>
+    <script src="http://ogbcvxavq.bkt.clouddn.com/jquery-form.js"></script>
+  </body>
+
+</html>
