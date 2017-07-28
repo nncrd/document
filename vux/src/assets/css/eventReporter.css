@@ -19,10 +19,10 @@
   overflow: hidden;
   margin:0;
 }
-#fileImg {
+#fileImg,#fileVideo {
   display:none
 }
-#fileImg+label {    
+#fileImg+label,#fileVideo+label {    
   color: #1aad19;
   border: 1px solid #1aad19;
   display: inline-block;
@@ -30,4 +30,7 @@
   line-height: 2.3;
   font-size: 13px;
   border-radius: 5px;
+}
+#video{
+  width:48%;
 }

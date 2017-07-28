@@ -46,6 +46,17 @@
         <h4>{{fileValue}}</h4>
       </div>
     </group>
+    <group :title="videoPreview">
+      <video id="video" controls="controls" >
+        <source :src="videoList">
+      </video>
+      <div id="pictureBtn">
+        <input type="file" id="fileVideo" name="file" multiple="multiple" required="required" accept="video/*" @change="addVideo"/>
+        <label for="fileVideo">添加视频</label>
+        <x-button mini plain type="default" @click.native='cleanVideo'>清除视频</x-button>
+        <h4>{{fileValue}}</h4>
+      </div>
+    </group>
     <group title="请输入视频链接，多个地址以“，”隔开">      
       <x-textarea :placeholder="eventLink" name="videoAddress" v-model="linkContent"></x-textarea>
     </group>
@@ -108,6 +119,37 @@ export default {
     cleanPic(){
       this.imglist=[]
     },
+    addVideo(e){
+      const files = e.target.files
+      if(!files.length) {
+        return;
+      } 
+      else if(files.length + this.videoList.length > 2) {
+        window.alert("每次最多只能上传2部视频");
+        return;
+      } 
+      if(typeof FileReader == 'undefined'){
+        this.fileValue="你的浏览器不支持FileReader接口！功能无法正常使用！"
+      }
+      for(var i=0;i<files.length;i++){
+        if(!/video\/\w+/.test(files[i].type)){
+          alert("请选择视频！");
+          return;
+        }   
+        var reader = new FileReader();        
+        reader.readAsDataURL(files[i]); //将文件以Data URL形式读入页面
+        var _this=this 
+        reader.onload=function(e){  
+          var arr={'src':this.result};
+          //_this.videoList.push(arr);
+          console.log(this.result)
+          _this.videoList=this.result
+        }            
+      }
+    },
+    cleanVideo(){
+      this.videoList=[]
+    },
     fetchPoint(){
       this.showMap=true;
     },    
@@ -163,6 +205,7 @@ export default {
       eventPic:'事件图片',
       fileValue:'',
       eventLink:'链接',
+      videoPreview:'视频预览',
       linkContent:'',
       eventContent:'事件内容',
       mainContent:'内容',
@@ -187,6 +230,7 @@ export default {
       {
         src: 'https://ooo.0o0.ooo/2017/05/17/591c271acea7c.jpg',
       }],
+      videoList:'',
       options: {
         getThumbBoundsFn (index) {
           // find thumbnail element
