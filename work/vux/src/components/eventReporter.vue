@@ -10,27 +10,7 @@
     <group :title="eventAddress">
       <x-input :placeholder="eventOccurAddress"></x-input>
     </group>  
-    <div id="mapFetch">
-      <label>
-        <icon name='map-marker'scale='1.5'></icon>
-        <x-button mini plain type="primary" @click.native='fetchPoint'>地图取点</x-button>
-      </label>
-      <p v-show='eventLon'>选中点坐标：（{{eventLon}}，{{eventLat}}）</p>
-    </div>
-    <div v-transfer-dom>
-      <popup v-model="showMap" height="100%">
-        <!-- group already has a top border, so we need to hide header's bottom border-->
-        <popup-header
-        :left-text="leftText"
-        :right-text="rightText"
-        :title="mapTitle"
-        :show-bottom-border="false"
-        @on-click-left="showMap = false"
-        @on-click-right="showMap = false">
-        </popup-header>
-        <div id="mainMap"></div>
-      </popup>
-    </div>
+    <event-map></event-map>
     <group :title="eventContent">  
       <x-textarea :max="250" name="description" :placeholder="mainContent"></x-textarea>
     </group>
@@ -47,9 +27,8 @@
       </div>
     </group>
     <group :title="videoPreview">
-      <video id="video" controls="controls" >
-        <source :src="videoList">
-      </video>
+      <div id="video" v-html="videoUrl">
+      </div>
       <div id="pictureBtn">
         <input type="file" id="fileVideo" name="file" multiple="multiple" required="required" accept="video/*" @change="addVideo"/>
         <label for="fileVideo">添加视频</label>
@@ -70,15 +49,13 @@
 </style>
 <script>
 import {Divider, XButton ,XHeader, XTextarea, Group, XInput ,Datetime,Box, TransferDom, Previewer, Flexbox, FlexboxItem, Popup, PopupHeader} from 'vux'
+import EventMap from './EventMap'
 export default {
   directives: {
     TransferDom
   },
   components: {
-    Divider, XButton ,XHeader, XTextarea, Group, XInput ,Datetime,Box, TransferDom, Previewer, Flexbox, FlexboxItem, Popup, PopupHeader
-  },
-  mounted(){
-    this.initMap();
+    Divider, XButton ,XHeader, XTextarea, Group, XInput ,Datetime,Box, TransferDom, Previewer, Flexbox, FlexboxItem, Popup, PopupHeader, EventMap
   },
   methods: {  
     timeChange(){
@@ -124,7 +101,7 @@ export default {
       if(!files.length) {
         return;
       } 
-      else if(files.length + this.videoList.length > 2) {
+      else if(files.length > 2) {
         window.alert("每次最多只能上传2部视频");
         return;
       } 
@@ -142,53 +119,15 @@ export default {
         reader.onload=function(e){  
           var arr={'src':this.result};
           //_this.videoList.push(arr);
-          console.log(this.result)
-          _this.videoList=this.result
+          //_this.videoList=this.result
+          let oldHtml=_this.videoUrl
+          _this.videoUrl+='<video controls="controls"><source src="'+this.result+'"></video>'
         }            
       }
     },
     cleanVideo(){
-      this.videoList=[]
-    },
-    fetchPoint(){
-      this.showMap=true;
-    },    
-    initMap(){
-      var map = new BMap.Map("mainMap",{minZoom:7,maxZoom:18});    // 创建Map实例,设置地图允许的最小/大级别
-      var point = new BMap.Point(105.553232,26.590884) //设置中心点坐标
-      map.centerAndZoom(point, 7);  // 初始化地图,设置地图级别
-      //map.addControl(new BMap.MapTypeControl());   //添加地图类型控件
-      map.setCurrentCity("南宁");          // 设置地图显示的城市 此项是必须设置的
-      map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放      
-      var marker = new BMap.Marker(new BMap.Point(105.803232,26.190884))// 创建点
-      var _this=this
-      map.addEventListener("click",function(e){//监听点击地图事件
-        _this.eventLon=e.point.lng;
-        _this.eventLat=e.point.lat;
-        marker.point={'lng':e.point.lng,'lat':e.point.lat}
-        map.addOverlay(marker);            //显示点     
-      });
-      this.getBoundary(map)
-    },
-    getBoundary(map){       
-    var bdary = new BMap.Boundary();
-    bdary.get("广西", function(rs){       //获取行政区域
-      map.clearOverlays();        //清除地图覆盖物       
-      var count = rs.boundaries.length; //行政区域的点有多少个
-      if (count === 0) {
-        alert('未能获取当前输入行政区域');
-        return ;
-      }
-      var pointArray = [];
-      for (var i = 0; i < count; i++) {
-        var ply = new BMap.Polygon(rs.boundaries[i], {strokeWeight: 2, strokeColor: "#ff0000",fillColor:"rgba(255,255,255,0.4)"}); //建立多边形覆盖物
-        map.addOverlay(ply);  //添加覆盖物
-        pointArray = pointArray.concat(ply.getPath());
-      }    
-      //map.setViewport(pointArray);    //调整视野   
-      //map.panTo(new BMap.Point(105.203232,27.190884));
-    });   
-  }
+      this.videoUrl=''
+    }
   },
   data () {
     return {
@@ -200,8 +139,6 @@ export default {
       timeData:'',
       eventAddress:'事件地点',
       eventOccurAddress:'地点',
-      eventLon:'',
-      eventLat:'',
       eventPic:'事件图片',
       fileValue:'',
       eventLink:'链接',
@@ -230,7 +167,7 @@ export default {
       {
         src: 'https://ooo.0o0.ooo/2017/05/17/591c271acea7c.jpg',
       }],
-      videoList:'',
+      videoUrl:'',
       options: {
         getThumbBoundsFn (index) {
           // find thumbnail element
@@ -245,11 +182,7 @@ export default {
           // Good guide on how to get element coordinates:
           // http://javascript.info/tutorial/coordinates
         }
-      },
-      showMap:false,
-      leftText:'取消',
-      rightText:'确定',
-      mapTitle:'请选取地址'
+      }
     }
   }
 }
