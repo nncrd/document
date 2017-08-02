@@ -7,7 +7,7 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>九宇科技</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0">
   <meta name="keywords" content="九宇蓝科技" />
 
   <!-- Facebook and Twitter integration -->
@@ -24,7 +24,7 @@
   <!-- Animate.css -->
   <link rel="stylesheet" href="css/animate.css">
   <!-- Icomoon Icon Fonts-->
-  <link rel="stylesheet" href="css/icomoon.css">
+  <!-- <link rel="stylesheet" href="css/icomoon.css"> -->
   <!-- Simple Line Icons -->
   <link rel="stylesheet" href="css/simple-line-icons.css">
   <!-- Owl Carousel -->
@@ -36,7 +36,7 @@
   <link rel="stylesheet" href="css/style.css">
 
   <!-- Styleswitcher ( This style is for demo purposes only, you may delete this anytime. ) -->
-  <link rel="stylesheet" id="theme-switch" href="css/style.css">
+  <!-- <link rel="stylesheet" id="theme-switch" href="css/style.css"> -->
   <!-- End demo purposes only -->
 
   <!-- Modernizr JS -->
@@ -64,9 +64,9 @@
                   <li class="active"><a href="#" data-nav-section="home"><span><i class="icon-home"></i> 网站首页</span></a></li>
                   <li><a href="#" data-nav-section="services"><span><i class="icon-question"></i> 公司介绍</span></a></li>
                   <li><a href="#" data-nav-section="press"><span><i class="icon-star"></i> 公司服务</span></a></li>
-                  <li><a href="#" data-nav-section="testimonials"><span><i class="icon-globe"></i> 行业服务</span></a></li>
-                  <li><a href="#" data-nav-section="pricing"><span><i class="icon-game-controller"></i> 公司产品</span></a></li>
-                  <li><a href="#" data-nav-section="invate"><span><i class="icon-graduation"></i> 招贤纳士</span></a></li>
+                  <li id="liInvate"><a href="#" data-nav-section="testimonials"><span><i class="icon-globe"></i> 行业服务</span></a></li>
+                  <li id="liPicing"><a href="#" data-nav-section="pricing"><span><i class="icon-game-controller"></i> 公司产品</span></a></li>
+                  <li id="liTestimonials"><a href="#" data-nav-section="invate"><span><i class="icon-graduation"></i> 招贤纳士</span></a></li>
                   <li><a href="#" data-nav-section="contact"><span><i class="icon-phone"></i> 联系我们</span></a></li>
                 </ul>
               </div>
@@ -144,13 +144,13 @@
         <div class="col-md-12 section-heading text-center">
           <div class="row">
             <div class="col-md-4 col-md-offset-1 to-animate2">
-              <img src="images/about1.png" class="img-responsive" alt="图片加载中">
+              <img src="images/about1.jpg" class="img-responsive" alt="图片加载中">
             </div>
             <div class="col-md-6 to-animate3">
             <textarea class="textareaBox" readonly="readonly">
               广西九宇蓝科技有限公司是一家从事计算机软件、移动互联和行业信息化建设等的咨询、设计和开发服务的高科技公司，定位是预警应急系统。公司致力于为政府部门及企事业单位提供最安全、最便捷和最高效信息化整体解决方案。              
               公司以战略化咨询、平台化技术、专业化服务打造精细化的产品和解决方案，通过先进的管理方法和实施经验，不断创新产品与服务平台。
-              公司专注于核心技术框架的构建和不断优化，以及模块化产品的研发，定制类开发在满足用户需求的前提下不断提升用户体验，并提供最细致化的信息化建设全流程跟踪服务。              
+              公司专注于核心技术框架的构建和不断优化，以及模块化产品的研发，定制类开发在满足用户需求的前提下不断提升用户体验，并提供最细致化的信息化建设全流程跟踪服务。
             </textarea>
             </div>
           </div>
@@ -250,8 +250,8 @@
         </div>
         <div class="modal-body">
           <div class="row">
-            <div class="col-sm-5">
-              <img src="src.jpg" data-echo="images/designingSoftware.png" class="img-responsive">
+            <div class="col-sm-5" style="text-align: center">
+              <img src="images/src.jpg" data-echo="images/designingSoftware.jpg" class="img-responsive" style="display: inline-block;">
             </div>
             <div class="col-sm-7">
               <textarea class="textareaBox" readonly="readonly">
@@ -276,8 +276,8 @@
         </div>
         <div class="modal-body">
           <div class="row">
-            <div class="col-sm-5">
-              <img src="src.jpg" data-echo="images/solution.png" class="img-responsive">
+            <div class="col-sm-5" style="text-align: center">
+              <img src="images/src.jpg" data-echo="images/solution.jpg" class="img-responsive" style="display: inline-block;">
             </div>
             <div class="col-sm-7">
               <textarea class="textareaBox" readonly="readonly">
@@ -301,8 +301,8 @@
         </div>
         <div class="modal-body">
           <div class="row">
-            <div class="col-sm-5">
-              <img src="src.jpg" data-echo="images/APPdesign.png" class="img-responsive">
+            <div class="col-sm-5" style="text-align: center">
+              <img src="images/src.jpg" data-echo="images/APPdesign.jpg" class="img-responsive" style="display: inline-block;">
             </div>
             <div class="col-sm-7">
               <textarea class="textareaBox" readonly="readonly">
@@ -391,7 +391,7 @@
           <div class="box-testimony to-animate">
             <blockquote>
               <span class="quote"><span><i class="icon-layers"></i></span></span>
-              <img src="src.jpg" data-echo="images/svcdetail4.jpg" class="img-responsive"> 
+              <img src="images/src.jpg" data-echo="images/svcdetail4.jpg" class="img-responsive"> 
               <div class="textContent">
                 <textarea class="textareaBox" readonly="readonly">
       县气象局存在多个孤立的业务系统，且内外网物理隔离，业务人员每天需反复多次登录多个业务才能完成当天工作，效率很低，且会影响预警信息发布实效。
@@ -409,7 +409,7 @@
           <div class="box-testimony to-animate">
             <blockquote>
               <span class="quote"><span><i class="icon-layers"></i></span></span>
-              <img src="src.jpg" data-echo="images/svcdetail5.jpg" class="img-responsive"> 
+              <img src="images/src.jpg" data-echo="images/svcdetail5.jpg" class="img-responsive"> 
               <div class="textContent">
                 <textarea class="textareaBox" readonly="readonly">
       各个县局拥有很多个业务系统，但各县局的具体业务需求不完全相同，需要一个切合的智能化的软件平台。
@@ -425,7 +425,7 @@
           <div class="box-testimony to-animate">
             <blockquote>
               <span class="quote"><span><i class="icon-layers"></i></span></span>
-              <img src="src.jpg" data-echo="images/svcdetail6.jpg" class="img-responsive"> 
+              <img src="images/src.jpg" data-echo="images/svcdetail6.jpg" class="img-responsive"> 
               <div class="textContent">
                 <textarea class="textareaBox" readonly="readonly">
       “互联网+”和信息化高速发展的时代，政府部门和企事业单位的信息化建设在加速进行。在此大背景下，我司会辅助各县局做好本局气象信息化建设的相关工作,如：信息化系统可行性研究方案的编写、信息化建设项目的申报、项目实施方案的编写、项目验收文档的编写、操作手册和培训材料的编写等。                
@@ -440,7 +440,7 @@
           <div class="box-testimony to-animate">
             <blockquote>
               <span class="quote"><span><i class="icon-layers"></i></span></span>
-              <img src="src.jpg" data-echo="images/svcdetail7.jpg" class="img-responsive"> 
+              <img src="images/src.jpg" data-echo="images/svcdetail7.jpg" class="img-responsive"> 
               <div class="textContent">
                 <textarea class="textareaBox" readonly="readonly">
       我公司为各县局的硬件设备和软件系统提供定时的巡检服务，一旦发现问题及隐患就及时解决，以确保县级软硬件系统的安全和稳定运行。
@@ -455,7 +455,7 @@
           <div class="box-testimony to-animate">
             <blockquote>
               <span class="quote"><span><i class="icon-layers"></i></span></span>
-              <img src="src.jpg" data-echo="images/svcdetail8.jpg" class="img-responsive"> 
+              <img src="images/src.jpg" data-echo="images/svcdetail8.jpg" class="img-responsive"> 
               <div class="textContent">
                 <textarea class="textareaBox" readonly="readonly">
       我们公司免费为各个市县局提供信息化建设的技术咨询服务，具体包括：业务系统、三农服务、防灾减灾等信息化建设，我们会基于当前最时新的技术并结合各个县局的具体业务需求和软硬件条件提出最适合本局的项目建设方案，以文档和系统原型等方式提交给业主单位。
@@ -515,7 +515,7 @@
             <div class="col-md-12 content">
               <img src="images/chongzuoweixinFM_s.jpg">
               <p>崇左气象局微信公众号，是我司为崇左气象局开发的多元素微信公众号。</p>
-              <p>该微信号包含了<b>天气预报</b>、<b>本地特色</b>、<b>群众互动</b>等丰富功能。</p>
+              <p>该微信号包含了<b>天气预报</b>、<b>本地特色</b>、<b>群众互动</b>等丰富功能。</p><br><br>
             </div>
             <div class="col-md-8 col-md-offset-2">
               <a href="#" class="btn btn-primary btn-block" class="btn btn-default btn-sm" data-toggle="modal" data-target="#worksModal3">查看详细</a>
@@ -541,7 +541,7 @@
                     </div>
                     <div class="PPT_img">
                         <div class="PPT_img_min">
-                            <img src="src.jpg" data-echo="images/xiangmu/yingji_all.png" class="img-responsive">
+                            <img src="images/src.jpg" data-echo="images/xiangmu/yingji_all.png" class="img-responsive">
                         </div>
                     </div>
                     <div class="PPT_text">
@@ -557,7 +557,7 @@
                     </div>
                     <div class="PPT_img">
                         <div class="PPT_img_min">
-                            <img src="src.jpg" data-echo="images/xiangmu/yingji_1.png" class="img-responsive">
+                            <img src="images/src.jpg" data-echo="images/xiangmu/yingji_1.png" class="img-responsive">
                         </div>
                     </div>
                     <div class="PPT_text">
@@ -573,7 +573,7 @@
                     </div>
                     <div class="PPT_img">
                         <div class="PPT_img_min">
-                            <img src="src.jpg" data-echo="images/xiangmu/yingji_2.png" class="img-responsive">
+                            <img src="images/src.jpg" data-echo="images/xiangmu/yingji_2.png" class="img-responsive">
                         </div>
                     </div>
                     <div class="PPT_text">
@@ -589,7 +589,7 @@
                     </div>
                     <div class="PPT_img">
                         <div class="PPT_img_min">
-                            <img src="src.jpg" data-echo="images/xiangmu/yingji_3.png" class="img-responsive">
+                            <img src="images/src.jpg" data-echo="images/xiangmu/yingji_3.png" class="img-responsive">
                         </div>
                     </div>
                     <div class="PPT_text">
@@ -605,7 +605,7 @@
                     </div>
                     <div class="PPT_img">
                         <div class="PPT_img_min">
-                            <img src="src.jpg" data-echo="images/xiangmu/yingji_4.png" class="img-responsive">
+                            <img src="images/src.jpg" data-echo="images/xiangmu/yingji_4.png" class="img-responsive">
                         </div>
                     </div>
                     <div class="PPT_text">
@@ -675,7 +675,7 @@
                     </div>
                     <div class="PPT_img">
                         <div class="PPT_img_min">
-                            <img src="src.jpg" data-echo="images/xiangmu/pubei_all_s.jpg" class="img-responsive">
+                            <img src="images/src.jpg" data-echo="images/xiangmu/pubei_all_s.jpg" class="img-responsive">
                         </div>
                     </div>
                     <div class="PPT_text">
@@ -693,7 +693,7 @@
                     </div>
                     <div class="PPT_img">
                         <div class="PPT_img_min">
-                            <img src="src.jpg" data-echo="images/xiangmu/pubei_zongjiagou.jpg" class="img-responsive">
+                            <img src="images/src.jpg" data-echo="images/xiangmu/pubei_zongjiagou.jpg" class="img-responsive">
                         </div>
                     </div>
                     <div class="PPT_text">
@@ -711,7 +711,7 @@
                     </div>
                     <div class="PPT_img">
                         <div class="PPT_img_min">
-                            <img src="src.jpg" data-echo="images/xiangmu/pubei_qianduan1.jpg" class="img-responsive">
+                            <img src="images/src.jpg" data-echo="images/xiangmu/pubei_qianduan1.jpg" class="img-responsive">
                         </div>
                     </div>
                     <div class="PPT_text">
@@ -727,7 +727,7 @@
                     </div>
                     <div class="PPT_img">
                         <div class="PPT_img_min">
-                            <img src="src.jpg" data-echo="images/xiangmu/pubei_qianduan2.jpg" class="img-responsive">
+                            <img src="images/src.jpg" data-echo="images/xiangmu/pubei_qianduan2.jpg" class="img-responsive">
                         </div>
                     </div>
                     <div class="PPT_text">
@@ -745,7 +745,7 @@
                     </div>
                     <div class="PPT_img">
                         <div class="PPT_img_min">
-                            <img src="src.jpg" data-echo="images/xiangmu/pubei_qianduan3.jpg" class="img-responsive">
+                            <img src="images/src.jpg" data-echo="images/xiangmu/pubei_qianduan3.jpg" class="img-responsive">
                         </div>
                     </div>
                     <div class="PPT_text">
@@ -760,7 +760,7 @@
                     </div>
                     <div class="PPT_img">
                         <div class="PPT_img_min">
-                            <img src="src.jpg" data-echo="images/xiangmu/pubei_qianduan4.jpg" class="img-responsive">
+                            <img src="images/src.jpg" data-echo="images/xiangmu/pubei_qianduan4.jpg" class="img-responsive">
                         </div>
 
                     </div>
@@ -777,7 +777,7 @@
                     </div>
                     <div class="PPT_img">
                         <div class="PPT_img_min">
-                            <img src="src.jpg" data-echo="images/xiangmu/pubei_houtai.jpg" class="img-responsive">
+                            <img src="images/src.jpg" data-echo="images/xiangmu/pubei_houtai.jpg" class="img-responsive">
                         </div>
 
                     </div>
@@ -846,7 +846,7 @@
                     </div>
                     <div class="PPT_img">
                         <div class="PPT_img_min">
-                            <img src="src.jpg" data-echo="images/xiangmu/cz_all.jpg" class="img-responsive">
+                            <img src="images/src.jpg" data-echo="images/xiangmu/cz_all.jpg" class="img-responsive">
                         </div>
                     </div>
                     <div class="PPT_text">
@@ -861,7 +861,7 @@
                     </div>
                     <div class="PPT_img">
                         <div class="PPT_img_min">
-                            <img src="src.jpg" data-echo="images/xiangmu/cz_1.jpg" class="img-responsive">
+                            <img src="images/src.jpg" data-echo="images/xiangmu/cz_1.jpg" class="img-responsive">
                         </div>
                     </div>
                     <div class="PPT_text">
@@ -877,7 +877,7 @@
                     </div>
                     <div class="PPT_img">
                         <div class="PPT_img_min">
-                            <img src="src.jpg" data-echo="images/xiangmu/cz_2.jpg" class="img-responsive">
+                            <img src="images/src.jpg" data-echo="images/xiangmu/cz_2.jpg" class="img-responsive">
                         </div>
                     </div>
                     <div class="PPT_text">
@@ -895,7 +895,7 @@
                     </div>
                     <div class="PPT_img">
                         <div class="PPT_img_min">
-                            <img src="src.jpg" data-echo="images/xiangmu/cz_3.jpg" class="img-responsive">
+                            <img src="images/src.jpg" data-echo="images/xiangmu/cz_3.jpg" class="img-responsive">
                         </div>
                     </div>
                     <div class="PPT_text">
@@ -963,7 +963,7 @@
             </div>
             <div class="row">
                 <div class="col-md-4 to-animate" id="mainPic">                       
-                    <!-- <img src="src.jpg" data-echo="images/recruit2.png"> -->
+                    <!-- <img src="images/src.jpg" data-echo="images/recruit2.png"> -->
                 </div>                
                 <div class="col-md-8 to-animate2">
                     <div class="invate-box">
@@ -1181,7 +1181,7 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-body">
-                        <img src="src.jpg" data-echo="images/address.png" class="img-responsive">
+                        <img src="images/src.jpg" data-echo="images/address.png" class="img-responsive">
                         <p>公交：25路;211路</p>
                         <p>地铁：1号线南湖站C1出口</p>
                     </div>
@@ -1302,12 +1302,12 @@
     <script src="js/main.js"></script>
 
     <!-- Add fancyBox main JS and CSS files -->  
-    <script src="js/jquery.fancybox.js" type="text/javascript"></script>  
-    <link href="css/jquery.fancybox.css" media="screen" rel="stylesheet" type="text/css" />  
+    <!-- <script src="js/jquery.fancybox.js" type="text/javascript"></script>   -->
+    <!-- <link href="css/jquery.fancybox.css" media="screen" rel="stylesheet" type="text/css" />   -->
     <!-- fancybox_app -->  
-    <script src="js/fancybox_app.js" type="text/javascript"></script>  
+    <!-- <script src="js/fancybox_app.js" type="text/javascript"></script>   -->
     <!-- Add mousewheel plugin (this is optional) -->  
-    <script src="js/jquery.mousewheel-3.0.6.pack.js" type="text/javascript"></script>  
+    <!-- <script src="js/jquery.mousewheel-3.0.6.pack.js" type="text/javascript"></script>   -->
     <script src="js/jQueryRotate.js" type="text/javascript"></script>  
 	</body>
 </html>

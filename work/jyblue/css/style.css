@@ -60,6 +60,9 @@ h1, h2, h3, h4, h5, h6 {
   #slider .item{
     height: 580px;
   }  
+  #jyrt-invate,#jyrt-pricing,#jyrt-testimonials,#liInvate,#liPicing,#liTestimonials{
+    display:none;
+  }
 }
 ::-webkit-selection {
   color: #fff;
@@ -348,6 +351,9 @@ background:#618ef4 !important;}
 #jyrt-contact {
   padding: 7em 0;
 }
+#jyrt-invate {
+  padding: 7em 0 2em 0;
+}
 @media screen and (max-width: 480px) {
   #jyrt-our-services,
   #jyrt-about-us,
@@ -355,12 +361,10 @@ background:#618ef4 !important;}
   #jyrt-testimonials,
   #jyrt-pricing,
   #jyrt-press,
-  #jyrt-contact {
-    padding: 10em 0;
-  }
-}
-#jyrt-invate {
-  padding: 7em 0 2em 0;
+  #jyrt-contact,
+  #jyrt-invate {
+    padding: 4em 0 0;
+  }   
 }
 #jyrt-invate .invate-box{
   text-align: center;
@@ -442,6 +446,15 @@ background:#618ef4 !important;}
     font-weight: 100;
     overflow: auto;
     text-align: left;
+}
+@media screen and (max-width: 768px) {
+  #jyrt-invate li>div{
+    transition:none;
+    -webkit-transition:none;
+    -khtml-transition:none;
+    -moz-transition:none;
+    -o-transition:none;
+  }
 }
 #jyrt-invate .invate-box div i{
   color:#e52b50;
@@ -1423,6 +1436,9 @@ header #navbar li a {
   background-image:url(../images/3.jpg);
 }
 @media screen and (max-width: 768px) {
+  *{
+    -webkit-backface-visibility: hidden;
+  }
   #itemBg1{
     background-image:url(../images/1_s.jpg);
   }
@@ -1431,6 +1447,17 @@ header #navbar li a {
   }
   #itemBg3{
     background-image:url(../images/3_s.jpg);
+  }
+}
+@media screen and (max-width: 480px) {
+  #itemBg1{
+    background-image:url(../images/1_ss.jpg);
+  }
+  #itemBg2{
+    background-image:url(../images/2_ss.jpg);
+  }
+  #itemBg3{
+    background-image:url(../images/3_ss.jpg);
   }
 }
 
