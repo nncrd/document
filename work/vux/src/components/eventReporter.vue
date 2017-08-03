@@ -36,9 +36,6 @@
         <h4>{{fileValue}}</h4>
       </div>
     </group>
-    <group title="请输入视频链接，多个地址以“，”隔开">      
-      <x-textarea :placeholder="eventLink" name="videoAddress" v-model="linkContent"></x-textarea>
-    </group>
     <box gap="1em 1em">  
       <x-button @click.native="eventSubmit" type="primary">提交</x-button>
     </box>
@@ -101,32 +98,35 @@ export default {
       if(!files.length) {
         return;
       } 
-      else if(files.length > 2) {
-        window.alert("每次最多只能上传2部视频");
+      else if(files.length+this.videoCount > 3) {
+        window.alert("每次最多只能上传3部视频");
         return;
       } 
       if(typeof FileReader == 'undefined'){
         this.fileValue="你的浏览器不支持FileReader接口！功能无法正常使用！"
       }
-      for(var i=0;i<files.length;i++){
+      for(var i=0;i<files.length;i++){        
         if(!/video\/\w+/.test(files[i].type)){
           alert("请选择视频！");
           return;
         }   
+        if(files[i].size>30*1024*1024)
+        {
+          alert("请上传小于30M的视频!");
+          return;
+        }
         var reader = new FileReader();        
         reader.readAsDataURL(files[i]); //将文件以Data URL形式读入页面
         var _this=this 
         reader.onload=function(e){  
-          var arr={'src':this.result};
-          //_this.videoList.push(arr);
-          //_this.videoList=this.result
-          let oldHtml=_this.videoUrl
           _this.videoUrl+='<video controls="controls"><source src="'+this.result+'"></video>'
-        }            
+        }   
+        this.videoCount++         
       }
     },
     cleanVideo(){
-      this.videoUrl=''
+      this.videoUrl='';
+      this.videoCount=0;
     }
   },
   data () {
@@ -143,10 +143,9 @@ export default {
       fileValue:'',
       eventLink:'链接',
       videoPreview:'视频预览',
-      linkContent:'',
+      videoCount:0,
       eventContent:'事件内容',
       mainContent:'内容',
-      linkData:'',
       imglist: [{
         src: 'https://ooo.0o0.ooo/2017/05/17/591c271ab71b1.jpg',
         w: 800,
