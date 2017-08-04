@@ -47,6 +47,9 @@
 <script>
 import {Divider, XButton ,XHeader, XTextarea, Group, XInput ,Datetime,Box, TransferDom, Previewer, Flexbox, FlexboxItem, Popup, PopupHeader} from 'vux'
 import EventMap from './EventMap'
+import Vue from 'vue'
+import VueResource from 'vue-resource'
+Vue.use(VueResource)
 export default {
   directives: {
     TransferDom
@@ -59,7 +62,8 @@ export default {
       alert(this.timeData)
     },
     eventSubmit(){
-
+      let data={'name':"xb",'url':"www.baidu.com"}
+      this.$http.post('http://127.0.0.1:8080',data).then(res=>{console.log(res)})
     },
     show (index) {
       this.$refs.previewer.show(index)

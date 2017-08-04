@@ -34,6 +34,8 @@ import {XButton, TransferDom ,Popup, PopupHeader} from 'vux'
     },
     mounted(){
       this.initMap();
+      console.log(this.mapTitle)
+      console.log(this.$parent.event)
     },
     data(){
       return{
