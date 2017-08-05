@@ -63,7 +63,9 @@ export default {
     },
     eventSubmit(){
       let data={'name':"xb",'url':"www.baidu.com"}
-      this.$http.post('http://127.0.0.1:8080',data).then(res=>{console.log(res)})
+      this.$http.post('/vueApi.php',data).then(function(res){
+  console.log(res);  
+})
     },
     show (index) {
       this.$refs.previewer.show(index)

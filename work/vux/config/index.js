@@ -27,7 +27,15 @@ module.exports = {
     autoOpenBrowser: false,
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    proxyTable: {},
+    proxyTable: {
+    	 '/vueApi.php': {
+    	target: 'http://127.0.0.1:80/test/vueApi.php',
+    	changeOrigin: true,
+    	pathRewrite: {
+      '^/vueApi.php': '/vueApi.php'
+    }
+  }
+    },
     // CSS Sourcemaps off by default because relative paths are "buggy"
     // with this option, according to the CSS-Loader README
     // (https://github.com/webpack/css-loader#sourcemaps)
