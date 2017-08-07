@@ -29,7 +29,7 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
     	 '/vueApi.php': {
-    	target: 'http://127.0.0.1:80/test/vueApi.php',
+    	target: 'http://localhost:8026/test/vueApi.php',
     	changeOrigin: true,
     	pathRewrite: {
       '^/vueApi.php': '/vueApi.php'

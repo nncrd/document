@@ -2,17 +2,17 @@
   <div>
     <x-header title="事件上报页面"></x-header>
     <group :title="event">
-      <x-input :placeholder="eventTitle"></x-input>
+      <x-input :placeholder="eventTitleDefault" v-model:value=eventTitle required></x-input>
     </group>
     <group :title="eventTime">
-      <datetime v-model="timeData" default-selected-value="2017-06-18 13" format="YYYY-MM-DD HH" :placeholder="timeSelect" @on-change="timeChange" :title="eventStartTime"></datetime>
+      <datetime v-model="timeData" default-selected-value="2017-06-18 13" format="YYYY-MM-DD HH" :placeholder="timeSelect" @on-change="timeChange" :title="eventStartTime" required></datetime>
     </group>
     <group :title="eventAddress">
-      <x-input :placeholder="eventOccurAddress"></x-input>
+      <x-input :placeholder="eventOccurAddressDefault" v-model:value=eventOccurAddress required></x-input>
     </group>  
-    <event-map></event-map>
+    <event-map @tranPoint='tranPoint'></event-map>
     <group :title="eventContent">  
-      <x-textarea :max="250" name="description" :placeholder="mainContent"></x-textarea>
+      <x-textarea :max="250" name="description" :placeholder="mainContentDefault" v-model:value=mainContent></x-textarea>
     </group>
     <group :title="eventPic">
       <img class="previewer-demo-img" v-for="(item, index) in imglist" :src="item.src" width="100" @click="show(index)">
@@ -27,7 +27,7 @@
       </div>
     </group>
     <group :title="videoPreview">
-      <div id="video" v-html="videoUrl">
+      <div id="video" v-html="videoUrlHtml">
       </div>
       <div id="pictureBtn">
         <input type="file" id="fileVideo" name="file" multiple="multiple" required="required" accept="video/*" @change="addVideo"/>
@@ -48,8 +48,9 @@
 import {Divider, XButton ,XHeader, XTextarea, Group, XInput ,Datetime,Box, TransferDom, Previewer, Flexbox, FlexboxItem, Popup, PopupHeader} from 'vux'
 import EventMap from './EventMap'
 import Vue from 'vue'
-import VueResource from 'vue-resource'
-Vue.use(VueResource)
+//import VueResource from 'vue-resource'
+import axios from 'axios'
+//Vue.use(VueResource)
 export default {
   directives: {
     TransferDom
@@ -59,13 +60,35 @@ export default {
   },
   methods: {  
     timeChange(){
-      alert(this.timeData)
+      
     },
     eventSubmit(){
-      let data={'name':"xb",'url':"www.baidu.com"}
-      this.$http.post('/vueApi.php',data).then(function(res){
-  console.log(res);  
-})
+      var imgUrl=this.imglist[0].src;
+      for(let i=1;i<this.imglist.length;i++){
+        imgUrl+=','+this.imglist[i].src
+      }
+      let postData={
+        'eventTitle':this.eventTitle,
+        'timeData':this.timeData,
+        'eventOccurAddress':this.eventOccurAddress,
+        'eventLon':this.eventLon,
+        'eventLat':this.eventLat,
+        'mainContent':this.mainContent,
+        'imgUrl':imgUrl,    
+        'videoUrl':this.videoUrl
+      }
+      //this.$http.post('/vueApi.php',postData).then(function(res){console.log(res);})
+      axios({
+        method:'post',
+        url:'/vueApi.php',
+        data: postData
+      })
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });  
     },
     show (index) {
       this.$refs.previewer.show(index)
@@ -125,34 +148,46 @@ export default {
         reader.readAsDataURL(files[i]); //将文件以Data URL形式读入页面
         var _this=this 
         reader.onload=function(e){  
-          _this.videoUrl+='<video controls="controls"><source src="'+this.result+'"></video>'
+          _this.videoUrlHtml+='<video controls="controls"><source src="'+this.result+'"></video>';
+          _this.videoUrl+=this.result+',';
         }   
         this.videoCount++         
       }
     },
     cleanVideo(){
-      this.videoUrl='';
+      this.videoUrl=''
+      this.videoUrlHtml='';
       this.videoCount=0;
+    },
+    tranPoint(data){
+      this.eventLon=data['lng'];
+      this.eventLat=data['lat'];
     }
   },
   data () {
     return {
       event:'事件标题',
-      eventTitle:'标题',
+      eventTitleDefault:'标题',
+      eventTitle:'',
       eventTime:'发生时间',
       eventStartTime:'时间',
       timeSelect:'请选择时间',
       timeData:'',
       eventAddress:'事件地点',
-      eventOccurAddress:'地点',
+      eventOccurAddressDefault:'地点',
+      eventOccurAddress:'',
+      eventLon:'',
+      eventLat:'',
       eventPic:'事件图片',
       fileValue:'',
       eventLink:'链接',
       videoPreview:'视频预览',
       videoCount:0,
       eventContent:'事件内容',
-      mainContent:'内容',
-      imglist: [{
+      mainContentDefault:'内容',
+      mainContent:'',
+      imglist: [
+      {
         src: 'https://ooo.0o0.ooo/2017/05/17/591c271ab71b1.jpg',
         w: 800,
         h: 400
@@ -173,6 +208,7 @@ export default {
         src: 'https://ooo.0o0.ooo/2017/05/17/591c271acea7c.jpg',
       }],
       videoUrl:'',
+      videoUrlHtml:'',
       options: {
         getThumbBoundsFn (index) {
           // find thumbnail element

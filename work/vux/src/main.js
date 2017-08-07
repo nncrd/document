@@ -4,24 +4,9 @@ import Vue from 'vue'
 import FastClick from 'fastclick'
 import VueRouter from 'vue-router'
 import App from './App'
-import Register from './components/RegisterVux'
-import SuccessMsg from './components/SuccessMsg'
-import EventReporter from './components/EventReporter'
+import routes from './router/index';
 
 Vue.use(VueRouter)
-
-const routes = [{
-  path: '/',
-  component: Register
-},{
-  path: '/SuccessMsg',
-  name: 'SuccessMsg',
-  component: SuccessMsg
-},{
-  path: '/EventReporter',
-  name: 'EventReporter',
-  component: EventReporter
-}]
 
 const router = new VueRouter({
   routes

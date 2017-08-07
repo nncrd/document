@@ -64,7 +64,8 @@ import {XButton, TransferDom ,Popup, PopupHeader} from 'vux'
           _this.eventLon=e.point.lng;
           _this.eventLat=e.point.lat;
           marker.point={'lng':e.point.lng,'lat':e.point.lat}
-          map.addOverlay(marker);            //显示点     
+          map.addOverlay(marker);        //显示点
+          _this.$emit('tranPoint',marker.point)
         });
         this.getBoundary(map)
       },
