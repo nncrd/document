@@ -28,13 +28,20 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-    	 '/vueApi.php': {
-    	target: 'http://localhost:8026/test/vueApi.php',
-    	changeOrigin: true,
-    	pathRewrite: {
-      '^/vueApi.php': '/vueApi.php'
-    }
-  }
+      '/vueApi.php': {
+        target: 'http://localhost:8026/test/vueApi.php',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/vueApi.php': '/vueApi.php'
+        }
+      },
+      '/wechat/reporter-exist': {
+        target: 'http://localhost:80/test/vueApi.php',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/wechat/reporter-exist': '/wechat/reporter-exist'
+        }
+      }
     },
     // CSS Sourcemaps off by default because relative paths are "buggy"
     // with this option, according to the CSS-Loader README

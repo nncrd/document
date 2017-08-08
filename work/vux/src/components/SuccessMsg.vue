@@ -18,22 +18,22 @@ export default {
   },
   methods: {
     changeIcon () {
-      if (!this.icon || this.icon === 'success') {
-        this.icon = 'warn'
-        return
-      }
-      if (this.icon === 'warn') {
-        this.icon = 'info'
-        this.$router.push({name:'EventReporter', params: { title: '注册成功', test:'事件'}})
-      }
-      if (this.icon === 'info') {
-        this.icon = 'waiting'
-        return
-      }
-      if (this.icon === 'waiting') {
-        this.icon = 'success'
-        this.$router.push({name:'EventReporter', params: { title: '注册成功', test:'事件'}})
-      }
+      // if (!this.icon || this.icon === 'success') {
+      //   this.icon = 'warn'
+      //   return
+      // }
+      // if (this.icon === 'warn') {
+      //   this.icon = 'info'
+      //   this.$router.push({name:'EventReporter', params: { title: '注册成功', test:'事件'}})
+      // }
+      // if (this.icon === 'info') {
+      //   this.icon = 'waiting'
+      //   return
+      // }
+      // if (this.icon === 'waiting') {
+      //   this.icon = 'success'
+      //   this.$router.push({name:'EventReporter', params: { title: '注册成功', test:'事件'}})
+      // }
     }
   },
   data () {
