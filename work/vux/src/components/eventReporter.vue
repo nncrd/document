@@ -1,14 +1,14 @@
-<template>
+<template transition="fadeOutLeft">
   <div>
     <x-header title="事件上报页面"></x-header>
     <group :title="event">
-      <x-input :placeholder="eventTitleDefault" v-model:value=eventTitle required></x-input>
+      <x-input :placeholder="eventTitleDefault" v-model:value=eventTitle required :max="50"></x-input>
     </group>
     <group :title="eventTime">
       <datetime v-model="timeData" default-selected-value="2017-06-18 13" format="YYYY-MM-DD HH" :placeholder="timeSelect" @on-change="timeChange" :title="eventStartTime" required></datetime>
     </group>
     <group :title="eventAddress">
-      <x-input :placeholder="eventOccurAddressDefault" v-model:value=eventOccurAddress required></x-input>
+      <x-input :placeholder="eventOccurAddressDefault" v-model:value=eventOccurAddress required :max="50"></x-input>
     </group>  
     <event-map @tranPoint='tranPoint'></event-map>
     <group :title="eventContent">  

@@ -1,4 +1,4 @@
-<template>
+<template transition="fadeOutLeft">
   <div id="registerForm"> 
     <group title="">
       <selector placeholder="请选择地区" v-model="area" title="所在地区" name="district" :options="areaList" @on-change="onChange"></selector>

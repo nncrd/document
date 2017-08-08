@@ -33,7 +33,6 @@ import {XButton, TransferDom ,Popup, PopupHeader} from 'vux'
       XButton ,Popup, PopupHeader
     },
     mounted(){
-      this.initMap();
       console.log(this.mapTitle)
       console.log(this.$parent.event)
     },
@@ -44,30 +43,35 @@ import {XButton, TransferDom ,Popup, PopupHeader} from 'vux'
         showMap:false,
         leftText:'取消',
         rightText:'确定',
-        mapTitle:'请选取地址'
+        mapTitle:'请选取地址',
+        initFlag:false
       }
     },
     methods:{
       fetchPoint(){
         this.showMap=true;
-      },    
+        this.initMap();
+      },
       initMap(){
-        var map = new BMap.Map("mainMap",{minZoom:7,maxZoom:18});    // 创建Map实例,设置地图允许的最小/大级别
-        var point = new BMap.Point(105.553232,26.590884) //设置中心点坐标
-        map.centerAndZoom(point, 7);  // 初始化地图,设置地图级别
-        //map.addControl(new BMap.MapTypeControl());   //添加地图类型控件
-        map.setCurrentCity("南宁");          // 设置地图显示的城市 此项是必须设置的
-        map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放      
-        var marker = new BMap.Marker(new BMap.Point(105.803232,26.190884))// 创建点
-        var _this=this
-        map.addEventListener("click",function(e){//监听点击地图事件
-          _this.eventLon=e.point.lng;
-          _this.eventLat=e.point.lat;
-          marker.point={'lng':e.point.lng,'lat':e.point.lat}
-          map.addOverlay(marker);        //显示点
-          _this.$emit('tranPoint',marker.point)
-        });
-        this.getBoundary(map)
+        if(!this.initFlag){
+          var map = new BMap.Map("mainMap",{minZoom:7,maxZoom:18});    // 创建Map实例,设置地图允许的最小/大级别
+          var point = new BMap.Point(105.553232,27.590884) //设置中心点坐标
+          map.centerAndZoom(point, 7);  // 初始化地图,设置地图级别
+          //map.addControl(new BMap.MapTypeControl());   //添加地图类型控件
+          map.setCurrentCity("南宁");          // 设置地图显示的城市 此项是必须设置的
+          map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
+          var marker = new BMap.Marker(new BMap.Point(105.803232,26.190884))// 创建点
+          var _this=this;
+          map.addEventListener("click",function(e){//监听点击地图事件
+            _this.eventLon=e.point.lng;
+            _this.eventLat=e.point.lat;
+            marker.point={'lng':e.point.lng,'lat':e.point.lat};
+            map.addOverlay(marker);        //显示点
+            _this.$emit('tranPoint',marker.point)
+          });
+          this.getBoundary(map)
+          this.initFlag=true;
+        }
       },
       getBoundary(map){       
         var bdary = new BMap.Boundary();

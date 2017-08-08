@@ -24,7 +24,7 @@ export default {
       }
       if (this.icon === 'warn') {
         this.icon = 'info'
-        return
+        this.$router.push({name:'EventReporter', params: { title: '注册成功', test:'事件'}})
       }
       if (this.icon === 'info') {
         this.icon = 'waiting'
