@@ -78,13 +78,34 @@ export default {
         'videoUrl':this.videoUrl
       }
       //this.$http.post('/vueApi.php',postData).then(function(res){console.log(res);})
+      var _this=this
       axios({
         method:'post',
-        url:'/vueApi.php',
+        url:'/emo-web/wechat/event-reporter',
         data: postData
       })
       .then(function (response) {
         console.log(response);
+        if(response.data['code']==0)
+        {
+          console.log('上报成功')
+          _this.$router.push({name:'SuccessMsg', params: { title: '事件上报成功' , icon:'', description:'',from:'/EventReporter',to:'EventReporter'}})
+        }
+        else if(response.data['error']==103)
+        {
+          console.log('用户已经被封号')
+          _this.$router.push({name:'SuccessMsg', params: { title: '事件上报失败' , icon:'warn', description:'用户已经被封号',from:'/EventReporter',to:'EventReporter'}})
+        }
+        else if(response.data['error']==-110)
+        {
+          console.log('系统后台出错')
+          _this.$router.push({name:'SuccessMsg', params: { title: '事件上报失败' , icon:'warn', description:'系统后台出错',from:'/EventReporter',to:'EventReporter'}})
+        }
+        else if(response.data['error']==-111)
+        {
+          console.log('没有获取微信号信息')
+          _this.$router.push({name:'SuccessMsg', params: { title: '事件上报失败' , icon:'warn', description:'没有获取微信号信息',from:'/EventReporter',to:'EventReporter'}})
+        }
       })
       .catch(function (error) {
         console.log(error);

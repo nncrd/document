@@ -28,7 +28,7 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-      '/vueApi.php': {
+      '/wechat/event-reporter': {
         target: 'http://localhost:8026/test/vueApi.php',
         changeOrigin: true,
         pathRewrite: {
@@ -36,10 +36,17 @@ module.exports = {
         }
       },
       '/wechat/reporter-exist': {
-        target: 'http://localhost:80/test/vueApi.php',
+        target: 'http://localhost:8026/test/vueApi.php',
         changeOrigin: true,
         pathRewrite: {
           '^/wechat/reporter-exist': '/wechat/reporter-exist'
+        }
+      },
+      '/wechat/reporter-register': {
+        target: 'http://localhost:8026/test/vueApi.php',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/wechat/reporter-register': '/wechat/reporter-register'
         }
       }
     },

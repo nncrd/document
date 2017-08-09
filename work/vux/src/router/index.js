@@ -1,5 +1,9 @@
 const router = [{
   path: '/',
+  name: 'ReporterExist',
+  component:resolve => require(['../components/ReporterExist.vue'], resolve)
+},{
+  path: '/Register',
   name: 'Register',
   component:resolve => require(['../components/RegisterVux.vue'], resolve)
 },{

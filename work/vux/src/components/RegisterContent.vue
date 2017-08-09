@@ -1,17 +1,17 @@
 <template transition="fadeOutLeft">
   <div id="registerForm"> 
     <group title="">
-      <selector placeholder="请选择地区" v-model="area" title="所在地区" name="district" :options="areaList" @on-change="onChange"></selector>
+      <selector placeholder="请选择地区" v-model="area" title="所在地区" name="district" required :options="areaList" @on-change="onChange"></selector>
     </group>   
     <group title="">
-      <selector placeholder="请选择单位" v-model="department" title="单位名称" name="district" :options="departmentList" @on-change="onChange"></selector>
+      <selector placeholder="请选择单位" v-model="department" title="单位名称" name="district" required :options="departmentList" @on-change="onChange"></selector>
     </group>
     <group title="">
-      <x-input title="用户姓名" name="username" v-model="openType" placeholder="请输入姓名" is-type="china-name"
+      <x-input title="用户姓名" name="username" v-model="userName" placeholder="请输入姓名" required is-type="china-name"
       @on-enter="showPlugin"></x-input>
     </group>
     <group title="">
-      <x-input title="手机号码" name="mobile" placeholder="请输入手机号码" keyboard="number" is-type="china-mobile"></x-input>
+      <x-input title="手机号码" name="mobile" v-model="userPhone" placeholder="请输入手机号码" required keyboard="number" is-type="china-mobile"></x-input>
     </group>
     <box gap="1em 1em">  
       <x-button @click.native="showPlugin" type="primary">提交</x-button>
@@ -35,6 +35,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 Vue.use(VueRouter)
+import axios from 'axios'
 import {Selector, XInput, Box, Group,Confirm, XButton ,TransferDomDirective as TransferDom} from 'vux'
 export default{
   directives: {
@@ -55,7 +56,8 @@ export default{
       title:"提示",
       area:'',
       department: '',
-      openType:'',
+      userName:'',
+      userPhone:'',
       areaList: [{key: 'nn', value: '南宁'}, {key: 'gl', value: '桂林'}, {key: 'lz', value: '柳州'}, {key: 'bh', value: '北海'}, {key: 'wz', value: '梧州'}, {key: 'bs', value: '百色'}, {key: 'fcg', value: '防城港'}, {key: 'qz', value: '钦州'}, {key: 'yl', value: '玉林'}, {key: 'hc', value: '河池'}, {key: 'gg', value: '贵港'}, {key: 'hz', value: '贺州'}, {key: 'cz', value: '崇左'}],
       departmentList: [{key: 'gtj', value: '国土局'}, {key: 'slj', value: '水利局'}, {key: 'xzf', value: '县政府'}, {key: 'fxb', value: '防汛办'}, {key: 'lyj', value: '旅游局'}, {key: 'jyj', value: '教育局'}, {key: 'zjj', value: '住建局'}, {key: 'jtb', value: '交通局'}, {key: 'ajj', value: '安监局'}, {key: 'glj', value: '公路局'}, {key: 'zzf', value: '镇政府'}, {key: 'rwb', value: '人武部'}, {key: 'qxj', value: '气象局'}]
     }
@@ -70,12 +72,43 @@ export default{
       if (msg) {
         alert(msg)
       }
-      if(this.openType === 'admin'){
-        this.$router.push({name:'SuccessMsg', params: { title: '注册成功' , icon:'', description:'内容详情'}})
+      var _this=this;
+      let postData={
+        'name':this.userName,
+        'tel':this.userPhone,
+        'org_id':100,
       }
-      else{
-        this.$router.push({name:'SuccessMsg', params: { title: '登录失败' , icon:'warn', description:'该微信号已被封禁'}})
-      }
+      axios({
+        method:'post',
+        url:'/emo-web/wechat/reporter-register',
+        data: postData
+      })
+      .then(function (response) {
+        console.log(response);
+        if(response.data['code']==0)
+        {
+          console.log('注册成功')
+          _this.$router.push({name:'SuccessMsg', params: { title: '注册成功' , icon:'', description:'',from:'reporterRegister',to:'EventReporter'}})
+        }
+        else if(response.data['error']==102)
+        {
+          console.log('用户已经注册过')
+          _this.$router.push({name:'SuccessMsg', params: { title: '注册失败' , icon:'warn', description:'用户已经注册过',from:'/Register',to:'/Register'}})
+        }
+        else if(response.data['error']==103)
+        {
+          console.log('用户已经被封号')
+          _this.$router.push({name:'SuccessMsg', params: { title: '注册失败' , icon:'warn', description:'用户已经被封号',from:'/Register',to:'/Register'}})
+        }
+        else if(response.data['error']==-111)
+        {
+          console.log('没有获取微信号信息')
+          _this.$router.push({name:'SuccessMsg', params: { title: '注册失败' , icon:'warn', description:'没有获取微信号信息',from:'/Register',to:'/Register'}})
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      }); 
     },
     onHide () {
       console.log('on hide')

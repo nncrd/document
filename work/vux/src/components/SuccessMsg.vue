@@ -44,11 +44,12 @@ export default {
       buttons: [{
         type: 'primary',
         text: '确认',
+        link: this.$route.params.to,
         onClick: this.changeIcon.bind(this)
       }, {
         type: 'default',
         text: '返回',
-        link: '/'
+        link: this.$route.params.from
       }]
     }
   }
