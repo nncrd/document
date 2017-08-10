@@ -2,7 +2,7 @@
 <html>
 <head lang="en">
   <meta charset="UTF-8">
-  <title>应急办注册页面</title>
+  <title>应急办上报页面</title>
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="format-detection" content="telephone=no">
@@ -13,15 +13,13 @@
   <script src="assets/js/amazeui.min.js"></script>
   <script src="https://static.runoob.com/assets/jquery-validation-1.14.0/dist/jquery.validate.min.js"></script>
   <script src="https://static.runoob.com/assets/jquery-validation-1.14.0/dist/localization/messages_zh.js"></script>
+  <script src="assets/js/amazeui.datetimepicker.min.js"></script>
   <link rel="stylesheet" href="assets/css/amazeui.min.css"/>
+  <link rel="stylesheet" href="assets/css/amazeui.datetimepicker.css"/>
   <link rel="stylesheet" href="assets/css/emo.css"/>
   <style>
     .am-header-default {
       background-color: #df2507;
-    }
-    .logo {
-      margin:1em 0;
-      text-align: center;
     }
     img{
       margin-bottom: 1em;
@@ -51,7 +49,7 @@
           </a>
       </div>
       <h1 class="am-header-title">
-          账号注册
+          事件上报
       </h1>
       <div class="am-header-right am-header-nav">
           <a href="#right-link" class="">
@@ -59,47 +57,56 @@
           </a>
       </div>
   </header>
-  <div class="logo">
-    <img src="assets/i/logo.png" alt="加载中"/>
-  </div>
   <div class="am-g">
     <div class="am-u-lg-6 am-u-md-8 am-u-sm-centered">
       <form method="post" class="am-form" id="userRegister" action="/wechat/reporter-register">
-        <icon class="am-icon-globe"></icon><label for="area">地区<span class="must">*</span></label>
-        <select id="area" class="am-form-select am-input-lg" name="area">
-          <option value ="nn">南宁</option>
-          <option value ="gl">桂林</option>
-          <option value ="lz">柳州</option>
-          <option value ="wz">梧州</option>
-          <option value ="bh">北海</option>
-          <option value ="bs">百色</option>
-        </select>
-        <icon class="am-icon-users"></icon><label for="department">部门<span class="must">*</span></label>
-        <select id="department" class="am-form-select am-input-lg" name="department">
-          <option value ="gtj">国土局</option>
-          <option value ="slt">水利厅</option>
-          <option value ="xzf">县政府</option>
-          <option value ="fxb">防汛办</option>
-          <option value ="lyj">旅游局</option>
-          <option value ="jyj">教育局</option>
-        </select>
+        <icon class="am-icon-book"></icon><label for="area">事件标题<span class="must">*</span></label>
+          <input type="text" name="eventTitle" id="eventTitle" value="" placeholder="请输入标题，请不超过50个字" class="am-input-lg">
+        <icon class="am-icon-calendar"></icon><label for="department">发生时间<span class="must">*</span></label>
+        <input type="text" value="2017-08-11 21" id="datetimepicker" class="am-form-field">
         <div>
           <icon class="am-icon-user"></icon><label for="email">姓名<span class="must">*</span></label>
           <input type="text" name="name" id="name" value="" placeholder="请输入姓名" class="am-input-lg">
         </div>
         <div>
-          <icon class="am-icon-mobile-phone"></icon><label for="password">手机号<span class="must">*</span></label>
-          <input type="text" name="phone" id="phone" value="" placeholder="请输入手机号码" class="am-input-lg">
+          <icon class="am-icon-home"></icon><label for="address">事件地点<span class="must">*</span></label>
+          <input type="text" name="address" id="address" value="" placeholder="请输入地点，请不超过50个字" class="am-input-lg">
         </div>
         <br>
         <div class="am-cf">
-          <input type="submit" value="提交信息" class="submitBtn am-btn am-btn-lg am-center" style="">
+          <button type="button" name="marker" id="marker" class="submitBtn am-btn am-btn-sm am-center"><icon class="am-icon-map-marker" data-am-modal="{target: '#map-actions'}"> 地图取点</button>
+        </div>
+        <div class="am-modal-actions" id="map-actions">
+          <div class="am-modal-actions-group">
+          <div style="background: white;height:20em">
+          <h3>请在地图上取点</h3>
+          </div>
+            <ul class="am-list">   
+              <li class="am-modal-actions-danger">
+                <a href="#" data-am-modal-close><i class="am-icon-twitter"></i>确定</a>
+              </li>
+            </ul>
+          </div>
+          <div class="am-modal-actions-group">
+            <button class="am-btn am-btn-secondary am-btn-block" data-am-modal-close>取消</button>
+          </div>
+        </div>
+        <br>
+        <div class="am-cf">
+          <input type="submit" name="" value="提交信息" class="submitBtn am-btn am-btn-lg am-center">
         </div>
       </form>
     </div>
   </div>
   <script type="text/javascript">
     $(function () {
+      var $modal = $('#map-modal');
+      $('#marker').on('click', function(e) {
+        $modal.modal('open');
+      });
+      $('#datetimepicker').datetimepicker({
+        format: 'yyyy-mm-dd hh'
+      });
       jQuery.validator.addMethod("isPhone", function(value, element) { 
         var tel = /^(((13[0-9]{1})|(15[0-9]{1}))+\d{8})$/; 
         return this.optional(element) || (tel.test(value)); 
