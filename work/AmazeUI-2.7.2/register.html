@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+  <meta charset="UTF-8">
+  <title>应急办注册页面</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <link rel="alternate icon" type="image/png" href="assets/i/favicon.png">
+  <script src="assets/js/jquery.min.js"></script>
+  <script src="http://static.runoob.com/assets/jquery-validation-1.14.0/dist/jquery.validate.min.js"></script>
+  <script src="http://static.runoob.com/assets/jquery-validation-1.14.0/dist/localization/messages_zh.js"></script>
+  <link rel="stylesheet" href="assets/css/amazeui.min.css"/>
+  <style>
+    .am-header-default {
+      background-color: #df2507;
+    }
+    .logo {
+      margin:1em 0;
+      text-align: center;
+    }
+    img{
+      margin-bottom: 1em;
+      width: 70px;
+    }
+    label{
+      margin-top:.2em
+    }
+    icon{
+      margin-right:.2em;
+    }
+    .must{
+      padding-left:.2em;
+      color: #ff0000;
+    }
+    .error{
+      color: #ff0000;
+      font-size:.5em;
+    }
+  </style>
+</head>
+<body>
+  <header data-am-widget="header" class="am-header am-header-default">
+      <div class="am-header-left am-header-nav">
+          <a href="#left-link" class="">
+              <img class="am-header-icon-custom" src="data:image/svg+xml;charset&#x3D;utf-8,&lt;svg xmlns&#x3D;&quot;http://www.w3.org/2000/svg&quot; viewBox&#x3D;&quot;0 0 12 20&quot;&gt;&lt;path d&#x3D;&quot;M10,0l2,2l-8,8l8,8l-2,2L0,10L10,0z&quot; fill&#x3D;&quot;%23fff&quot;/&gt;&lt;/svg&gt;" alt=""/>
+          </a>
+      </div>
+      <h1 class="am-header-title">
+          账号注册
+      </h1>
+      <div class="am-header-right am-header-nav">
+          <a href="#right-link" class="">
+              <img class="am-header-icon-custom" src="data:image/svg+xml;charset&#x3D;utf-8,&lt;svg xmlns&#x3D;&quot;http://www.w3.org/2000/svg&quot; viewBox&#x3D;&quot;0 0 42 26&quot; fill&#x3D;&quot;%23fff&quot;&gt;&lt;rect width&#x3D;&quot;4&quot; height&#x3D;&quot;4&quot;/&gt;&lt;rect x&#x3D;&quot;8&quot; y&#x3D;&quot;1&quot; width&#x3D;&quot;34&quot; height&#x3D;&quot;2&quot;/&gt;&lt;rect y&#x3D;&quot;11&quot; width&#x3D;&quot;4&quot; height&#x3D;&quot;4&quot;/&gt;&lt;rect x&#x3D;&quot;8&quot; y&#x3D;&quot;12&quot; width&#x3D;&quot;34&quot; height&#x3D;&quot;2&quot;/&gt;&lt;rect y&#x3D;&quot;22&quot; width&#x3D;&quot;4&quot; height&#x3D;&quot;4&quot;/&gt;&lt;rect x&#x3D;&quot;8&quot; y&#x3D;&quot;23&quot; width&#x3D;&quot;34&quot; height&#x3D;&quot;2&quot;/&gt;&lt;/svg&gt;" alt=""/>
+          </a>
+      </div>
+  </header>
+<div class="logo">
+  <img src="assets/i/logo.png" alt="加载中"/>
+</div>
+<div class="am-g">
+  <div class="am-u-lg-6 am-u-md-8 am-u-sm-centered">
+    <form method="post" class="am-form" id="userRegister" action="/wechat/reporter-register">
+      <icon class="am-icon-globe"></icon><label for="area">地区<span class="must">*</span></label>
+      <select id="area" class="am-form-select am-input-lg" name="area">
+        <option value ="nn">南宁</option>
+        <option value ="gl">桂林</option>
+        <option value ="lz">柳州</option>
+        <option value ="wz">梧州</option>
+        <option value ="bh">北海</option>
+        <option value ="bs">百色</option>
+      </select>
+      <icon class="am-icon-users"></icon><label for="department">部门<span class="must">*</span></label>
+      <select id="department" class="am-form-select am-input-lg" name="department">
+        <option value ="gtj">国土局</option>
+        <option value ="slt">水利厅</option>
+        <option value ="xzf">县政府</option>
+        <option value ="fxb">防汛办</option>
+        <option value ="lyj">旅游局</option>
+        <option value ="jyj">教育局</option>
+      </select>
+      <div>
+        <icon class="am-icon-user"></icon><label for="email">姓名<span class="must">*</span></label>
+        <input type="text" name="name" id="name" value="" placeholder="请输入姓名" class="am-input-lg">
+      </div>
+      <div>
+        <icon class="am-icon-mobile-phone"></icon><label for="password">手机号<span class="must">*</span></label>
+        <input type="text" name="phone" id="phone" value="" placeholder="请输入手机号码" class="am-input-lg" xbcheck>
+      </div>
+      <br>
+      <div class="am-cf">
+        <input type="submit" name="" value="提交信息" class="am-btn am-btn-lg am-btn-primary am-btn-sm am-center am-round">
+      </div>
+    </form>
+  </div>
+</div>
+<script type="text/javascript">
+$(function () {
+  jQuery.validator.addMethod("isPhone", function(value, element) { 
+    var tel = /^(((13[0-9]{1})|(15[0-9]{1}))+\d{8})$/; 
+    return this.optional(element) || (tel.test(value)); 
+    }, "电话号码格式错误");
+  $('#userRegister').validate({
+    //提交表单后，（第一个）未通过验证的表单获得焦点 
+    focusInvalid:true, 
+    //当未通过验证的元素获得焦点时，移除错误提示 
+    //focusCleanup:true, 
+    // errorClass: "unchecked",
+    // validClass: "checked",
+    // errorElement: "span",
+    submitHandler:function(form){
+        $(form).ajaxSubmit({
+            type:"post",
+            url:"",
+            beforeSend:function(){
+                //$("#loading").show();
+            },
+            complete:function(){
+                //$("#loading").hide();
+            },
+            success: function(data) {
+                if(data.code==0){
+                    alert("注册成功")
+                }
+                else if(data.error==102){
+                    alert("用户已经注册过")
+                }
+                else if(data.error==103){
+                    alert("用户已经被封号")
+                }
+                else if(data.error==-111){
+                    alert("没有获取微信号信息")
+                }
+            }
+        });
+    },
+    rules: {
+      name:"required",
+      phone:{
+        isPhone:true,
+        required:true,
+      },
+    },
+    messages:{
+      name:"请输入用户名",
+      phone:{
+        required:"请输入手机号码"
+      }
+    }
+  });
+});
+</script>
+</body>
+</html>
