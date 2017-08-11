@@ -9,26 +9,25 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="Cache-Control" content="no-siteapp" />
   <link rel="alternate icon" type="image/png" href="assets/i/favicon.png">
-  <script src="assets/js/jquery.min.js"></script>
-  <script src="assets/js/amazeui.min.js"></script>
-  <script src="https://static.runoob.com/assets/jquery-validation-1.14.0/dist/jquery.validate.min.js"></script>
-  <script src="https://static.runoob.com/assets/jquery-validation-1.14.0/dist/localization/messages_zh.js"></script>
-  <script src="assets/js/amazeui.datetimepicker.min.js"></script>
+  <script type="text/javascript" src="assets/js/jquery.min.js"></script>
+  <script type="text/javascript" src="assets/js/amazeui.min.js"></script>
+  <!-- <script type="text/javascript" src="https://cdn.bootcss.com/jquery.form/4.2.1/jquery.form.min.js"></script> -->
+  <script type="text/javascript" src="https://cdn.bootcss.com/jquery-validate/1.17.0/jquery.validate.min.js"></script>
+  <script type="text/javascript" src="https://cdn.bootcss.com/jquery-validate/1.17.0/localization/messages_zh.min.js"></script>
+  <script type="text/javascript" src="assets/js/amazeui.datetimepicker.min.js"></script>
+  <script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=0zyaFbAYrqWzAorQm0jqZqkKlEHv1m7l"></script>
+  <script type="text/javascript" src="https://api.map.baidu.com/library/AreaRestriction/1.2/src/AreaRestriction_min.js"></script>
   <link rel="stylesheet" href="assets/css/amazeui.min.css"/>
   <link rel="stylesheet" href="assets/css/amazeui.datetimepicker.css"/>
   <link rel="stylesheet" href="assets/css/emo.css"/>
   <style>
+/*    body{
+      background-color: #e9d8c8;
+    }*/
     .am-header-default {
       background-color: #df2507;
     }
-    img{
-      margin-bottom: 1em;
-      width: 85px;
-    }
-    label{
-      margin-top:.2em
-    }
-    icon{
+    span{
       margin-right:.2em;
     }
     .must{
@@ -38,6 +37,13 @@
     .error{
       color: #ff0000;
       font-size:.5em;
+    }
+    #mainMap{
+      width: 100%;
+      height: 100%;
+    }
+    #eventLon,#eventLat{
+      display: none;
     }
   </style>
 </head>
@@ -59,31 +65,35 @@
   </header>
   <div class="am-g">
     <div class="am-u-lg-6 am-u-md-8 am-u-sm-centered">
-      <form method="post" class="am-form" id="userRegister" action="/wechat/reporter-register">
-        <icon class="am-icon-book"></icon><label for="area">事件标题<span class="must">*</span></label>
+      <form method="post" class="am-form" id="eventReporter" action="">
+        <div class="am-form-group">
+          <span class="am-icon-book"></span><label for="eventTitle">事件标题<span class="must">*</span></label>
           <input type="text" name="eventTitle" id="eventTitle" value="" placeholder="请输入标题，请不超过50个字" class="am-input-lg">
-        <icon class="am-icon-calendar"></icon><label for="department">发生时间<span class="must">*</span></label>
-        <input type="text" value="2017-08-11 21" id="datetimepicker" class="am-form-field">
-        <div>
-          <icon class="am-icon-user"></icon><label for="email">姓名<span class="must">*</span></label>
-          <input type="text" name="name" id="name" value="" placeholder="请输入姓名" class="am-input-lg">
         </div>
-        <div>
-          <icon class="am-icon-home"></icon><label for="address">事件地点<span class="must">*</span></label>
+        <div class="am-form-group">
+        <span class="am-icon-calendar"></span><label for="timeData">发生时间<span class="must">*</span></label>
+        <input type="text" name="timeData" id="timeData" value="2017-08-11 21" id="datetimepicker" class="am-form-field am-input-lg">
+        </div>
+        <div class="am-form-group">
+          <span class="am-icon-home"></span><label for="address">事件地点<span class="must">*</span></label>
           <input type="text" name="address" id="address" value="" placeholder="请输入地点，请不超过50个字" class="am-input-lg">
         </div>
         <br>
         <div class="am-cf">
           <button type="button" name="marker" id="marker" class="submitBtn am-btn am-btn-sm am-center"><icon class="am-icon-map-marker" data-am-modal="{target: '#map-actions'}"> 地图取点</button>
+          <input name="eventLon" id="eventLon" type="text">
+          <input name="eventLat" id="eventLat" type="text">
+          <p id="mapData"></p>
         </div>
         <div class="am-modal-actions" id="map-actions">
           <div class="am-modal-actions-group">
-          <div style="background: white;height:20em">
-          <h3>请在地图上取点</h3>
+          <div style="background: white;height:25em">
+            <h3>请在地图上取点</h3>
+            <div id="mainMap"></div>
           </div>
             <ul class="am-list">   
               <li class="am-modal-actions-danger">
-                <a href="#" data-am-modal-close><i class="am-icon-twitter"></i>确定</a>
+                <a href="#" data-am-modal-close><span class="am-icon-upload"></span> 确定</a>
               </li>
             </ul>
           </div>
@@ -91,19 +101,136 @@
             <button class="am-btn am-btn-secondary am-btn-block" data-am-modal-close>取消</button>
           </div>
         </div>
-        <br>
-        <div class="am-cf">
-          <input type="submit" name="" value="提交信息" class="submitBtn am-btn am-btn-lg am-center">
+        <div class="am-form-group">
+          <span class="am-icon-database am-icon-spin"></span><label for="mainContent">事件内容<span class="must">*</span></label>
+          <textarea rows="5" id="mainContent" name="mainContent" placeholder="请输入内容，请不超过250个字" class="am-input-lg"></textarea>
+        </div>
+        <div class="am-form-group">
+          <span class="am-icon-file-image-o"></span><label for="">事件图片</label>
+          <ul data-am-widget="gallery" class="am-gallery am-avg-sm-2 am-avg-md-3 am-avg-lg-4 am-gallery-default" data-am-gallery="{ pureview: true }" >
+              <li>
+                <div class="am-gallery-item">
+                    <a href="https://ooo.0o0.ooo/2017/05/17/591c271ab71b1.jpg" class="">
+                      <img src="https://ooo.0o0.ooo/2017/05/17/591c271ab71b1.jpg"/>
+                    </a>
+                </div>
+              </li>
+              <li>
+                <div class="am-gallery-item">
+                    <a href="https://ooo.0o0.ooo/2017/05/17/591c271acea7c.jpg" class="">
+                      <img src="https://ooo.0o0.ooo/2017/05/17/591c271acea7c.jpg"/>
+                    </a>
+                </div>
+              </li>      
+              <li>
+                <div class="am-gallery-item">
+                    <a href="https://ooo.0o0.ooo/2017/06/15/59425a592b949.jpeg" class="">
+                      <img src="https://ooo.0o0.ooo/2017/06/15/59425a592b949.jpeg"/>
+                    </a>
+                </div>
+              </li>
+          </ul>
+          <div class="operateBtn">            
+            <input type="file" id="filePicture" name="file" multiple="multiple" required="required" accept="image/*" onchange="addPicture"/>
+            <label for="filePicture" class="submitBtn am-btn am-btn-sm"><span class="am-icon-plus-square"></span> 添加图片</label>  
+            <button type="button" name="deletePicture" id="deletePicture" class="cancelBtn am-btn am-btn-sm"><span class="am-icon-minus-square"></span> 删除图片</button>
+          </div>
+        </div>
+        <div class="am-cf am-form-group">
+          <span class="am-icon-file-video-o"></span><label for="">事件视频</label>
+          <div class="operateBtn">
+            <input type="file" id="fileVideo" name="file" multiple="multiple" required="required" accept="video/*" onchange="addVideo"/>
+            <label for="fileVideo" class="submitBtn am-btn am-btn-sm"><span class="am-icon-plus-square"></span> 添加视频</label>            
+            <button type="button" name="deleteVideo" id="deleteVideo" class="cancelBtn am-btn am-btn-sm"><span class="am-icon-minus-square"></span> 删除视频</button>
+          </div>
+        </div>
+        <div class="am-cf am-form-group">
+          <button type="submit" name="" class="submitBtn am-btn am-btn-lg am-center"><span class="am-icon-cloud-upload"></span> 提交信息</button>
         </div>
       </form>
     </div>
   </div>
   <script type="text/javascript">
+    function initMap(){
+      if(!this.initFlag){
+        var map = new BMap.Map("mainMap",{minZoom:7,maxZoom:18});    // 创建Map实例,设置地图允许的最小/大级别
+        var point = new BMap.Point(108.553232,23.090884) //设置中心点坐标
+        map.centerAndZoom(point, 7);  // 初始化地图,设置地图级别
+        //map.addControl(new BMap.MapTypeControl());   //添加地图类型控件
+        map.setCurrentCity("南宁");          // 设置地图显示的城市 此项是必须设置的
+        map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
+        var marker = new BMap.Marker(new BMap.Point(105.803232,26.190884))// 创建点
+        var _this=this;
+        map.addEventListener("click",function(e){//监听点击地图事件
+          _this.eventLon=e.point.lng;
+          _this.eventLat=e.point.lat;
+          marker.point={'lng':e.point.lng,'lat':e.point.lat};
+          map.addOverlay(marker);        //显示点
+          $("#mapData").html("选中点坐标为："+e.point.lng+" , "+e.point.lat)
+          $("#eventLon").val(e.point.lng);
+          $("#eventLat").val(e.point.lat);
+        });
+        this.getBoundary(map)
+        this.initFlag=true;
+      }
+    }
+    function getBoundary(map){       
+      var bdary = new BMap.Boundary();
+      bdary.get("广西", function(rs){       //获取行政区域
+        map.clearOverlays();        //清除地图覆盖物       
+        var count = rs.boundaries.length; //行政区域的点有多少个
+        if (count === 0) {
+          alert('未能获取当前输入行政区域');
+          return ;
+        }
+        var pointArray = [];
+        for (var i = 0; i < count; i++) {
+          var ply = new BMap.Polygon(rs.boundaries[i], {strokeWeight: 2, strokeColor: "#ff0000",fillColor:"rgba(255,255,255,0.4)"}); //建立多边形覆盖物
+          map.addOverlay(ply);  //添加覆盖物
+          pointArray = pointArray.concat(ply.getPath());
+        }    
+        //map.setViewport(pointArray);    //调整视野   
+        //map.panTo(new BMap.Point(105.203232,27.190884));
+      });       
+    }
+    function addVideo(e){
+      const files = e.target.files
+      if(!files.length) {
+        return;
+      } 
+      else if(files.length+this.videoCount > 3) {
+        window.alert("每次最多只能上传3部视频");
+        return;
+      } 
+      if(typeof FileReader == 'undefined'){
+        this.fileValue="你的浏览器不支持FileReader接口！功能无法正常使用！"
+      }
+      for(var i=0;i<files.length;i++){        
+        if(!/video\/\w+/.test(files[i].type)){
+          alert("请选择视频！");
+          return;
+        }   
+        if(files[i].size>30*1024*1024)
+        {
+          alert("请上传小于30M的视频!");
+          return;
+        }
+        var reader = new FileReader();        
+        reader.readAsDataURL(files[i]); //将文件以Data URL形式读入页面
+        var _this=this 
+        reader.onload=function(e){  
+          _this.videoUrlHtml+='<video controls="controls"><source src="'+this.result+'"></video>';
+          _this.videoUrl+=this.result+',';
+        }   
+        this.videoCount++         
+      }
+    }
     $(function () {
       var $modal = $('#map-modal');
       $('#marker').on('click', function(e) {
         $modal.modal('open');
       });
+      initMap();
       $('#datetimepicker').datetimepicker({
         format: 'yyyy-mm-dd hh'
       });
@@ -111,7 +238,7 @@
         var tel = /^(((13[0-9]{1})|(15[0-9]{1}))+\d{8})$/; 
         return this.optional(element) || (tel.test(value)); 
         }, "电话号码格式错误");
-      $('#userRegister').validate({
+      $('#eventReporter').validate({
         //提交表单后，（第一个）未通过验证的表单获得焦点 
         focusInvalid:true, 
         //当未通过验证的元素获得焦点时，移除错误提示 
@@ -122,7 +249,7 @@
         submitHandler:function(form){
             $(form).ajaxSubmit({
                 type:"post",
-                url:"",
+                url:"/wechat/event-reporter",
                 beforeSend:function(){
                     //$("#loading").show();
                 },

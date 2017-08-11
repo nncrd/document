@@ -11,11 +11,15 @@
   <link rel="alternate icon" type="image/png" href="assets/i/favicon.png">
   <script src="assets/js/jquery.min.js"></script>
   <script src="assets/js/amazeui.min.js"></script>
+  <script src="https://malsup.github.io/jquery.form.js" type="text/javascript"></script>
   <script src="https://static.runoob.com/assets/jquery-validation-1.14.0/dist/jquery.validate.min.js"></script>
   <script src="https://static.runoob.com/assets/jquery-validation-1.14.0/dist/localization/messages_zh.js"></script>
   <link rel="stylesheet" href="assets/css/amazeui.min.css"/>
   <link rel="stylesheet" href="assets/css/emo.css"/>
   <style>
+/*    body{
+      background-color: #e9d8c8;
+    }*/
     .am-header-default {
       background-color: #df2507;
     }
@@ -64,7 +68,7 @@
   </div>
   <div class="am-g">
     <div class="am-u-lg-6 am-u-md-8 am-u-sm-centered">
-      <form method="post" class="am-form" id="userRegister" action="/wechat/reporter-register">
+      <form method="post" class="am-form" id="userRegister" action="">
         <icon class="am-icon-globe"></icon><label for="area">地区<span class="must">*</span></label>
         <select id="area" class="am-form-select am-input-lg" name="area">
           <option value ="nn">南宁</option>
@@ -115,7 +119,7 @@
         submitHandler:function(form){
             $(form).ajaxSubmit({
                 type:"post",
-                url:"",
+                url:"/wechat/reporter-register",
                 beforeSend:function(){
                     //$("#loading").show();
                 },

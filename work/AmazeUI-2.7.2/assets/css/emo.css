@@ -1,5 +1,20 @@
 .submitBtn{
   background:#df2507;
   color:white;
-  border-radius: 5px
+  border-radius: 5px;
+}
+.cancelBtn{
+  background:transparent;
+  color:#666;
+  border:solid 2px #666;
+  border-radius: 5px;
+}
+.operateBtn{
+  text-align: center;
+}
+.submitBtn:hover,.submitBtn:focus{
+  color:#fff;
+}
+#fileVideo,#filePicture{
+  display: none;
 }
