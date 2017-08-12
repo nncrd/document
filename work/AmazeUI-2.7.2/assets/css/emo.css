@@ -1,3 +1,11 @@
+.am-header-fixed {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  z-index: 1010;
+}
 .submitBtn{
   background:#df2507;
   color:white;
@@ -14,7 +22,4 @@
 }
 .submitBtn:hover,.submitBtn:focus{
   color:#fff;
-}
-#fileVideo,#filePicture{
-  display: none;
 }

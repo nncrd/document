@@ -11,11 +11,12 @@
   <link rel="alternate icon" type="image/png" href="assets/i/favicon.png">
   <script type="text/javascript" src="assets/js/jquery.min.js"></script>
   <script type="text/javascript" src="assets/js/amazeui.min.js"></script>
-  <!-- <script type="text/javascript" src="https://cdn.bootcss.com/jquery.form/4.2.1/jquery.form.min.js"></script> -->
+  <script type="text/javascript" src="https://cdn.bootcss.com/jquery.form/4.2.1/jquery.form.min.js"></script>
   <script type="text/javascript" src="https://cdn.bootcss.com/jquery-validate/1.17.0/jquery.validate.min.js"></script>
   <script type="text/javascript" src="https://cdn.bootcss.com/jquery-validate/1.17.0/localization/messages_zh.min.js"></script>
   <script type="text/javascript" src="assets/js/amazeui.datetimepicker.min.js"></script>
   <script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=0zyaFbAYrqWzAorQm0jqZqkKlEHv1m7l"></script>
+  <!-- 限制地图范围 -->
   <script type="text/javascript" src="https://api.map.baidu.com/library/AreaRestriction/1.2/src/AreaRestriction_min.js"></script>
   <link rel="stylesheet" href="assets/css/amazeui.min.css"/>
   <link rel="stylesheet" href="assets/css/amazeui.datetimepicker.css"/>
@@ -38,19 +39,26 @@
       color: #ff0000;
       font-size:.5em;
     }
+    #timeData{
+      color:#000;
+    }
     #mainMap{
       width: 100%;
       height: 100%;
     }
-    #eventLon,#eventLat{
+    #eventLon,#eventLat,#fileVideo,#filePicture,#imgUrl,#videoUrl{
       display: none;
+    }
+    #videoBox video{
+      width:48%;
+      height: 10em;
     }
   </style>
 </head>
 <body>
-  <header data-am-widget="header" class="am-header am-header-default">
+  <header data-am-widget="header" class="am-header am-header-default am-header-fixed">
       <div class="am-header-left am-header-nav">
-          <a href="#left-link" class="">
+          <a href="register.html" class="">
               <img class="am-header-icon-custom" src="data:image/svg+xml;charset&#x3D;utf-8,&lt;svg xmlns&#x3D;&quot;http://www.w3.org/2000/svg&quot; viewBox&#x3D;&quot;0 0 12 20&quot;&gt;&lt;path d&#x3D;&quot;M10,0l2,2l-8,8l8,8l-2,2L0,10L10,0z&quot; fill&#x3D;&quot;%23fff&quot;/&gt;&lt;/svg&gt;" alt=""/>
           </a>
       </div>
@@ -68,7 +76,7 @@
       <form method="post" class="am-form" id="eventReporter" action="">
         <div class="am-form-group">
           <span class="am-icon-book"></span><label for="eventTitle">事件标题<span class="must">*</span></label>
-          <input type="text" name="eventTitle" id="eventTitle" value="" placeholder="请输入标题，请不超过50个字" class="am-input-lg">
+          <input type="text" name="eventTitle" id="eventTitle" value="" maxlength="50" placeholder="请输入标题，请不超过50个字" class="am-input-lg">
         </div>
         <div class="am-form-group">
         <span class="am-icon-calendar"></span><label for="timeData">发生时间<span class="must">*</span></label>
@@ -76,7 +84,7 @@
         </div>
         <div class="am-form-group">
           <span class="am-icon-home"></span><label for="address">事件地点<span class="must">*</span></label>
-          <input type="text" name="address" id="address" value="" placeholder="请输入地点，请不超过50个字" class="am-input-lg">
+          <input type="text" name="eventOccurAddress" id="address" value="" maxlength="50" placeholder="请输入地点，请不超过50个字" class="am-input-lg">
         </div>
         <br>
         <div class="am-cf">
@@ -103,11 +111,11 @@
         </div>
         <div class="am-form-group">
           <span class="am-icon-database am-icon-spin"></span><label for="mainContent">事件内容<span class="must">*</span></label>
-          <textarea rows="5" id="mainContent" name="mainContent" placeholder="请输入内容，请不超过250个字" class="am-input-lg"></textarea>
+          <textarea rows="5" id="mainContent" name="mainContent" maxlength="250" placeholder="请输入内容，请不超过250个字" class="am-input-lg"></textarea>
         </div>
         <div class="am-form-group">
           <span class="am-icon-file-image-o"></span><label for="">事件图片</label>
-          <ul data-am-widget="gallery" class="am-gallery am-avg-sm-2 am-avg-md-3 am-avg-lg-4 am-gallery-default" data-am-gallery="{ pureview: true }" >
+          <ul id="pictureList" data-am-widget="gallery" class="am-gallery am-avg-sm-2 am-avg-md-3 am-avg-lg-4 am-gallery-default" data-am-gallery="{ pureview: true }" >
               <li>
                 <div class="am-gallery-item">
                     <a href="https://ooo.0o0.ooo/2017/05/17/591c271ab71b1.jpg" class="">
@@ -131,17 +139,20 @@
               </li>
           </ul>
           <div class="operateBtn">            
-            <input type="file" id="filePicture" name="file" multiple="multiple" required="required" accept="image/*" onchange="addPicture"/>
+            <input type="file" id="filePicture" multiple="multiple" required="required" accept="image/*" onchange="addPicture()"/>
             <label for="filePicture" class="submitBtn am-btn am-btn-sm"><span class="am-icon-plus-square"></span> 添加图片</label>  
-            <button type="button" name="deletePicture" id="deletePicture" class="cancelBtn am-btn am-btn-sm"><span class="am-icon-minus-square"></span> 删除图片</button>
+            <button type="button" name="deletePicture" id="deletePicture" class="cancelBtn am-btn am-btn-sm" onclick="removePicture()"><span class="am-icon-minus-square"></span> 删除图片</button>
+            <input name="imgUrl" id="imgUrl">
           </div>
         </div>
         <div class="am-cf am-form-group">
           <span class="am-icon-file-video-o"></span><label for="">事件视频</label>
           <div class="operateBtn">
-            <input type="file" id="fileVideo" name="file" multiple="multiple" required="required" accept="video/*" onchange="addVideo"/>
+            <div id="videoBox"></div>
+            <input type="file" id="fileVideo" multiple="multiple" required="required" accept="video/*" onchange="addVideo()"/>
             <label for="fileVideo" class="submitBtn am-btn am-btn-sm"><span class="am-icon-plus-square"></span> 添加视频</label>            
-            <button type="button" name="deleteVideo" id="deleteVideo" class="cancelBtn am-btn am-btn-sm"><span class="am-icon-minus-square"></span> 删除视频</button>
+            <button type="button" name="deleteVideo" id="deleteVideo" class="cancelBtn am-btn am-btn-sm" onclick="removeVideo()"><span class="am-icon-minus-square"></span> 删除视频</button>
+            <input name="videoUrl" id="videoUrl">
           </div>
         </div>
         <div class="am-cf am-form-group">
@@ -152,27 +163,31 @@
   </div>
   <script type="text/javascript">
     function initMap(){
-      if(!this.initFlag){
-        var map = new BMap.Map("mainMap",{minZoom:7,maxZoom:18});    // 创建Map实例,设置地图允许的最小/大级别
-        var point = new BMap.Point(108.553232,23.090884) //设置中心点坐标
-        map.centerAndZoom(point, 7);  // 初始化地图,设置地图级别
-        //map.addControl(new BMap.MapTypeControl());   //添加地图类型控件
-        map.setCurrentCity("南宁");          // 设置地图显示的城市 此项是必须设置的
-        map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
-        var marker = new BMap.Marker(new BMap.Point(105.803232,26.190884))// 创建点
-        var _this=this;
-        map.addEventListener("click",function(e){//监听点击地图事件
-          _this.eventLon=e.point.lng;
-          _this.eventLat=e.point.lat;
-          marker.point={'lng':e.point.lng,'lat':e.point.lat};
-          map.addOverlay(marker);        //显示点
-          $("#mapData").html("选中点坐标为："+e.point.lng+" , "+e.point.lat)
-          $("#eventLon").val(e.point.lng);
-          $("#eventLat").val(e.point.lat);
-        });
-        this.getBoundary(map)
-        this.initFlag=true;
-      }
+      var map = new BMap.Map("mainMap",{minZoom:7,maxZoom:18});    // 创建Map实例,设置地图允许的最小/大级别
+      var point = new BMap.Point(108.553232,23.090884) //设置中心点坐标
+      map.centerAndZoom(point, 7);  // 初始化地图,设置地图级别
+      //map.addControl(new BMap.MapTypeControl());   //添加地图类型控件
+      map.setCurrentCity("南宁");          // 设置地图显示的城市 此项是必须设置的
+      map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
+      var marker = new BMap.Marker(new BMap.Point(105.803232,26.190884))// 创建点
+      var _this=this;
+      map.addEventListener("click",function(e){//监听点击地图事件
+        _this.eventLon=e.point.lng;
+        _this.eventLat=e.point.lat;
+        marker.point={'lng':e.point.lng,'lat':e.point.lat};
+        map.addOverlay(marker);        //显示点
+        $("#mapData").html("选中点坐标为："+e.point.lng+" , "+e.point.lat)
+        $("#eventLon").val(e.point.lng);
+        $("#eventLat").val(e.point.lat);
+      });
+      // var b = new BMap.Bounds(new BMap.Point(102.133259,19.844364),new BMap.Point(114.91938,27.888988));
+      // try { 
+      //   BMapLib.AreaRestriction.setBounds(map, b);
+      // } 
+      // catch (e) {
+      //   alert(e);
+      // }
+      this.getBoundary(map)
     }
     function getBoundary(map){       
       var bdary = new BMap.Boundary();
@@ -193,12 +208,47 @@
         //map.panTo(new BMap.Point(105.203232,27.190884));
       });       
     }
-    function addVideo(e){
-      const files = e.target.files
+    function addPicture(){
+      let files = document.getElementById("filePicture").files;
+      let pictureCount = document.getElementById("pictureList").getElementsByTagName("li").length
       if(!files.length) {
         return;
       } 
-      else if(files.length+this.videoCount > 3) {
+      else if(files.length + pictureCount > 6) {
+        window.alert("每次最多只能上传6张图片");
+        return;
+      } 
+      if(typeof FileReader == 'undefined'){
+        this.fileValue="你的浏览器不支持FileReader接口！功能无法正常使用！"
+      }
+      for(var i=0;i<files.length;i++){
+        if(!/image\/\w+/.test(files[i].type)){
+          alert("请选择图片！");
+          return;
+        }   
+        var reader = new FileReader();        
+        reader.readAsDataURL(files[i]); //将文件以Data URL形式读入页面
+        var _this=this 
+        reader.onload=function(e){  
+          let oldContent = $("#pictureList").html();
+          $("#pictureList").html(oldContent+"<li><div class='am-gallery-item'><a href='"+this.result+"'><img src='"+this.result+"'/></a></div></li>");
+          let oldUrl = $("#imgUrl").val();
+          $("#imgUrl").val(oldUrl+this.result+",")
+        }
+      }
+    }
+    function removePicture(){
+      $("#pictureList").html("");
+      $("ul.am-pureview-slider").html("");
+      $("#imgUrl").val("");
+    }
+    function addVideo(){
+      let files = document.getElementById("fileVideo").files;
+      let videoCount = document.getElementsByTagName("video").length
+      if(!files.length) {
+        return;
+      } 
+      else if(files.length+videoCount > 3) {
         window.alert("每次最多只能上传3部视频");
         return;
       } 
@@ -219,11 +269,16 @@
         reader.readAsDataURL(files[i]); //将文件以Data URL形式读入页面
         var _this=this 
         reader.onload=function(e){  
-          _this.videoUrlHtml+='<video controls="controls"><source src="'+this.result+'"></video>';
-          _this.videoUrl+=this.result+',';
-        }   
-        this.videoCount++         
+          let oldContent = $("#videoBox").html();
+          $("#videoBox").html(oldContent+'<video controls="controls"><source src="'+this.result+'"></video>');
+          let oldUrl = $("#videoUrl").val();
+          $("#videoUrl").val(oldUrl+this.result+",")
+        }         
       }
+    }
+    function removeVideo(){
+      $("#videoBox").html("")
+      $("#videoUrl").val("")
     }
     $(function () {
       var $modal = $('#map-modal');
@@ -231,21 +286,14 @@
         $modal.modal('open');
       });
       initMap();
-      $('#datetimepicker').datetimepicker({
+      $('#timeData').datetimepicker({
         format: 'yyyy-mm-dd hh'
-      });
-      jQuery.validator.addMethod("isPhone", function(value, element) { 
-        var tel = /^(((13[0-9]{1})|(15[0-9]{1}))+\d{8})$/; 
-        return this.optional(element) || (tel.test(value)); 
-        }, "电话号码格式错误");
+      });      
       $('#eventReporter').validate({
         //提交表单后，（第一个）未通过验证的表单获得焦点 
         focusInvalid:true, 
         //当未通过验证的元素获得焦点时，移除错误提示 
         //focusCleanup:true, 
-        // errorClass: "unchecked",
-        // validClass: "checked",
-        // errorElement: "span",
         submitHandler:function(form){
             $(form).ajaxSubmit({
                 type:"post",
@@ -258,32 +306,29 @@
                 },
                 success: function(data) {
                     if(data.code==0){
-                        alert("注册成功")
-                    }
-                    else if(data.error==102){
-                        alert("用户已经注册过")
+                        console.log("事件上报成功")
                     }
                     else if(data.error==103){
-                        alert("用户已经被封号")
+                        console.log("用户已经被封号")
+                    }
+                    else if(data.error==-110){
+                        console.log("系统后台出错")
                     }
                     else if(data.error==-111){
-                        alert("没有获取微信号信息")
+                        console.log("没有获取微信号信息")
                     }
                 }
             });
         },
         rules: {
-          name:"required",
-          phone:{
-            isPhone:true,
-            required:true,
-          },
+          eventTitle:"required",
+          eventOccurAddress:"required",
+          mainContent:"required"
         },
         messages:{
-          name:"请输入用户名",
-          phone:{
-            required:"请输入手机号码"
-          }
+          eventTitle:"请输入事件标题",
+          eventOccurAddress:"请输入事件地点",
+          mainContent:"请输入事件内容"
         }
       });
     });
