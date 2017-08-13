@@ -17,9 +17,6 @@
   <link rel="stylesheet" href="assets/css/amazeui.min.css"/>
   <link rel="stylesheet" href="assets/css/emo.css"/>
   <style>
-/*    body{
-      background-color: #e9d8c8;
-    }*/
     .am-header-default {
       background-color: #df2507;
     }
@@ -39,11 +36,7 @@
     .must{
       padding-left:.2em;
       color: #ff0000;
-    }
-    .error{
-      color: #ff0000;
-      font-size:.5em;
-    }
+    }    
   </style>
 </head>
 <body>
@@ -88,7 +81,7 @@
         </select>
         <div>
           <icon class="am-icon-user"></icon><label for="email">姓名<span class="must">*</span></label>
-          <input type="text" name="name" id="name" value="" placeholder="请输入姓名" class="am-input-lg">
+          <input type="text" name="name" id="name" value="" maxlength="10" placeholder="请输入姓名" class="am-input-lg">
         </div>
         <div>
           <icon class="am-icon-mobile-phone"></icon><label for="password">手机号<span class="must">*</span></label>

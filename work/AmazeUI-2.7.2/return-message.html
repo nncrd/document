@@ -14,36 +14,79 @@
   <link rel="stylesheet" href="assets/css/amazeui.min.css"/>
   <link rel="stylesheet" href="assets/css/emo.css"/>
   <style>
-/*    body{
-      background-color: #e9d8c8;
-    }*/
     .am-header-default {
       background-color: #df2507;
     }
-    span{
-      margin-right:.2em;
+    #returnDiv{
+      text-align: center;
+      margin-top: 30%;
     }
+    #returnDiv .am-icon-btn{
+      width: 2em;
+      height: 2em;
+      line-height: 1.8em;
+    }
+    #returnDiv span{
+      font-size: 3em;
+      display: none;
+    }
+    
   </style>
 </head>
 <body>
   <header data-am-widget="header" class="am-header am-header-default am-header-fixed">
-      <div class="am-header-left am-header-nav">
-          <a href="register.html" class="">
-              <img class="am-header-icon-custom" src="data:image/svg+xml;charset&#x3D;utf-8,&lt;svg xmlns&#x3D;&quot;http://www.w3.org/2000/svg&quot; viewBox&#x3D;&quot;0 0 12 20&quot;&gt;&lt;path d&#x3D;&quot;M10,0l2,2l-8,8l8,8l-2,2L0,10L10,0z&quot; fill&#x3D;&quot;%23fff&quot;/&gt;&lt;/svg&gt;" alt=""/>
-          </a>
-      </div>
       <h1 class="am-header-title">
-          事件上报结果
+          处理结果
       </h1>
-      <div class="am-header-right am-header-nav">
-          <a href="#right-link" class="">
-              <img class="am-header-icon-custom" src="data:image/svg+xml;charset&#x3D;utf-8,&lt;svg xmlns&#x3D;&quot;http://www.w3.org/2000/svg&quot; viewBox&#x3D;&quot;0 0 42 26&quot; fill&#x3D;&quot;%23fff&quot;&gt;&lt;rect width&#x3D;&quot;4&quot; height&#x3D;&quot;4&quot;/&gt;&lt;rect x&#x3D;&quot;8&quot; y&#x3D;&quot;1&quot; width&#x3D;&quot;34&quot; height&#x3D;&quot;2&quot;/&gt;&lt;rect y&#x3D;&quot;11&quot; width&#x3D;&quot;4&quot; height&#x3D;&quot;4&quot;/&gt;&lt;rect x&#x3D;&quot;8&quot; y&#x3D;&quot;12&quot; width&#x3D;&quot;34&quot; height&#x3D;&quot;2&quot;/&gt;&lt;rect y&#x3D;&quot;22&quot; width&#x3D;&quot;4&quot; height&#x3D;&quot;4&quot;/&gt;&lt;rect x&#x3D;&quot;8&quot; y&#x3D;&quot;23&quot; width&#x3D;&quot;34&quot; height&#x3D;&quot;2&quot;/&gt;&lt;/svg&gt;" alt=""/>
-          </a>
-      </div>
   </header>
-  
+    <div id="returnDiv">
+      <span class="am-icon-btn am-success am-icon-check"></span>
+      <span class="am-icon-btn am-warning am-icon-ban"></span>
+      <span class="am-icon-btn am-warning am-icon-warning"></span>
+      <span class="am-icon-btn am-danger am-icon-chain-broken"></span>
+      <span class="am-icon-btn am-danger am-icon-bug"></span>
+      <h1></h1><p></p>
+      <button type="button" class="submitBtn am-btn am-btn-sm am-center" onclick="window.history.go(-1);location.reload();"><icon class="am-icon-reply"> 返回</button>
+    </div>
   <script type="text/javascript">
-    
+    function printResult(logo,result,content){
+      $(logo).css('display','inline-block')
+      $("#returnDiv h1").html(result);
+      $("#returnDiv p").html(content);
+    }
+    $(function(){
+      var returnType='reporter';
+      var returnResult=-112;
+      var returnContent='';
+      if(returnType=='register'){
+        if(returnResult==0){
+          printResult('.am-icon-check','注册成功','')
+        }
+        else if(returnResult==102){
+          printResult('.am-icon-warning','注册失败','用户已经注册过')
+        }
+        else if(returnResult==103){
+          printResult('.am-icon-ban','注册失败','用户已经被封号')
+        }
+        else if(returnResult==-111){
+          printResult('.am-icon-chain-broken','注册失败','没有获取微信号信息')
+        }
+      }
+      else if(returnType=='reporter'){
+        if(returnResult==0){
+          printResult('.am-icon-check','事件上报成功','')
+        }
+        else if(returnResult==103){
+          printResult('.am-icon-ban','事件上报失败','用户已经被封号')
+        }
+        else if(returnResult==-111){
+          printResult('.am-icon-bug','事件上报失败','系统后台出错')
+        }
+        else if(returnResult==-112){
+          printResult('.am-icon-chain-broken','事件上报失败','没有获取微信号信息')
+        }
+      }
+    });
   </script>
 </body>
 </html>
