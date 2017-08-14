@@ -21,25 +21,22 @@
   <link rel="stylesheet" href="assets/css/amazeui.min.css"/>
   <link rel="stylesheet" href="assets/css/amazeui.datetimepicker.css"/>
   <link rel="stylesheet" href="assets/css/emo.css"/>
-  <style>    
-    .am-header-default {
-      background-color: #df2507;
-    }
-    span{
-      margin-right:.2em;
-    }
-    .must{
-      padding-left:.2em;
-      color: #ff0000;
-    }
+  <style>       
     #timeData{
       color:#000;
+    }
+    #leftNumDiv{
+      color:#aaa;
+    }
+    #leftNum{
+      color:#eeaf00;
+      font-weight: bold;
     }
     #mainMap{
       width: 100%;
       height: 100%;
     }
-    #eventLon,#eventLat,#fileVideo,#filePicture,#imgUrl,#videoUrl{
+    #eventLon, #eventLat, #fileVideo, #filePicture, #imgUrl, #videoUrl{
       display: none;
     }
     #videoBox video{
@@ -67,32 +64,31 @@
   <div class="am-g">
     <div class="am-u-lg-6 am-u-md-8 am-u-sm-centered">
       <form method="post" class="am-form" id="eventReporter" action="">
-        <div class="am-form-group">
+        <div class="am-form-group" data-am-scrollspy="{animation: 'fade'}">
           <span class="am-icon-book"></span><label for="eventTitle">事件标题<span class="must">*</span></label>
           <input type="text" name="eventTitle" id="eventTitle" value="" maxlength="50" placeholder="请输入标题，请不超过50个字" class="am-input-lg">
         </div>
-        <div class="am-form-group">
+        <div class="am-form-group" data-am-scrollspy="{animation: 'fade'}">
         <span class="am-icon-calendar"></span><label for="timeData">发生时间<span class="must">*</span></label>
         <input type="text" name="timeData" id="timeData" value="2017-08-11 21" id="datetimepicker" class="am-form-field am-input-lg">
         </div>
-        <div class="am-form-group">
+        <div class="am-form-group" data-am-scrollspy="{animation: 'fade'}">
           <span class="am-icon-home"></span><label for="address">事件地点<span class="must">*</span></label>
           <input type="text" name="eventOccurAddress" id="address" value="" maxlength="50" placeholder="请输入地点，请不超过50个字" class="am-input-lg">
         </div>
-        <br>
-        <div class="am-cf">
+        <fieldset class="am-form-group" data-am-scrollspy="{animation: 'fade'}">
           <button type="button" name="marker" id="marker" class="submitBtn am-btn am-btn-sm am-center"><icon class="am-icon-map-marker" data-am-modal="{target: '#map-actions'}"> 地图取点</button>
           <input name="eventLon" id="eventLon" type="text">
           <input name="eventLat" id="eventLat" type="text">
           <p id="mapData"></p>
-        </div>
+        </fieldset>
         <div class="am-modal-actions" id="map-actions">
           <div class="am-modal-actions-group">
           <div style="background: white;height:25em">
             <h3>请在地图上取点</h3>
             <div id="mainMap"></div>
           </div>
-            <ul class="am-list">   
+            <ul class="am-list">
               <li class="am-modal-actions-danger">
                 <a href="#" data-am-modal-close><span class="am-icon-upload"></span> 确定</a>
               </li>
@@ -102,43 +98,44 @@
             <button class="am-btn am-btn-secondary am-btn-block" data-am-modal-close>取消</button>
           </div>
         </div>
-        <div class="am-form-group">
+        <div class="am-form-group" data-am-scrollspy="{animation: 'fade'}">
           <span class="am-icon-database am-icon-spin"></span><label for="mainContent">事件内容<span class="must">*</span></label>
           <textarea rows="5" id="mainContent" name="mainContent" maxlength="250" placeholder="请输入内容，请不超过250个字" class="am-input-lg"></textarea>
+          <div id="leftNumDiv">还可以输入<span id="leftNum"></span>个字</div>
         </div>
-        <div class="am-form-group">
+        <fieldset class="am-form-group pictureDiv" data-am-scrollspy="{animation: 'fade'}">
           <span class="am-icon-file-image-o"></span><label for="">事件图片</label>
           <ul id="pictureList" data-am-widget="gallery" class="am-gallery am-avg-sm-2 am-avg-md-3 am-avg-lg-4 am-gallery-default" data-am-gallery="{ pureview: true }" >
-              <li>
-                <div class="am-gallery-item">
-                    <a href="https://ooo.0o0.ooo/2017/05/17/591c271ab71b1.jpg" class="">
-                      <img src="https://ooo.0o0.ooo/2017/05/17/591c271ab71b1.jpg"/>
-                    </a>
-                </div>
-              </li>
-              <li>
-                <div class="am-gallery-item">
-                    <a href="https://ooo.0o0.ooo/2017/05/17/591c271acea7c.jpg" class="">
-                      <img src="https://ooo.0o0.ooo/2017/05/17/591c271acea7c.jpg"/>
-                    </a>
-                </div>
-              </li>      
-              <li>
-                <div class="am-gallery-item">
-                    <a href="https://ooo.0o0.ooo/2017/06/15/59425a592b949.jpeg" class="">
-                      <img src="https://ooo.0o0.ooo/2017/06/15/59425a592b949.jpeg"/>
-                    </a>
-                </div>
-              </li>
+            <li>
+              <div class="am-gallery-item">
+                  <a href="https://ooo.0o0.ooo/2017/05/17/591c271ab71b1.jpg" class="">
+                    <img src="https://ooo.0o0.ooo/2017/05/17/591c271ab71b1.jpg"/>
+                  </a>
+              </div>
+            </li>
+            <li>
+              <div class="am-gallery-item">
+                  <a href="https://ooo.0o0.ooo/2017/05/17/591c271acea7c.jpg" class="">
+                    <img src="https://ooo.0o0.ooo/2017/05/17/591c271acea7c.jpg"/>
+                  </a>
+              </div>
+            </li>
+            <li>
+              <div class="am-gallery-item">
+                  <a href="https://ooo.0o0.ooo/2017/06/15/59425a592b949.jpeg" class="">
+                    <img src="https://ooo.0o0.ooo/2017/06/15/59425a592b949.jpeg"/>
+                  </a>
+              </div>
+            </li>
           </ul>
-          <div class="operateBtn">            
+          <div class="operateBtn">
             <input type="file" id="filePicture" multiple="multiple" required="required" accept="image/*" onchange="addPicture()"/>
             <label for="filePicture" class="submitBtn am-btn am-btn-sm"><span class="am-icon-plus-square"></span> 添加图片</label>  
             <button type="button" name="deletePicture" id="deletePicture" class="cancelBtn am-btn am-btn-sm" onclick="removePicture()"><span class="am-icon-minus-square"></span> 删除图片</button>
             <input name="imgUrl" id="imgUrl">
           </div>
-        </div>
-        <div class="am-cf am-form-group">
+        </fieldset>
+        <fieldset class="am-cf am-form-group" data-am-scrollspy="{animation: 'fade'}">
           <span class="am-icon-file-video-o"></span><label for="">事件视频</label>
           <div class="operateBtn">
             <div id="videoBox"></div>
@@ -147,7 +144,7 @@
             <button type="button" name="deleteVideo" id="deleteVideo" class="cancelBtn am-btn am-btn-sm" onclick="removeVideo()"><span class="am-icon-minus-square"></span> 删除视频</button>
             <input name="videoUrl" id="videoUrl">
           </div>
-        </div>
+        </fieldset>
         <div class="am-cf am-form-group">
           <button type="submit" name="" class="submitBtn am-btn am-btn-lg am-center"><span class="am-icon-cloud-upload"></span> 提交信息</button>
         </div>
@@ -155,6 +152,17 @@
     </div>
   </div>
   <script type="text/javascript">
+    function changeLeftNum(obj,num){
+      $("#leftNum").text(num);
+      $(obj).on('keyup',function(){
+        var len = $(obj).val();
+        $("#leftNum").text(num-len.length);
+        if(len.length>=num){
+            $("#leftNum").text(0);
+            $(obj).val(len.substring(0,num));
+        }
+      });
+    }
     function initMap(){
       var map = new BMap.Map("mainMap",{minZoom:7,maxZoom:18});    // 创建Map实例,设置地图允许的最小/大级别
       var point = new BMap.Point(108.553232,23.090884) //设置中心点坐标
@@ -169,7 +177,7 @@
         _this.eventLat=e.point.lat;
         marker.point={'lng':e.point.lng,'lat':e.point.lat};
         map.addOverlay(marker);        //显示点
-        $("#mapData").html("选中点坐标为："+e.point.lng+" , "+e.point.lat)
+        $("#mapData").html("选中点坐标："+e.point.lng+" , "+e.point.lat)
         $("#eventLon").val(e.point.lng);
         $("#eventLat").val(e.point.lat);
       });
@@ -182,10 +190,10 @@
       // }
       this.getBoundary(map)
     }
-    function getBoundary(map){       
+    function getBoundary(map){
       var bdary = new BMap.Boundary();
       bdary.get("广西", function(rs){       //获取行政区域
-        map.clearOverlays();        //清除地图覆盖物       
+        map.clearOverlays();        //清除地图覆盖物
         var count = rs.boundaries.length; //行政区域的点有多少个
         if (count === 0) {
           alert('未能获取当前输入行政区域');
@@ -197,7 +205,7 @@
           map.addOverlay(ply);  //添加覆盖物
           pointArray = pointArray.concat(ply.getPath());
         }    
-        //map.setViewport(pointArray);    //调整视野   
+        //map.setViewport(pointArray);    //调整视野
         //map.panTo(new BMap.Point(105.203232,27.190884));
       });       
     }
@@ -274,6 +282,8 @@
       $("#videoUrl").val("")
     }
     $(function () {
+      var progress = $.AMUI.progress;
+      changeLeftNum("#mainContent",250);
       var $modal = $('#map-modal');
       $('#marker').on('click', function(e) {
         $modal.modal('open');
@@ -290,12 +300,12 @@
         submitHandler:function(form){
             $(form).ajaxSubmit({
                 type:"post",
-                url:"/wechat/event-reporter",
+                url:"../../wechat/event-reporter",
                 beforeSend:function(){
-                    //$("#loading").show();
+                    progress.start();
                 },
                 complete:function(){
-                    //$("#loading").hide();
+                    progress.done();
                 },
                 success: function(data) {
                     if(data.code==0){

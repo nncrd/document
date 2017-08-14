@@ -17,9 +17,6 @@
   <link rel="stylesheet" href="assets/css/amazeui.min.css"/>
   <link rel="stylesheet" href="assets/css/emo.css"/>
   <style>
-    .am-header-default {
-      background-color: #df2507;
-    }
     .logo {
       margin:1em 0;
       text-align: center;
@@ -28,15 +25,8 @@
       width: 85px;
     }
     label{
-      margin-top:.2em
-    }
-    icon{
-      margin-right:.2em;
-    }
-    .must{
-      padding-left:.2em;
-      color: #ff0000;
-    }    
+      margin-top:.5em
+    }   
   </style>
 </head>
 <body>
@@ -61,41 +51,38 @@
   <div class="am-g">
     <div class="am-u-lg-6 am-u-md-8 am-u-sm-centered">
       <form method="post" class="am-form" id="userRegister" action="">
-        <icon class="am-icon-globe"></icon><label for="area">地区<span class="must">*</span></label>
+        <span class="am-icon-globe"></span><label for="area">地区<span class="must">*</span></label>
         <select id="area" class="am-form-select am-input-lg" name="area">
-          <option value ="nn">南宁</option>
-          <option value ="gl">桂林</option>
-          <option value ="lz">柳州</option>
-          <option value ="wz">梧州</option>
-          <option value ="bh">北海</option>
-          <option value ="bs">百色</option>
         </select>
-        <icon class="am-icon-users"></icon><label for="department">部门<span class="must">*</span></label>
+        <span class="am-icon-users"></span><label for="department">部门<span class="must">*</span></label>
         <select id="department" class="am-form-select am-input-lg" name="department">
-          <option value ="gtj">国土局</option>
-          <option value ="slt">水利厅</option>
-          <option value ="xzf">县政府</option>
-          <option value ="fxb">防汛办</option>
-          <option value ="lyj">旅游局</option>
-          <option value ="jyj">教育局</option>
         </select>
         <div>
-          <icon class="am-icon-user"></icon><label for="email">姓名<span class="must">*</span></label>
+          <span class="am-icon-user"></span><label for="email">姓名<span class="must">*</span></label>
           <input type="text" name="name" id="name" value="" maxlength="10" placeholder="请输入姓名" class="am-input-lg">
         </div>
         <div>
-          <icon class="am-icon-mobile-phone"></icon><label for="password">手机号<span class="must">*</span></label>
-          <input type="text" name="phone" id="phone" value="" placeholder="请输入手机号码" class="am-input-lg">
+          <span class="am-icon-mobile-phone"></span><label for="password">手机号<span class="must">*</span></label>
+          <input type="text" name="tel" id="phone" value="" placeholder="请输入手机号码" class="am-input-lg">
         </div>
         <br>
         <div class="am-cf">
-          <input type="submit" value="提交信息" class="submitBtn am-btn am-btn-lg am-center" style="">
+          <button type="submit" class="submitBtn am-btn am-btn-lg am-center"><span class="am-icon-cloud-upload"></span> 提交信息</button>
         </div>
       </form>
     </div>
   </div>
   <script type="text/javascript">
-    $(function () {
+    $(function () {      
+      var progress = $.AMUI.progress;
+      var areaList=[{id: 'nn', name: '南宁'}, {id: 'gl', name: '桂林'}, {id: 'lz', name: '柳州'}, {id: 'bh', name: '北海'}, {id: 'wz', name: '梧州'}, {id: 'bs', name: '百色'}, {id: 'fcg', name: '防城港'}, {id: 'qz', name: '钦州'}, {id: 'yl', name: '玉林'}, {id: 'hc', name: '河池'}, {id: 'gg', name: '贵港'}, {id: 'hz', name: '贺州'}, {id: 'cz', name: '崇左'}];
+      var departmentList=[{id: 'gtj', name: '国土局'}, {id: 'slj', name: '水利局'}, {id: 'xzf', name: '县政府'}, {id: 'fxb', name: '防汛办'}, {id: 'lyj', name: '旅游局'}, {id: 'jyj', name: '教育局'}, {id: 'zjj', name: '住建局'}, {id: 'jtb', name: '交通局'}, {id: 'ajj', name: '安监局'}, {id: 'glj', name: '公路局'}, {id: 'zzf', name: '镇政府'}, {id: 'rwb', name: '人武部'}, {id: 'qxj', name: '气象局'}];
+      for(var i = 0; i< areaList.length; i++){  
+        $("<option value='"+areaList[i].id+"'>"+areaList[i].name+"</option>").appendTo("#area");  
+      }
+      for(var i = 0; i< departmentList.length; i++){  
+        $("<option value='"+departmentList[i].id+"'>"+departmentList[i].name+"</option>").appendTo("#department");  
+      }
       jQuery.validator.addMethod("isPhone", function(value, element) { 
         var tel = /^(((13[0-9]{1})|(15[0-9]{1}))+\d{8})$/; 
         return this.optional(element) || (tel.test(value)); 
@@ -111,25 +98,25 @@
         submitHandler:function(form){
             $(form).ajaxSubmit({
                 type:"post",
-                url:"/wechat/reporter-register",
+                url:"../../wechat/reporter-register",
                 beforeSend:function(){
-                    //$("#loading").show();
+                  progress.start();
                 },
                 complete:function(){
-                    //$("#loading").hide();
+                  progress.done();
                 },
                 success: function(data) {
                     if(data.code==0){
-                        alert("注册成功")
+                        console.log("注册成功")
                     }
                     else if(data.error==102){
-                        alert("用户已经注册过")
+                        console.log("用户已经注册过")
                     }
                     else if(data.error==103){
-                        alert("用户已经被封号")
+                        console.log("用户已经被封号")
                     }
                     else if(data.error==-111){
-                        alert("没有获取微信号信息")
+                        console.log("没有获取微信号信息")
                     }
                 }
             });

@@ -1,16 +1,11 @@
 body{
-  background-color: rgba(196,0,0,0.1);
-  background: -webkit-linear-gradient(left top, rgba(196,128,0,0.2) , rgba(196,0,0,0.1)); /* Safari 5.1 - 6.0 */
-  background: -o-linear-gradient(bottom right, rgba(196,128,0,0.2), rgba(196,0,0,0.1)); /* Opera 11.1 - 12.0 */
-  background: -moz-linear-gradient(bottom right, rgba(196,128,0,0.2), rgba(196,0,0,0.1)); /* Firefox 3.6 - 15 */
-  background: linear-gradient(to bottom right, rgba(196,128,0,0.2) , rgba(196,0,0,0.1)); /* 标准的语法（必须放在最后） */
+/*  background: -webkit-linear-gradient(left top, rgba(196,128,0,0.2) , rgba(196,0,0,0.1));
+  background: -o-linear-gradient(bottom right, rgba(196,128,0,0.2), rgba(196,0,0,0.1));
+  background: -moz-linear-gradient(bottom right, rgba(196,128,0,0.2), rgba(196,0,0,0.1)); 
+  background: linear-gradient(to bottom right, rgba(196,128,0,0.2) , rgba(196,0,0,0.1));*/
 }
-.error{
+.am-header-default {
   background-color: #df2507;
-  color: #fff;
-  font-size:.5em;
-  width: 100%;
-  padding-left: .5em;
 }
 .am-header-fixed {
   position: fixed;
@@ -20,16 +15,43 @@ body{
   width: 100%;
   z-index: 1010;
 }
+#eventReporter input,#eventReporter textarea,#userRegister select,#userRegister input,.error{
+  border-radius:3px;
+}
+.must{
+  padding-left:.2em;
+  color: #ff0000;
+}
+span{
+  margin-right:.2em;
+  transition: all .5s;
+}
+span:active{
+  transform: rotate(360deg);
+}
+fieldset{
+  border:solid 1px #ccc;
+  border-radius: 3px;
+}
+.error{
+  background-color: #df2507;
+  color: #fff;
+  font-size:1em;
+  width: 100%;
+  padding-left: .5em;
+}
 .submitBtn{
   background:#df2507;
   color:white;
   border-radius: 5px;
+  outline:none;
 }
 .cancelBtn{
   background:transparent;
   color:#666;
   border:solid 2px #666;
   border-radius: 5px;
+  outline:none;
 }
 .operateBtn{
   text-align: center;
