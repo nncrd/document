@@ -1,0 +1,87 @@
+
+<style>
+
+
+    .stationEditTip input{padding: 6px 3px;border-radius: 5px;height: 25px;width: 100%;}
+
+
+    .stationEditTip{margin-top: 10px;line-height: 25px;}
+    .stationEditTip i{line-height: 25px;}
+    .stationEditControl{text-align: center;margin-top: 20px;}
+    .stationEditControl button{padding: 3px;border-radius: 5px;width: 20%;}
+    .stationEditControl input{padding: 3px;border-radius: 5px;width: 20%;margin-left: 5%;}
+
+</style>
+
+
+<div class="editArea container-fluid">
+
+    <div class="row">
+        <form action="../auth/station-update" method="post" name="orginfoEdit" id="orginfoEdit" >
+
+            <div class="stationEditTip col-xs-12">
+                <div class="col-md-1 col-xs-2">部门ID：</div>
+                <div class="col-xs-4">
+                    <input name="id" value="${report.id}" readOnly="true" style="border: none;">
+                </div>
+            </div>
+
+            <div class="stationEditTip col-xs-12">
+                <div class="col-md-1 col-xs-2">部门名字：</div>
+                <div class="col-xs-4">
+                <input name="fullname" value="${report.fullName}" id="fullname" class="pull-right">
+               </div>
+            </div>
+
+            <div class="stationEditTip col-xs-12">
+                <div class="col-md-1 col-xs-2">所属城市：</div>
+                <div class="col-xs-4">
+                <#if report.city??>
+                <input type="hidden" value="" id="cityname" class="pull-right">
+                </#if>
+                <select id=city name="city"></select>
+                </div>
+            </div>
+
+            <div class="stationEditTip col-xs-12">
+                <div class="col-md-1 col-xs-2">部门简称：</div>
+                <div class="col-xs-4">
+                   <input name="shortname" value="${report.shortName}" id="shortname" class="pull-right" > 
+                </div>
+            </div>
+
+            <div class="stationEditTip col-xs-12">
+                <div class="col-md-1 col-xs-2">行政级别：</div>
+                <div class="col-xs-4">
+                <#if report.level??>
+                   <input type="hidden" value="${report.level}" id="orginfolevel" class="pull-right">
+                 </#if>
+                   	<select id="level" name=level>
+                   	<option value="1">自治区</option>
+					<option value="2">市级</option>
+					<option value="3">县级</option>
+                	</select>
+                </div>
+            </div>
+
+            <div class="stationEditControl col-xs-6">
+                <input type="submit" class="btn-success" value="提交">
+                <input type="button" class="btn-danger" id="btnCancel" onclick="$('.right_col').load('../html/admin/report.html');" value="取消">
+            </div>
+
+        </form>
+    </div>
+
+
+
+
+</div>
+<script>
+
+var reportlevel = $("#reportlevel").val();
+$("#level option[value='"+orginfolevel+"']").attr("selected","selected");
+
+var cityname=$("#cityname").val();
+$("#city option[value='"+cityname+"']").attr("selected","selected");
+
+</script>

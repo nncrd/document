@@ -8,19 +8,19 @@
   <meta name="format-detection" content="telephone=no">
   <meta name="renderer" content="webkit">
   <meta http-equiv="Cache-Control" content="no-siteapp" />
-  <link rel="alternate icon" type="image/png" href="assets/i/favicon.png">
-  <script type="text/javascript" src="assets/js/jquery.min.js"></script>
-  <script type="text/javascript" src="assets/js/amazeui.min.js"></script>
-  <script type="text/javascript" src="https://cdn.bootcss.com/jquery.form/4.2.1/jquery.form.min.js"></script>
-  <script type="text/javascript" src="https://cdn.bootcss.com/jquery-validate/1.17.0/jquery.validate.min.js"></script>
-  <script type="text/javascript" src="https://cdn.bootcss.com/jquery-validate/1.17.0/localization/messages_zh.min.js"></script>
-  <script type="text/javascript" src="assets/js/amazeui.datetimepicker.min.js"></script>
-  <script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=0zyaFbAYrqWzAorQm0jqZqkKlEHv1m7l"></script>
+  <link rel="alternate icon" type="image/png" href="//qiniu.jyblue.com/emo/favicon.png">
+  <script type="text/javascript" src="//qiniu.jyblue.com/js/jquery-2.1.4.min.js"></script>
+  <script type="text/javascript" src="//qiniu.jyblue.com/js/amazeui.min.js"></script>
+  <script type="text/javascript" src="//cdn.bootcss.com/jquery.form/4.2.1/jquery.form.min.js"></script>
+  <script type="text/javascript" src="//cdn.bootcss.com/jquery-validate/1.17.0/jquery.validate.min.js"></script>
+  <script type="text/javascript" src="//cdn.bootcss.com/jquery-validate/1.17.0/localization/messages_zh.min.js"></script>
+  <script type="text/javascript" src="//qiniu.jyblue.com/js/amazeui.datetimepicker.min.js"></script>
+  <script type="text/javascript" src="//api.map.baidu.com/api?v=2.0&ak=0zyaFbAYrqWzAorQm0jqZqkKlEHv1m7l"></script>
   <!-- 限制地图范围 -->
-  <script type="text/javascript" src="https://api.map.baidu.com/library/AreaRestriction/1.2/src/AreaRestriction_min.js"></script>
-  <link rel="stylesheet" href="assets/css/amazeui.min.css"/>
-  <link rel="stylesheet" href="assets/css/amazeui.datetimepicker.css"/>
-  <link rel="stylesheet" href="assets/css/emo.css"/>
+  <script type="text/javascript" src="//api.map.baidu.com/library/AreaRestriction/1.2/src/AreaRestriction_min.js"></script>
+  <link rel="stylesheet" href="//qiniu.jyblue.com/css/amazeui.min.css"/>
+  <link rel="stylesheet" href="//qiniu.jyblue.com/css/amazeui.datetimepicker.css"/>
+  <link rel="stylesheet" href="//qiniu.jyblue.com/emo/emo.css"/>
   <style>       
     #timeData{
       color:#000;
@@ -32,9 +32,15 @@
       color:#eeaf00;
       font-weight: bold;
     }
+    #marker{
+      margin-bottom:.2em;
+    }
     #mainMap{
       width: 100%;
       height: 100%;
+    }
+    #mapData{
+      margin:0;
     }
     #eventLon, #eventLat, #fileVideo, #filePicture, #imgUrl, #videoUrl{
       display: none;
@@ -48,7 +54,7 @@
 <body>
   <header data-am-widget="header" class="am-header am-header-default am-header-fixed">
       <div class="am-header-left am-header-nav">
-          <a href="return-message.html" class="">
+          <a href="#left-link" class="">
               <img class="am-header-icon-custom" src="data:image/svg+xml;charset&#x3D;utf-8,&lt;svg xmlns&#x3D;&quot;http://www.w3.org/2000/svg&quot; viewBox&#x3D;&quot;0 0 12 20&quot;&gt;&lt;path d&#x3D;&quot;M10,0l2,2l-8,8l8,8l-2,2L0,10L10,0z&quot; fill&#x3D;&quot;%23fff&quot;/&gt;&lt;/svg&gt;" alt=""/>
           </a>
       </div>
@@ -106,30 +112,9 @@
         <fieldset class="am-form-group pictureDiv" data-am-scrollspy="{animation: 'fade'}">
           <span class="am-icon-file-image-o"></span><label for="">事件图片</label>
           <ul id="pictureList" data-am-widget="gallery" class="am-gallery am-avg-sm-2 am-avg-md-3 am-avg-lg-4 am-gallery-default" data-am-gallery="{ pureview: true }" >
-            <li>
-              <div class="am-gallery-item">
-                  <a href="https://ooo.0o0.ooo/2017/05/17/591c271ab71b1.jpg" class="">
-                    <img src="https://ooo.0o0.ooo/2017/05/17/591c271ab71b1.jpg"/>
-                  </a>
-              </div>
-            </li>
-            <li>
-              <div class="am-gallery-item">
-                  <a href="https://ooo.0o0.ooo/2017/05/17/591c271acea7c.jpg" class="">
-                    <img src="https://ooo.0o0.ooo/2017/05/17/591c271acea7c.jpg"/>
-                  </a>
-              </div>
-            </li>
-            <li>
-              <div class="am-gallery-item">
-                  <a href="https://ooo.0o0.ooo/2017/06/15/59425a592b949.jpeg" class="">
-                    <img src="https://ooo.0o0.ooo/2017/06/15/59425a592b949.jpeg"/>
-                  </a>
-              </div>
-            </li>
           </ul>
           <div class="operateBtn">
-            <input type="file" id="filePicture" multiple="multiple" required="required" accept="image/*" onchange="addPicture()"/>
+            <input type="file" id="filePicture" multiple="multiple" accept="image/*" onchange="addPicture()"/>
             <label for="filePicture" class="submitBtn am-btn am-btn-sm"><span class="am-icon-plus-square"></span> 添加图片</label>  
             <button type="button" name="deletePicture" id="deletePicture" class="cancelBtn am-btn am-btn-sm" onclick="removePicture()"><span class="am-icon-minus-square"></span> 删除图片</button>
             <input name="imgUrl" id="imgUrl">
@@ -139,7 +124,7 @@
           <span class="am-icon-file-video-o"></span><label for="">事件视频</label>
           <div class="operateBtn">
             <div id="videoBox"></div>
-            <input type="file" id="fileVideo" multiple="multiple" required="required" accept="video/*" onchange="addVideo()"/>
+            <input type="file" id="fileVideo" multiple="multiple" accept="video/*" onchange="addVideo()"/>
             <label for="fileVideo" class="submitBtn am-btn am-btn-sm"><span class="am-icon-plus-square"></span> 添加视频</label>            
             <button type="button" name="deleteVideo" id="deleteVideo" class="cancelBtn am-btn am-btn-sm" onclick="removeVideo()"><span class="am-icon-minus-square"></span> 删除视频</button>
             <input name="videoUrl" id="videoUrl">
@@ -293,7 +278,8 @@
         format: 'yyyy-mm-dd hh'
       });      
       $('#eventReporter').validate({
-        //提交表单后，（第一个）未通过验证的表单获得焦点 
+    	ignore:[],
+    	//提交表单后，（第一个）未通过验证的表单获得焦点 
         focusInvalid:true, 
         //当未通过验证的元素获得焦点时，移除错误提示 
         //focusCleanup:true, 
@@ -326,11 +312,13 @@
         rules: {
           eventTitle:"required",
           eventOccurAddress:"required",
+          eventLon:"required",
           mainContent:"required"
         },
         messages:{
           eventTitle:"请输入事件标题",
           eventOccurAddress:"请输入事件地点",
+          eventLon:"请在地图上取点",
           mainContent:"请输入事件内容"
         }
       });

@@ -1,8 +1,8 @@
 body{
-/*  background: -webkit-linear-gradient(left top, rgba(196,128,0,0.2) , rgba(196,0,0,0.1));
+  background: -webkit-linear-gradient(left top, rgba(196,128,0,0.2) , rgba(196,0,0,0.1));
   background: -o-linear-gradient(bottom right, rgba(196,128,0,0.2), rgba(196,0,0,0.1));
   background: -moz-linear-gradient(bottom right, rgba(196,128,0,0.2), rgba(196,0,0,0.1)); 
-  background: linear-gradient(to bottom right, rgba(196,128,0,0.2) , rgba(196,0,0,0.1));*/
+  background: linear-gradient(to bottom right, rgba(196,128,0,0.2) , rgba(196,0,0,0.1));
 }
 .am-header-default {
   background-color: #df2507;
@@ -32,6 +32,7 @@ span:active{
 fieldset{
   border:solid 1px #ccc;
   border-radius: 3px;
+  background-color: white;
 }
 .error{
   background-color: #df2507;
