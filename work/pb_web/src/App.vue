@@ -35,8 +35,9 @@ export default {
   #infoBoxFooter img{width: 20px;position: relative;top: -3px;z-index: 1}
   .infoBoxInfo{display:-webkit-box;border-bottom: dashed 1px #666666;padding-bottom: 0.5rem;}
   .infoBoxText{-webkit-box-flex:1;}
-  .infoBoxImg{width: 100px;height: 100px;overflow: hidden;cursor: pointer;position: relative;z-index: 10}
-  .infoBoxImg img{width: 100%;height: 100%;}  
+  .infoBoxImg{width: 100px;cursor: pointer;position: relative;z-index: 10;display: flex;flex-wrap:wrap;}
+  .infoBoxImg div{flex: 1;min-width:45%;margin: 1px 2px;}
+  .infoBoxImg img{width: 100%}  
   .infoBoxText_min{display:-webkit-box;}
   .infoValue{-webkit-box-flex:1;}
   .infoName{width: 5.5rem;}  

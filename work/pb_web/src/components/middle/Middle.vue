@@ -42,7 +42,6 @@
     import Sjsb from '@/components/middle/Sjsb'
     import Kpzs from '@/components/middle/Kpzs'
     //var urlHead = 'http://222.216.111.50:9380/pb-web/';
-    //var urlHead ='http://localhost:8080/pb-web/'
     var urlHead = '../../';
     export default {
         name: '',
@@ -390,8 +389,12 @@
                                         '<div class="infoValue">'+json[i].telephone+'</div>'+
                                         '</div>'+
                                         '</div>'+
-                                        '<div class="infoBoxImg"><img onClick="checkPicture(this)" src=\"'+json[i].landImg+'?imageMogr2/thumbnail/500x500\" alt="图片暂无..."></div>'+
-                                        '</div>'
+                                        '<div class="infoBoxImg">'
+                                for(let j=0;j<(json[i].landImg+'').split(',').length;j++)   
+                                { 
+                                    infoContent+='<div><img onClick="checkPicture(this)" src="'+(json[i].landImg+'').split(',')[j]+'?imageMogr2/thumbnail/100x100" alt="图片暂无..."></div>'
+                                }
+                                infoContent+='</div></div>'                     
                             }
                             ditu.addMarker(point,icon,labelContent,infoContent,title,ptype);
                         }

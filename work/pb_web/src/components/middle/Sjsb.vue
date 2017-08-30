@@ -32,7 +32,7 @@
         <div style="padding: 0.5rem 0 0.5rem 1rem;color: #B33EF9;">
             带 <i class="fa fa-exclamation-circle"></i> 为必填项！
         </div>
-        <form class="pure-form" action="http://localhost:8080/pb-web/upInfomatin" accept-charset="utf-8" method="post" enctype="multipart/form-data" id="disasterAdd-form">
+        <form class="pure-form" action="../../upInfomatin" accept-charset="utf-8" method="post" enctype="multipart/form-data" id="disasterAdd-form">
             <div class="row">
                 <div class="sjsb-time sjsb-cell col s3" >
                     <div class="sjsb-cell-title">
@@ -130,8 +130,7 @@
     import Date_pick from '@/components/right/Date_pick'
 
 //    var urlHead = 'http://www.uulead.com/pb-web/';
-   var urlHead ='http://localhost:8080/pb-web/'
-                  //  var urlHead = '../../';
+                    var urlHead = '../../';
     export default {
         name: 'sjsb',
         data () {
