@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <script src="http://libs.baidu.com/jquery/2.1.1/jquery.min.js"></script>
+    <script type="text/javascript" src="gif.js"></script>
+    <script type="text/javascript" src="gif.worker.js"></script>
+    </head>
+    <body>
+      <div id="xb">
+        <video id="video1" controls width="360" autoplay src="VID_20170922_144249.mp4"></video>
+        <canvas id="myCanvas" width="360" height="640" style="display:none"></canvas>
+        <img style="width:360px" src="" id="render2">
+      </div>
+    </body>
+    <script>
+        var gif2 = new GIF({
+          workers: 2,
+          quality: 10,
+          width:360,
+          height:640
+        });
+        var v = document.getElementById("video1");
+        var c = document.getElementById("myCanvas");
+        ctx = c.getContext('2d');
+        var xx=0
+        v.addEventListener('play', function() {
+          var timer = window.setInterval(function() {
+            ctx.drawImage(v, 0, 0, 360, 640)
+              //console.log(c.toDataURL("image/png"))
+              $("#xb").append('<img style="width:360px;display:none" src="'+c.toDataURL('image/png')+'">')
+          },200);
+          v.addEventListener('pause', function() {
+            clearInterval(timer);    //Çå³ý¶¨Ê±Æ÷
+            for(var k=0;k<document.getElementsByTagName('img').length;k++)
+            {
+              gif2.addFrame(document.getElementsByTagName('img')[k])
+            }
+            gif2.on('finished', function(blob) {
+              document.getElementById("render2").src = URL.createObjectURL(blob)
+              console.log(blob)
+            });
+            //äÖÈ¾Í¼Æ¬
+            gif2.render();
+          }, false);
+        }, false);
+        
+        
+    </script>
+</html>
