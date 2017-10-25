@@ -1,0 +1,74 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+  <style type="text/css">
+    body, html{
+      width: 100%;
+      height: 100%;
+      margin:0;
+      font-family:"微软雅黑";
+      font-size:14px;
+    }
+    #l-map {
+      width:100%; 
+      height:900px;
+      overflow: hidden;
+    }
+    .BMapLib_nav,.BMapLib_sendToPhone{
+    display:none;
+    }
+    .textComtent{
+      float:left;
+      width:140px;
+    }
+    .textComtent p{
+      margin:0;
+      line-height:20px;
+    }
+    .textImg{
+      float:right;
+      width:95px;
+    }
+    .textImg img{
+      width:95px;
+    }
+  </style>
+  <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=FW5Y6wrPTrGOCtf7BvapCGyrkrICQlkt"></script>
+  <!-- 加载百度地图样式信息窗口 -->
+  <script type="text/javascript" src="http://api.map.baidu.com/library/SearchInfoWindow/1.5/src/SearchInfoWindow_min.js"></script>
+  <link rel="stylesheet" href="http://api.map.baidu.com/library/SearchInfoWindow/1.5/src/SearchInfoWindow_min.css" />
+  <title>叠加麻点图层</title>
+</head>
+<body>
+  <div id="l-map"></div>
+</body>
+</html>
+<script type="text/javascript">
+  // 百度地图API功能
+  var map = new BMap.Map("l-map");          // 创建地图实例
+  var point = new BMap.Point(108.344528,22.862783);  // 创建点坐标
+  map.centerAndZoom(point, 14);                 // 初始化地图，设置中心点坐标和地图级别
+  map.enableScrollWheelZoom();
+  map.addControl(new BMap.NavigationControl());  //添加默认缩放平移控件
+  var customLayer=new BMap.CustomLayer({
+      geotableId: 177965,
+    });
+  map.addTileLayer(customLayer);
+  customLayer.addEventListener('hotspotclick',callback);
+  function callback(e)//单击热点图层
+  {
+      console.log(e)
+      var customPoi = e.customPoi;//poi的默认字段
+      var contentPoi=e.content;//poi的自定义字段
+      var content = '<div class="textComtent"><p>地址：' + customPoi.address + '</p></div><div class="textImg"><img src="' +contentPoi.imgUrl+'"><div>';
+      var searchInfoWindow = new BMapLib.SearchInfoWindow(map, content, {
+        title: customPoi.title, //标题
+        width: 240, //宽度
+        height: 140, //高度
+      });
+      var point = new BMap.Point(customPoi.point.lng, customPoi.point.lat);
+      searchInfoWindow.open(point);
+  }  
+</script>
