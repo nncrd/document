@@ -45,7 +45,7 @@
                 });
             },
             backstage(){
-                window.location = urlHead+'html/index.html'
+                window.location = urlHead+'home'
             }
         },
         mounted:function () {

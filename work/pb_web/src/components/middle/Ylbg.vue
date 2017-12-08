@@ -2,7 +2,7 @@
     .ylbg-xiang-zhan input{display: none;}
     .ylbg-xiang-zhan label{display: block;line-height: 2rem;cursor: pointer;margin-right: 2rem;}
     .ylbg-xiang-zhan label i{color: #999999;line-height: 2rem;font-size: 1.1rem;position: absolute;right: 0.5rem;top: 0;}
-    .xiang-zhan-active i{color: #B33FF9 !important;}
+    .xiang-zhan-active,.xiang-zhan-active i{color: #B33FF9 !important;}
 
     .ylbg{}
         .ylbg-xiang-zhan{margin: 0.5rem;display: -webkit-box;display: flex;}
@@ -42,7 +42,7 @@
             <div class="ylbg-xiang">
                 <div class="xiang-cell" v-for="item in xiang" >
                     <label :for="item.typecode" @click="get_zhan(item.typecode,$event)">
-                        {{item.name}} <i class="fa fa-check-circle-o"></i>
+                        {{item.name}} <!-- <i class="fa fa-check-circle-o"></i> -->
                     </label>
                     <input type="checkbox" :id="item.typecode">
                 </div>
@@ -53,7 +53,7 @@
             <div class="ylbg-zhan">
                 <div class="zhan-cell" v-for="item in zhan">
                     <label @click="select_zhan(item.stationnum,$event)" :for="item.stationnum" class="xiang-zhan-active">
-                        {{item.stationname}} <i class="fa fa-check-circle-o"></i>
+                        {{item.stationname}} <!-- <i class="fa fa-check-circle-o"></i> -->
                     </label>
                     <input type="checkbox" :value="item.stationnum" :id="item.stationnum" checked>
                 </div>
@@ -155,6 +155,7 @@
             },
             select_zhan(val,$event){
                 setTimeout(function () {
+                    console.log(this)
                     if($('#'+val).is(":checked")){
                         $event.target.classList.add("xiang-zhan-active");
                         console.log(val)
@@ -202,8 +203,8 @@
                 var b_hour = $('.ylbg-time-begin .date_pick_select_hour').val();
                 var e_day = $('.ylbg-time-over .date_pick_select_day').val();
                 var e_hour = $('.ylbg-time-over .date_pick_select_hour').val();
-                var beginTime = b_day+b_hour;
-                var overTime = e_day+e_hour;
+                var datetime = b_day+b_hour;
+                var endDatetime = e_day+e_hour;
                 if(datetime > endDatetime){
                     alert('起始时间不能大于结束时间！');
                     return false;
@@ -216,9 +217,9 @@
                 });
 
                 selectStation=selectStation.substring(0,selectStation.length-1);
-                var myUrl="../stabtimeExportExcel?datetime="+beginTime+"&endDatetime="+overTime;
+                var myUrl="../stabtimeExportExcel?datetime="+datetime+"&endDatetime="+endDatetime;
                 if(selectStation.length>0){
-                    myUrl="../stabtimeExportExcel?datetime="+beginTime+"&endDatetime="+overTime+"&stationNum="+selectStation;
+                    myUrl="../stabtimeExportExcel?datetime="+datetime+"&endDatetime="+endDatetime+"&stationNum="+selectStation;
                 }
                 window.open(myUrl);
                 //$("body").append($("<iframe/>").attr("src",myUrl));

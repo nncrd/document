@@ -1,32 +1,161 @@
 <style>
     .middle-block{flex: 1;padding: 0.5rem;}
-    .middle-box{height: 100%;box-shadow: 0 0 0.3rem rgba(0,0,0,0.8);position: relative;}
+    .middle-box{height: 100%;box-shadow: 0 0 0.3rem rgba(0,0,0,0.8);position: relative;overflow:auto}
     #map{width: 100%;height: 100%;}
     .middle-box{}
     .right-title{background: #58B7FF;color: white;line-height: 2rem;padding-left: 1rem;}
     .fbqh{text-align: center;}
-    .fbqh img{height: 80%;margin-top: 5%;}
+    .fbqh img{height:80%;width: auto;margin-top: 5%;}
+    .fbqh .fa-minus-square-o,.fbqh .fa-plus-square-o{font-size: 3rem;color:#999999;position:fixed;left:15rem;top:6rem;cursor: pointer;}
+    .fbqh .fa-plus-square-o{left:18rem;}
+    .fbqh .fa-minus-square-o:active,.fbqh .fa-plus-square-o:active{color: #42A5F5}
+    #disastersList{
+        width: 70%;
+        height: 80%;
+        background: white;
+        margin:1% 0 0 1%;
+        box-shadow: .2rem .2rem 1rem #333;
+        position:absolute;
+        z-index: 9999;
+        border-radius: .5rem;
+        font-size:.5rem;
+        text-align: center;        
+    }    
+    #disastersListHeader{
+        width:100%;
+        height:2.5rem;
+        background: #4e82f9;
+        color: #fff;
+        padding:.2rem .8rem;
+        font-size: 1.3rem;
+        border-radius: .5rem .5rem 0 0;
+    }
+    #disastersListHeader img{
+        width:1.5rem;
+        margin:.2rem 0;
+        float:right;
+        cursor: pointer;
+    }
+    #disastersListContent {
+        height:88%;
+        overflow: auto;
+    }
+    #disastersListTitle{
+        padding:.5rem 0 0 0;
+        font-weight: bold;
+        border-bottom: 2px solid #999;
+        margin-bottom: .2rem;
+    }
+    #disastersListContent div,#disastersListTitle div{
+        padding:0;
+        margin:0;
+    }
+    #disastersListContent .row{
+        padding:.5rem 0;
+    }
+    #disastersListContent .row:hover{
+        background: #666666;
+        color:white;
+    }
+    
 </style>
 
 <template>
     <div class="middle-block">
+        <div id="disastersList" v-show=isDisasterList>
+            <div id="disastersListHeader">
+                隐患点列表
+                <img src="//qiniu.jyblue.com/infobox/close.png?imageslim" @click="isDisasterList=!isDisasterList">
+            </div>
+            <div id="disastersListTitle">
+                <div class="row">
+                    <div class="col s1">编号</div>
+                    <div class="col s2">名称</div>
+                    <div class="col s1">乡镇</div>
+                    <div class="col s1">雨量站</div>
+                    <div class="col s1">责任人</div>
+                    <div class="col s1">观测时间</div>    
+                    <div class="col s1">
+                        <div class="col s6">级别</div>
+                        <div class="col s6">风速</div>
+                    </div>              
+                    <div class="col s1">温度</div>
+                    <div class="col s1">实时雨量</div>
+                    <div class="col s1">有效雨量</div>
+                    
+                    <div class="col s1">灾害类型</div>
+                </div>  
+            </div>
+            <div id="disastersListContent">    
+                <div id="disastersListContentMain">        
+                    <div v-for="(item,index) in disasterList" class="row">
+                        <div class="col s1">
+                            {{item.number}}
+                        </div>
+                        <div class="col s2">
+                            {{item.dname}}
+                        </div>
+                        <div class="col s1">
+                            {{item.xiang}}
+                        </div>
+                        <div class="col s1">
+                            {{item.belongstation}}
+                        </div>
+                        <div class="col s1">
+                            {{item.dutypeople}}
+                        </div>
+                        <div class="col s1">
+                            {{item.observTimes}}
+                        </div>   
+                        <div class="col s1">          
+                            <div class="col s6">
+                                <span v-show='item.typeCode=="4"'>特大</span>
+                                <span v-show='item.typeCode=="3"'>重大</span>
+                                <span v-show='item.typeCode=="2"'>中型</span>
+                                <span v-show='item.typeCode=="1"'>小型</span>
+                            </div>
+                            <div class="col s6">
+                                {{item.windVelocity}}
+                            </div>
+                        </div>                                 
+                        <div class="col s1">
+                            {{item.minTemp}}~{{item.maxTemp}}
+                        </div>
+                        <div class="col s1">
+                            {{item.precipitation}}
+                        </div>
+                        <div class="col s1">
+                            {{item.validRain}}
+                        </div>                
+                        <div class="col s1">
+                            <span v-show='item.geologyType=="4"'>泥石流</span>
+                            <span v-show='item.geologyType=="3"'>滑坡</span>
+                            <span v-show='item.geologyType=="2"'>斜坡变形</span>
+                            <span v-show='item.geologyType=="1"'>崩塌</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="map-box middle-box" v-show="now_path==='skjc'||now_path==='zhyb'||now_path==='ylcx'||now_path==='ylfb'">
             <div id="map"></div>
             <v-tuceng></v-tuceng>
         </div>
         <v-ylbg v-if="now_path==='ylbg'"></v-ylbg>
         <div class="fbqh middle-box" v-if="now_path==='zhqy'||now_path==='rkfb'" >
-            <img src="http://ogbcvxavq.bkt.clouddn.com/pwebdisasterArea.png?imageslim" v-show="now_path==='zhqy'">
-            <img src="http://ogbcvxavq.bkt.clouddn.com/pwebpopulation.png?imageslim" v-show="now_path==='rkfb'">
+            <i class="fa fa-minus-square-o" @click="minusPic"></i> 
+            <i class="fa fa-plus-square-o" @click="plusPic"></i>            
+            <img src="//qiniu.jyblue.com/pwebdisasterArea.png" :style="{'min-height':zhqySize}" v-show="now_path==='zhqy'">
+            <img src="//qiniu.jyblue.com/pwebpopulation.png" :style="{'min-height':rkfbSize}" v-show="now_path==='rkfb'">
         </div>
         <div class="ssjc middle-box" v-if="now_path==='wxyt'||now_path==='ldt'||now_path==='tflj'" style="text-align: center;">
-            <iframe src="http://58.59.134.179/guangxi/skyuntupic.asp" width="80%" height="100%" frameborder="0" scrolling="no" style="max-width: 1060px;" v-if="now_path==='wxyt'">
+            <iframe src="//www.jyblue.com/gxqx-app/guangxi/skyuntupic.asp" width="80%" height="100%" frameborder="0" scrolling="no" style="max-width: 1060px;" v-if="now_path==='wxyt'">
                 您的浏览器无法显示该网页，请升级到最新版本或者使用谷歌、360浏览器访问。
             </iframe>
-            <iframe src="http://58.59.134.179/guangxi/skswan.asp?ds=bh" width="75%" height="100%" frameborder="0" scrolling="no" style="max-width: 1060px;" v-if="now_path==='ldt'">
+            <iframe src="//www.jyblue.com/gxqx-app/guangxi/skswan.asp?ds=bh" width="75%" height="100%" frameborder="0" scrolling="no" style="max-width: 1060px;" v-if="now_path==='ldt'">
                 您的浏览器无法显示该网页，请升级到最新版本或者使用谷歌、360浏览器访问。
             </iframe>
-            <iframe src="http://58.59.134.179/guangxi/typhoon/tyonline.html" width="100%" height="100%" frameborder="0" scrolling="no"  v-if="now_path==='tflj'">
+            <iframe src="//tf.istrongcloud.com/release/index-qx.html?id=1265301031&from=singlemessage&isappinstalled=0" width="100%" height="100%" frameborder="0" scrolling="no"  v-if="now_path==='tflj'">
                 您的浏览器无法显示该网页，请升级到最新版本或者使用谷歌、360浏览器访问。
             </iframe>
         </div>
@@ -41,12 +170,15 @@
     import Ylbg from '@/components/middle/Ylbg'
     import Sjsb from '@/components/middle/Sjsb'
     import Kpzs from '@/components/middle/Kpzs'
-    //var urlHead = 'http://222.216.111.50:9380/pb-web/';
-    var urlHead = '../../';
     export default {
         name: '',
         data () {
-            return {}
+            return {
+                zhqySize:"80%",
+                rkfbSize:"80%",
+                isDisasterList:false,
+                disasterList:'',
+            }
         },
         components:{
             'v-tuceng':Tuceng,'v-ylbg':Ylbg,'v-sjsb':Sjsb,'v-kpzs':Kpzs
@@ -63,6 +195,38 @@
             }
         },
         methods:{
+            minusPic(){                
+                if(this.now_path=="zhqy"){
+                    var size=parseInt(this.zhqySize.split("%")[0])-20
+                    if (size<=80){
+                        size=80
+                    }
+                    this.zhqySize=size+"%"
+                }
+                else{
+                    var size=parseInt(this.rkfbSize.split("%")[0])-20
+                    if (size<=80){
+                        size=80
+                    }
+                    this.rkfbSize=size+"%"
+                }
+            },
+            plusPic(){              
+                if(this.now_path=="zhqy"){
+                    var size=parseInt(this.zhqySize.split("%")[0])+20
+                    if (size>=200){
+                        size=200
+                    }
+                    this.zhqySize=size+"%"
+                }
+                else{
+                    var size=parseInt(this.rkfbSize.split("%")[0])+20
+                    if (size>=200){
+                        size=200
+                    }
+                    this.rkfbSize=size+"%"
+                }
+            },
             initMap(){
                 var _this = this;
                 //             百度地图API功能
@@ -129,10 +293,59 @@
                                 strokeColor: "transparent",
                                 strokeWeight: 3,
                                 fillColor:"grey",
-                                fillOpacity:0.3
+                                fillOpacity:1
                             });
                             map.addOverlay(polygon2);
                         });
+                    },
+                    getVoronoi:function (obj) {                        
+                        var VoronoiDemo = {
+                            voronoi: new Voronoi(),
+                            sites: [],
+                            diagram: null,
+                            margin: 0.15,
+                            canvas: null,
+                            bbox: {xl:109.24,xr:109.88,yt:21.87,yb:22.69},
+                            init: function() {
+                                this.randomSites();
+                                this.drawMap()
+                            },
+                            randomSites:function(){
+                                for(var site=0;site<obj.length;site++)
+                                this.sites.push({x:parseFloat(obj[site].lon),y:parseFloat(obj[site].lat)})
+                                this.diagram = this.voronoi.compute(this.sites, this.bbox);
+                            },
+                            drawMap:function(){
+                                for(var i=0;i<this.diagram.cells.length;i++)
+                                {         
+                                var color=''
+                if(i%5==0)
+                    color=""
+                else if(i%5==1)
+                    color=""
+                else if(i%5==2)
+                    color=""
+                else if(i%5==3)
+                    color=""
+                else if(i%5==4)
+                    color="" 
+                                    var polygonLines=''      
+                                    var halfedges = this.diagram.cells[i].halfedges,nHalfedges = halfedges.length;
+                                    if (nHalfedges > 2) {
+                                        var v = halfedges[0].getStartpoint();
+                                        var polygonLines=v.x+","+v.y+";"
+                                        for (var iHalfedge=0; iHalfedge<nHalfedges; iHalfedge++) {
+                                            v = halfedges[iHalfedge].getEndpoint();
+                                            polygonLines+=v.x+","+v.y+";"
+                                        }
+                                        var polygon = new BMap.Polygon(polygonLines, 
+                                        {strokeColor:"grey", strokeWeight:1, strokeOpacity:1,fillColor:color,fillOpacity:0.2});
+                                        map.addOverlay(polygon)
+                                    }
+                                }
+                            }
+                        }
+                        VoronoiDemo.init();                        
                     },
                     // 添加标注点
                     addMarker:function(point,icon,labelContent,infoContent,title,ptype) {
@@ -157,7 +370,7 @@
                         marker.setLabel(label);
 
 
-                        infoContent = '<div class="infoTitle">'+title+'</div><div id="infoBoxBody">'+infoContent+'</div><div id="infoBoxFooter"><img src="http://ogbcvxavq.bkt.clouddn.com/infobox/arrow_down.png?imageslim"></div>';
+                        infoContent = '<div class="infoTitle">'+title+'</div><div id="infoBoxBody">'+infoContent+'</div><div id="infoBoxFooter"><img src="//qiniu.jyblue.com/infobox/arrow_down3.png?imageslim"></div>';
 
                         var opts = {
                             boxStyle:{
@@ -166,7 +379,7 @@
                                 // border:'solid 1px #dcdcdc',
                                 borderRadius:'0.5rem'
                             },
-                            closeIconUrl:'http://ogbcvxavq.bkt.clouddn.com/infobox/close.png?imageslim',
+                            closeIconUrl:'//qiniu.jyblue.com/infobox/close.png?imageslim',
                             closeIconMargin:'0.2rem',
                             // enableAutoPan : true     //自动平移
                         };
@@ -206,11 +419,10 @@
                     },
                     // 解析数据并调用addMarker方法，实现数据展示
                     addPoints:function (figures,ptype){
-                        console.log(ptype)
                         var json = figures;
                         for(var i=0;i<json.length;i++){
                             var point = new BMap.Point(json[i].lon,json[i].lat);
-                            var icon = new BMap.Icon("http://ogbcvxavq.bkt.clouddn.com/pwebraindrop.png?imageslim", new BMap.Size(20,20));
+                            var icon = new BMap.Icon("//qiniu.jyblue.com/pwebraindrop.png?imageslim", new BMap.Size(20,20));
                             var infoContent = '';
                             var title = '';
                             var labelContent = i;
@@ -240,7 +452,7 @@
                                 if(ptype.indexOf('sum')>-1){rainName = '累计雨量'}
                                 labelContent = precipitation;
                                 title = json[i].stationName;
-                                icon = new BMap.Icon('http://ogbcvxavq.bkt.clouddn.com/pwebraindrop.png?imageslim', new BMap.Size(30,30));
+                                icon = new BMap.Icon('//qiniu.jyblue.com/pwebraindrop.png?imageslim', new BMap.Size(30,30));
                                 infoContent=
                                         '<div class="infoBoxInfo">'+
                                         '<div class="infoBoxText">'+
@@ -265,7 +477,7 @@
                                         '<div class="infoValue">'+alertdegree+'</div>'+
                                         '</div>'+
                                         '</div>'+
-                                        '<div class="infoBoxImg"><img src="http://ogbcvxavq.bkt.clouddn.com/pwebmonitoringStationPhoto.png?imageView2/1/w/80/h/80/imageslim" alt="加载中..."></div>'+
+                                        '<div class="infoBoxImg"><img src="//qiniu.jyblue.com/pwebmonitoringStationPhoto.png?imageView2/1/w/80/h/80/imageslim" alt="加载中..."></div>'+
                                         '</div>'
 
                             }
@@ -327,23 +539,23 @@
                                 // 根据隐患级别确定icon路径--------------------------
                                 if(json[i].typeCode==0||json[i].typeCode=='0'){
                                     typeCode = '无';
-                                    icon = new BMap.Icon('http://ogbcvxavq.bkt.clouddn.com/pweb'+deg_color+'Point3.png', new BMap.Size(15,15));
+                                    icon = new BMap.Icon('//qiniu.jyblue.com/pweb'+deg_color+'Point3.png', new BMap.Size(15,15));
                                 }
                                 else if(json[i].typeCode==1||json[i].typeCode=='1'){
                                     typeCode = '小型';
-                                    icon = new BMap.Icon('http://ogbcvxavq.bkt.clouddn.com/pweb'+deg_color+'Point3.png', new BMap.Size(15,15));
+                                    icon = new BMap.Icon('//qiniu.jyblue.com/pweb'+deg_color+'Point3.png', new BMap.Size(15,15));
                                 }
                                 else if(json[i].typeCode==2||json[i].typeCode=='2'){
                                     typeCode = '中型';
-                                    icon = new BMap.Icon('http://ogbcvxavq.bkt.clouddn.com/pweb'+deg_color+'Point2.png', new BMap.Size(20,20));
+                                    icon = new BMap.Icon('//qiniu.jyblue.com/pweb'+deg_color+'Point2.png', new BMap.Size(20,20));
                                 }
                                 else if(json[i].typeCode==3||json[i].typeCode=='3'){
                                     typeCode = '重大级';
-                                    icon = new BMap.Icon('http://ogbcvxavq.bkt.clouddn.com/pweb'+deg_color+'Point1.png', new BMap.Size(25,25));
+                                    icon = new BMap.Icon('//qiniu.jyblue.com/pweb'+deg_color+'Point1.png', new BMap.Size(25,25));
                                 }
                                 else if(json[i].typeCode==4||json[i].typeCode=='4'){
                                     typeCode = '特大级';
-                                    icon = new BMap.Icon('http://ogbcvxavq.bkt.clouddn.com/pb/images/'+deg_color+'Point30.png', new BMap.Size(30,30));
+                                    icon = new BMap.Icon('//qiniu.jyblue.com/pb/images/'+deg_color+'Point30.png', new BMap.Size(30,30));
                                 }
 
 
@@ -435,27 +647,27 @@
                                     var title = json[i].dname;
 
                                     //确认使用的icon
-                                    var icon = new BMap.Icon("http://ogbcvxavq.bkt.clouddn.com/pwebcollapsed.png", new BMap.Size(30,30));
+                                    var icon = new BMap.Icon("//qiniu.jyblue.com/pwebcollapsed.png", new BMap.Size(30,30));
                                     var typeC = '';
                                     var ptype = '';
                                     switch (type){
                                         case 1:
-                                            icon = new BMap.Icon("http://ogbcvxavq.bkt.clouddn.com/pwebcollapsed.png?imageView2/0/w/20/h/20/imageslim", new BMap.Size(20,20));
+                                            icon = new BMap.Icon("//qiniu.jyblue.com/pwebcollapsed.png?imageView2/0/w/20/h/20/imageslim", new BMap.Size(20,20));
                                             typeC = 'tc_坍塌';
                                             ptype = 'yhd_tc_tt';
                                             break;
                                         case 2:
-                                            icon = new BMap.Icon("http://ogbcvxavq.bkt.clouddn.com/pwebunstableSlope1.png?imageView2/0/w/20/h/20/imageslim", new BMap.Size(20,20));
+                                            icon = new BMap.Icon("//qiniu.jyblue.com/pwebunstableSlope1.png?imageView2/0/w/20/h/20/imageslim", new BMap.Size(20,20));
                                             typeC = 'tc_斜坡变形';
                                             ptype = 'yhd_tc_xpbx';
                                             break;
                                         case 3:
-                                            icon = new BMap.Icon("http://ogbcvxavq.bkt.clouddn.com/pweblandslide.png?imageView2/0/w/20/h/20/imageslim", new BMap.Size(20,20));
+                                            icon = new BMap.Icon("//qiniu.jyblue.com/pweblandslide.png?imageView2/0/w/20/h/20/imageslim", new BMap.Size(20,20));
                                             typeC = 'tc_滑坡';
                                             ptype = 'yhd_tc_hp';
                                             break;
                                         case 4:
-                                            icon = new BMap.Icon("http://ogbcvxavq.bkt.clouddn.com/pwebmudSlides.png?imageView2/0/w/20/h/20/imageslim", new BMap.Size(20,20));
+                                            icon = new BMap.Icon("//qiniu.jyblue.com/pwebmudSlides.png?imageView2/0/w/20/h/20/imageslim", new BMap.Size(20,20));
                                             typeC = 'tc_泥石流';
                                             ptype = 'yhd_tc_nsl';
                                             break;
@@ -483,7 +695,7 @@
                             beforeSend:function(){
                                 $('#app').append(
                                         '<div class="showMes" id="showMes_gonggongTC">'+
-                                        '<img src="http://ogbcvxavq.bkt.clouddn.com/wait.gif?imageslim">'+
+                                        '<img src="//qiniu.jyblue.com/wait.gif?imageslim">'+
                                         '</div>'
                                 )
                             },
@@ -517,11 +729,11 @@
 
                 var land = {
                     yjcx:function () {
+                        var year = $('.toolbar-skjc .date_pick_select_year').val();
                         var date = $('.toolbar-skjc .date_pick_select_day').val();
                         var hour = $('.toolbar-skjc .date_pick_select_hour').val();
-                        var full_date = date+hour;
+                        var full_date = year+date+hour;
                         var typeCode_text = $('.toolbar-skjc .level-btn-active').text();
-                        console.log(typeCode_text)
                         var typeCode = '';
                         switch (typeCode_text){
                             case '特大':
@@ -562,7 +774,7 @@
                             beforeSend:function(){
                                 $('#app').append(
                                         '<div class="showMes" id="showMes_landYj">'+
-                                        '<img src="http://ogbcvxavq.bkt.clouddn.com/wait.gif?imageslim">'+
+                                        '<img src="//qiniu.jyblue.com/wait.gif?imageslim">'+
                                         '</div>'
                                 )
                             },
@@ -574,10 +786,12 @@
                     single_search:function () {
                         var dname = $('.toolbar-skjc .single_search_name').val();
                         var number = $('.toolbar-skjc .single_search_num').val();
-                        var observTimes = $('.toolbar-skjc .date_pick_select_day').val() + $('.toolbar-skjc .date_pick_select_hour').val();
+                        var observTimes = $('.toolbar-skjc .date_pick_select_year').val()+$('.toolbar-skjc .date_pick_select_day').val() + $('.toolbar-skjc .date_pick_select_hour').val();
 
                         if(dname==''&&number==''){
                             alert('请输入隐患点名称或编号查询！')
+                            land.yjcx();
+                            station.addStation();
                             return false;
                         }
 
@@ -604,7 +818,7 @@
                             beforeSend:function(){
                                 $('#app').append(
                                         '<div class="showMes" id="showMes_landS">'+
-                                        '<img src="http://ogbcvxavq.bkt.clouddn.com/wait.gif?imageslim">'+
+                                        '<img src="//qiniu.jyblue.com/wait.gif?imageslim">'+
                                         '</div>'
                                 )
                             },
@@ -648,7 +862,7 @@
                             beforeSend:function(){
                                 $('#app').append(
                                         '<div class="showMes" id="showMes_landYb">'+
-                                        '<img src="http://ogbcvxavq.bkt.clouddn.com/wait.gif?imageslim">'+
+                                        '<img src="//qiniu.jyblue.com/wait.gif?imageslim">'+
                                         '</div>'
                                 )
                             },
@@ -660,9 +874,10 @@
                 var station = {
                     // 雨量查询
                     addStation:function () {
+                        var year = $('.toolbar-skjc .date_pick_select_year').val();
                         var date = $('.toolbar-skjc .date_pick_select_day').val();
                         var hour = $('.toolbar-skjc .date_pick_select_hour').val();
-                        var full_date = date+hour;
+                        var full_date = year+date+hour;
                         $.ajax({ type:"GET",
                             url:urlHead+'findByTimeStabtimeHistoryNo',
 //                            url:url_head+'findByTimeStabtimeHistoryNo',
@@ -671,6 +886,7 @@
                             dataType:"json",
                             success:function(data){
                                 var json = eval(data);
+                                ditu.getVoronoi(json)
                                 ditu.addPoints(json,'ylz');
                             },
                             error:function() {
@@ -679,12 +895,11 @@
                             beforeSend:function(){
                                 $('#app').append(
                                         '<div class="showMes" id="showMes_rainQ">'+
-                                        '<img src="http://ogbcvxavq.bkt.clouddn.com/wait.gif?imageslim">'+
+                                        '<img src="//qiniu.jyblue.com/wait.gif?imageslim">'+
                                         '</div>'
                                 )
                             },
                             complete:function(){
-                                console.log('rainQ')
                                 $("#showMes_rainQ").remove();
                             }
                         });
@@ -707,7 +922,7 @@
                             beforeSend:function(){
                                 $('#app').append(
                                         '<div class="showMes" id="showMes_rainS">'+
-                                        '<img src="http://ogbcvxavq.bkt.clouddn.com/wait.gif?imageslim">'+
+                                        '<img src="//qiniu.jyblue.com/wait.gif?imageslim">'+
                                         '</div>'
                                 )
                             },
@@ -716,9 +931,10 @@
                     },
                     // 等值线图
                     isoline:function () {
+                        var year = $('.toolbar-ylfb .date_pick_select_year').val();
                         var date = $('.toolbar-ylfb .date_pick_select_day').val();
                         var hour = $('.toolbar-ylfb .date_pick_select_hour').val();
-                        var full_date = date+hour;
+                        var full_date = year+date+hour;
                         if(full_date===0){
                             var year_now = new Date().getFullYear().toString();
                             var month_now = (new Date().getMonth()+1).toString();
@@ -797,7 +1013,7 @@
                             beforeSend:function(){
                                 $('#app').append(
                                         '<div class="showMes" id="showMes_rainI">'+
-                                        '<img src="http://ogbcvxavq.bkt.clouddn.com/wait.gif?imageslim">'+
+                                        '<img src="//qiniu.jyblue.com/wait.gif?imageslim">'+
                                         '</div>'
                                 )
                             },
@@ -807,7 +1023,7 @@
                 };
 
                 setTimeout(function () {
-                    ditu.getBoundry1();
+                    ditu.getBoundry1();                    
                     land.yjcx();
                     station.addStation();
                     _this.points_count();
@@ -816,9 +1032,12 @@
                     $('.left-block').on('click','#skjc',function () {
                         setTimeout(function () {
                             ditu.clearMap();
-                            ditu.getBoundry1();
+                            ditu.getBoundry1();                            
                             land.yjcx();
                             station.addStation();
+                            _this.points_count();
+                            _this.disasterList=""
+                            _this.isDisasterList=false;
                         },100);
 
                     });
@@ -830,6 +1049,8 @@
                             land.yjcx();
                             station.addStation();
                             _this.points_count();
+                            _this.disasterList=""
+                            _this.isDisasterList=false;
                         },100);
 
                     });
@@ -840,6 +1061,8 @@
                             ditu.getBoundry1();
                             land.yjcx();
                             station.addStation();
+                            _this.disasterList=""
+                            _this.isDisasterList=false;
                         },100);
 
                     });
@@ -849,6 +1072,8 @@
                             ditu.clearMap();
                             ditu.getBoundry1();
                             land.single_search();
+                            _this.disasterList=""
+                            _this.isDisasterList=false;
                         },100);
 
                     });
@@ -859,7 +1084,8 @@
                             ditu.clearMap();
                           ditu.getBoundry1();
                             land.ybcx();
-
+                            _this.disasterList=""
+                            _this.isDisasterList=false;
                         },100);
 
                     });
@@ -868,6 +1094,8 @@
                             ditu.clearMap();
                           ditu.getBoundry1();
                             land.ybcx();
+                            _this.disasterList=""
+                            _this.isDisasterList=false;
                         },100);
 
                     });
@@ -876,6 +1104,8 @@
                             ditu.clearMap();
                           ditu.getBoundry1();
                             land.ybcx();
+                            _this.disasterList=""
+                            _this.isDisasterList=false;
                         },100);
 
                     });
@@ -887,7 +1117,8 @@
                             ditu.clearMap();
                           ditu.getBoundry1();
                             station.rainSum();
-
+                            _this.disasterList=""
+                            _this.isDisasterList=false;
                         },100);
 
                     });
@@ -896,6 +1127,8 @@
                             ditu.clearMap();
                           ditu.getBoundry1();
                             station.rainSum();
+                            _this.disasterList=""
+                            _this.isDisasterList=false;
                         },100);
 
                     });
@@ -906,6 +1139,8 @@
                             ditu.clearMap();
                           ditu.getBoundry();
                             station.isoline();
+                            _this.disasterList=""
+                            _this.isDisasterList=false;
                         },50);
 
                     });
@@ -914,6 +1149,8 @@
                             ditu.clearMap();
                           ditu.getBoundry();
                             station.isoline();
+                            _this.disasterList=""
+                            _this.isDisasterList=false;
                         },100);
 
                     });
@@ -922,12 +1159,19 @@
                             ditu.clearMap();
                           ditu.getBoundry();
                             station.isoline();
+                            _this.disasterList=""
+                            _this.isDisasterList=false;
                         },100);
 
                     });
+                    $('.left-block').on('click','.collapsible div',function () {
+                        setTimeout(function () {
+                            _this.disasterList=""
+                            _this.isDisasterList=false;
+                        },100);
+                    });
 
-
-//                    图层---------------------------------------
+//                    隐患点列表---------------------------------------
                     $('.tuceng').on('click','.tuceng-cell label',function () {
                         var name = $(this).prev().val();
                         setTimeout(function () {
@@ -935,15 +1179,77 @@
                         },50);
                     });
 
+                    $('.right-block sup').on('click',function () {
+                        _this.disasterList=""
+                        _this.isDisasterList=true;
+                        var alertDegree=0
+                        if(this.getAttribute("class")=="legend-red"){
+                            alertDegree=4
+                        }
+                        else if(this.getAttribute("class")=="legend-orange"){
+                            alertDegree=3
+                        }
+                        else if(this.getAttribute("class")=="legend-yellow"){
+                            alertDegree=2
+                        }
+                        else if(this.getAttribute("class")=="legend-blue"){
+                            alertDegree=1
+                        }
+                        var year = $('.toolbar-skjc .date_pick_select_year').val();
+                        var date = $('.toolbar-skjc .date_pick_select_day').val();
+                        var hour = $('.toolbar-skjc .date_pick_select_hour').val();
+                        var dateCode = year+date+hour;
+                        var typeCode_text = $('.toolbar-skjc .level-btn-active').text();
+                        var typeCode
+                        switch (typeCode_text){
+                            case '特大':
+                                typeCode = 4;
+                                break;
+                            case '重大':
+                                typeCode = 3;
+                                break;
+                            case '中型':
+                                typeCode = 2;
+                                break;
+                            case '小型':
+                                typeCode = 1;
+                                break;
+                            case '所有':
+                                typeCode = '';
+                                break;
+                        }
+                        $.ajax({ 
+                            type:"GET",
+                            url:urlHead+"findLandInfoVilRain",
+                            timeout : 30000,
+                            dataType:"json",
+                            data:{
+                                dateCode:dateCode,
+                                alertDegree:alertDegree,
+                                typeCode:typeCode
+                            },
+                            success:function(data){
+                                _this.disasterList=data
+                            },
+                            error:function() {
+                                
+                            },
+                            beforeSend:function(){
+                                
+                            },
+                            complete:function(){}
+                        })
+                    });
+
                 },100);
 
             },
             points_count(){
                 setTimeout(function () {
+                    var year_select = $('.toolbar-skjc .date_pick_select_year').val().toString();
                     var date_select = $('.toolbar-skjc .date_pick_select_day').val().toString();
                     var hour_select = $('.toolbar-skjc .date_pick_select_hour').val().toString();
-                    var dateCode = date_select+hour_select;
-                    console.log(dateCode);
+                    var dateCode = year_select+date_select+hour_select;
                     $.ajax({ type:"GET",
                         url:urlHead+"findLandInfoVilRain",
 //                        url:urlHead+"findLandInfoVilRain",
@@ -980,7 +1286,7 @@
                         beforeSend:function(){
                             $('.legend-point').append(
                                     '<div style="position: absolute;top: 0;left: 0;width: 100%;height: 100%;background: rgba(0,0,0,0.2);text-align: center;" id="showMes_landTJ">'+
-                                    '<img src="http://ogbcvxavq.bkt.clouddn.com/wait.gif?imageslim" style="height: 80%;margin-top: 10%;">'+
+                                    '<img src="//qiniu.jyblue.com/wait.gif?imageslim" style="height: 80%;margin-top: 10%;">'+
                                     '</div>'
                             )
                         },

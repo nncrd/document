@@ -4,13 +4,14 @@
     <meta charset="utf-8">
     <title>浦北县地质灾害气象条件监测预警系统</title>
     <link href="static/materialize/css/materialize.min.css" rel="stylesheet" type="text/css">
-    <link href="http://ogbcvxavq.bkt.clouddn.com/font-awesome.min.css" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" type="text/css" href="http://ogbcvxavq.bkt.clouddn.com/sweet-alert.css">
-    <script src="http://ogbcvxavq.bkt.clouddn.com/js/sweet-alert.min.js"></script>
+    <link href="//qiniu.jyblue.com/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css" href="//qiniu.jyblue.com/sweet-alert.css">
+    <script src="//qiniu.jyblue.com/js/sweet-alert.min.js"></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <script>
       "use strict";
-      let urlHead = '../../';
+      //var urlHead = '../../';
+      var urlHead = 'http://202.103.199.182:7531/pb-web/'
 //      let urlHead = 'http://222.216.111.50:9380//pb-web/';
       function checkPicture(obj){
         $("#pictureDetail").show()
@@ -32,12 +33,13 @@
     <div id="app"></div>
     <!-- built files will be auto injected -->
     <div id="pictureDetail" onclick='closePicture()'><div><img src=""></img></div></div>
-    <script src="http://ogbcvxavq.bkt.clouddn.com/js/jquery-2.1.4.min.js"></script>
+    <script src="//qiniu.jyblue.com/js/jquery-2.1.4.min.js"></script>
     <script src="static/materialize/js/materialize.min.js"></script>
     <script src="https://cdn.bootcss.com/bluebird/3.5.0/bluebird.min.js"></script>
-    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=5hoPHGpq1xipcsN3xpGNijO0S1K5QVkG"></script>
+    <script type="text/javascript" src="//api.map.baidu.com/api?v=2.0&ak=5hoPHGpq1xipcsN3xpGNijO0S1K5QVkG"></script>
     <script type="text/javascript" src="static/js/info_box.js"></script>
-    <script src="http://ogbcvxavq.bkt.clouddn.com/jquery-form.js"></script>
+    <script type="text/javascript" src="static/js/rhill-voronoi-core.js"></script>
+    <script src="//qiniu.jyblue.com/jquery-form.js"></script>
   </body>
 
 </html>

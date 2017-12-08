@@ -14,6 +14,7 @@
 
         .image-box{border-radius: 0.3rem; border: solid 1px #dcdcdc;padding: 0.5rem;}
             .image-box-min img{max-width: 4rem;min-height: 3.5rem;}
+            .video-box-min video{max-width: 4rem;min-height: 3.5rem;margin:0 .5em;}
             .image-cell{width: 4rem;height: 3.5rem;float: left;margin-right: 0.5rem;border-radius: 0.3rem;overflow: hidden;}
             .image-plus{text-align: center;line-height: 3.5rem;border: dashed 1px #666666;box-sizing: border-box;font-size: 2rem;color: #666666;cursor: pointer;margin: 0 0.5rem 0 0 !important;}
             .image-plus:hover{color: #B33EF9;border:dashed 1px #B33EF9;}
@@ -53,7 +54,7 @@
                         <div class="card-content">
                             <div>
                                 <p style="font-size: 0.8rem;color: #999999 !important"><i class="fa fa-skyatlas purple-text"></i> 选择城镇 <i class="fa fa-skyatlas purple-text"></i></p>
-                                <select class="sjsb-xiang browser-default" v-model="xiang_selected" @change="get_cun" name="town">
+                                <select class="sjsb-xiang browser-default" v-model="xiang_selected" @change="get_cun">
                                     <option v-for="x in xiang" :value="x.typecode">{{x.name}}</option>
                                 </select>
                             </div>
@@ -87,6 +88,24 @@
                             </label>
                             <input type='file' id="img-files" style="display: none;" multiple name="file" accept="image/*" @change="selectFile($event)">
                             <div class="image-box-min">
+
+                            </div>
+                            <div class="clear-both"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sjsb-image sjsb-cell col s12" >
+                    <div class="sjsb-cell-title">
+                        视频选择<i style="color: #B33EF9;font-size: 0.9rem;margin-left: 6rem;">不支持连续添加视频，若要传多部视频，请一次选择多部！</i>
+                    </div>
+                    <div class="sjsb-cell-content">
+                        <div class="image-box">
+                            <label class="image-cell image-plus" for="video-files">
+                                <i class="fa fa-plus"></i>
+                            </label>
+                            <input type='file' id="video-files" style="display: none;" multiple name="videoFile" accept="video/*" @change="selectVideo($event)">
+                            <div class="video-box-min">
 
                             </div>
                             <div class="clear-both"></div>
@@ -197,7 +216,7 @@
                 var files = $event.target.files;
                 for(var i=0;i<files.length;i++){
                     if(!/image\/\w+/.test(files[i].type)){
-                        alert("看清楚，这个需要图片！");
+                        alert("格式不正确，请选择图片！");
                         return false;
                     }
                     var reader = new FileReader();
@@ -214,13 +233,46 @@
                     }
                 }
             },
+            selectVideo($event){
+                $(".video-box-min").html("");
+                if(typeof FileReader == 'undefined'){
+                    $(".image-box-min").html("你的浏览器不支持FileReader接口！功能无法正常使用！")
+                    //使选择控件不可操作
+                }
+                var files = $event.target.files;
+                for(var i=0;i<files.length;i++){
+                    if(!/video\/\w+/.test(files[i].type)){
+                        alert("格式不正确，请选择视频！");
+                        return false;
+                    }
+                    console.log(files[i].size)
+                    if(files[i].size>50*1024*1024)
+                    {
+                        alert("请上传小于50M的视频!");
+                        return false;
+                    }
+                    var reader = new FileReader();
+                    //将文件以Data URL形式读入页面
+                    reader.readAsDataURL(files[i]);
+                    reader.onload=function(e){
+                        var result=document.getElementById("result");
+                        //显示文件
+                        $(".video-box-min").append(
+                            '<video controls="controls"><source src="'+this.result+'"></video>'
+                        )
+                    }
+                }
+            },
             shangbao(){
 //                swal("", "", "");//加载中
                 $("#disasterAdd-form").ajaxSubmit({
+                    data:{
+                        town:$(".sjsb-xiang").find("option:selected").text()
+                    },
                     beforeSend:function(){
                         $('#app').append(
                                 '<div class="showMes" id="showMes_sjsb">'+
-                                '<img src="http://ogbcvxavq.bkt.clouddn.com/wait.gif?imageslim">'+
+                                '<img src="//qiniu.jyblue.com/wait.gif?imageslim">'+
                                 '</div>'
                         )
                     },

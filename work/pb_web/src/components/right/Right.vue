@@ -13,7 +13,7 @@
     }
     .toggle-toolbar-box:hover{border-right: solid 1.5rem rgb(66, 165, 245);}
     .legend-point-cell{line-height: 2rem;}
-    .legend-point-cell sup{}
+    .legend-point-cell sup{cursor:pointer;font-weight: bold;font-size: 1rem;color: darkred;}
 </style>
 
 <template>
@@ -21,9 +21,9 @@
         <div class="toolbar-box" v-show="show_toolbar">
             <!--实况监测toolbar-->
             <div class="toolbar-skjc" v-if="now_path==='skjc'">
-                <v-date-pick>
+                <v-date-pick-extend>
                     <div slot="title"><i class="fa fa-calendar-plus-o purple-text"></i> 预警时间</div>
-                </v-date-pick>
+                </v-date-pick-extend>
                 <v-level-change></v-level-change>
                 <v-single-search></v-single-search>
             </div>
@@ -40,9 +40,9 @@
             <!--雨量分布toolbar-->
             <div class="toolbar-ylfb" v-if="now_path==='ylfb'">
                 <v-change-1h24h></v-change-1h24h>
-                <v-date-pick>
+                <v-date-pick-extend>
                     <div slot="title"><i class="fa fa-calendar-plus-o purple-text"></i> 等值线日期</div>
-                </v-date-pick>
+                </v-date-pick-extend>
             </div>
 
 
@@ -54,22 +54,26 @@
                 <div class="card-content" style="text-align: center;">
                     <div class="row" style="margin-bottom: 0;">
                         <div class="col s6 legend-point-cell">
-                            <img src="http://ogbcvxavq.bkt.clouddn.com/pwebmonitoringStation.png?imageslim">雨量站
+                            <img src="//qiniu.jyblue.com/pwebmonitoringStation.png?imageslim">雨量站
                         </div>
                         <div class="col s6 legend-point-cell">
-                            <img src="http://ogbcvxavq.bkt.clouddn.com/pwebgreenicon.png?imageslim">无警戒
+                            <img src="//qiniu.jyblue.com/pwebgreenicon.png?imageslim">无警戒
                         </div>
                         <div class="col s6 legend-point-cell">
-                            <img src="http://ogbcvxavq.bkt.clouddn.com/pwebredPoint.png?imageslim">红色<sup class="legend-red" style="color: darkred;"></sup>
+                            <img src="//qiniu.jyblue.com/pwebredPoint.png?imageslim">红色 
+                            <sup class="legend-red"></sup>
                         </div>
                         <div class="col s6 legend-point-cell">
-                            <img src="http://ogbcvxavq.bkt.clouddn.com/pweborangePoint.png?imageslim">橙色<sup class="legend-orange" style="color: darkred;"></sup>
+                            <img src="//qiniu.jyblue.com/pweborangePoint.png?imageslim">橙色 
+                            <sup class="legend-orange"></sup>
                         </div>
                         <div class="col s6 legend-point-cell">
-                            <img src="http://ogbcvxavq.bkt.clouddn.com/pwebyellowPoint.png?imageslim">黄色<sup class="legend-yellow" style="color: darkred;"></sup>
+                            <img src="//qiniu.jyblue.com/pwebyellowPoint.png?imageslim">黄色 
+                            <sup class="legend-yellow"></sup>
                         </div>
                         <div class="col s6 legend-point-cell">
-                            <img src="http://ogbcvxavq.bkt.clouddn.com/pwebbluePoint.png?imageslim">蓝色<sup class="legend-blue" style="color: darkred;"></sup>
+                            <img src="//qiniu.jyblue.com/pwebbluePoint.png?imageslim">蓝色 
+                            <sup class="legend-blue"></sup>
                         </div>
                     </div>
                 </div>
@@ -81,22 +85,22 @@
                 <div class="card-content" style="text-align: center;">
                     <div class="row" style="margin-bottom: 0;">
                         <div class="col s6 legend-point-cell">
-                            <img src="http://ogbcvxavq.bkt.clouddn.com/pwebmonitoringStation.png?imageslim">雨量站
+                            <img src="//qiniu.jyblue.com/pwebmonitoringStation.png?imageslim">雨量站
                         </div>
                         <div class="col s6 legend-point-cell">
-                            <img src="http://ogbcvxavq.bkt.clouddn.com/pwebgreenicon.png?imageslim">无警戒
+                            <img src="//qiniu.jyblue.com/pwebgreenicon.png?imageslim">无警戒
                         </div>
                         <div class="col s6 legend-point-cell">
-                            <img src="http://ogbcvxavq.bkt.clouddn.com/pwebredPoint.png?imageslim">红色
+                            <img src="//qiniu.jyblue.com/pwebredPoint.png?imageslim">红色
                         </div>
                         <div class="col s6 legend-point-cell">
-                            <img src="http://ogbcvxavq.bkt.clouddn.com/pweborangePoint.png?imageslim">橙色
+                            <img src="//qiniu.jyblue.com/pweborangePoint.png?imageslim">橙色
                         </div>
                         <div class="col s6 legend-point-cell">
-                            <img src="http://ogbcvxavq.bkt.clouddn.com/pwebyellowPoint.png?imageslim">黄色
+                            <img src="//qiniu.jyblue.com/pwebyellowPoint.png?imageslim">黄色
                         </div>
                         <div class="col s6 legend-point-cell">
-                            <img src="http://ogbcvxavq.bkt.clouddn.com/pwebbluePoint.png?imageslim">蓝色
+                            <img src="//qiniu.jyblue.com/pwebbluePoint.png?imageslim">蓝色
                         </div>
                     </div>
                 </div>
@@ -146,6 +150,7 @@
 
 <script>
     import Date_pick from '@/components/right/Date_pick'
+    import Date_pick_extend from '@/components/right/Date_pick_extend'
     import Level_change from '@/components/right/Level_change'
     import Single_search from '@/components/right/Single_search'
     import Hour_pick from '@/components/right/Hour_pick'
@@ -159,7 +164,7 @@
             }
         },
         components:{
-            'v-date-pick':Date_pick,'v-level-change':Level_change,'v-single-search':Single_search,'v-hour-pick':Hour_pick,
+            'v-date-pick':Date_pick,'v-date-pick-extend':Date_pick_extend,'v-level-change':Level_change,'v-single-search':Single_search,'v-hour-pick':Hour_pick,
             'v-hour-sum':Hour_sum,'v-change-1h24h':Change_1h24h
         },
         computed:{

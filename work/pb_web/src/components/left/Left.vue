@@ -11,6 +11,7 @@
     .left-block .mini-menu{width: 2rem;border-right: solid 1px #dcdcdc;}
     .mini-menu .collection-header,.mini-menu .collapsible-header{padding: 0;width: 2rem;}
     .mini-menu .collection-header{padding: 0.3rem !important;}
+    .copyright{position:fixed;bottom:.5em ;left:.5em;width:15em;font-size:.8em;background-color: #42A5F5;padding:1px;border-radius: 2px;color: #fff;text-align: center;}
     @keyframes go-to-right {
         from{right: 8.5rem;bottom: 1rem;color:#b33ef9; }
         15%{right: 8rem;bottom: 0.1rem;}
@@ -77,6 +78,9 @@
                         <div class="menu-min-cell" @click="change_path('tflj')" :class="{'menu-min-cell-active':now_path==='tflj'}" id="tflj">
                             <i class="fa fa-motorcycle"></i> 台风路径
                         </div>
+                        <!--<div class="menu-min-cell">
+                            <a href="http://58.59.134.179/guangxi/typhoon/tyonline.html" target="_blank" style="color:#000000;"><i class="fa fa-motorcycle"></i> 台风路径</a>
+                        </div>-->
                     </div>
                   </li>
                   <li>
@@ -131,6 +135,10 @@
 
             </li>
         </ul>
+        <div class="copyright">
+                    ©浦北县气象局与国土局联合开发<br>
+                    技术支持——广西九宇蓝
+        </div>
     </div>
 </template>
 

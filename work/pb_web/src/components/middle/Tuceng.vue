@@ -31,10 +31,10 @@
             return {
                 show:false,
                 tucengs:[
-                    {name:'坍塌',value:'tc_坍塌',src:'http://ogbcvxavq.bkt.clouddn.com/pwebcollapsed.png?imageslim',id:'tuceng-tanta'},
-                    {name:'斜坡变形',value:'tc_斜坡变形',src:'http://ogbcvxavq.bkt.clouddn.com/pwebunstableSlope1.png?imageslim',id:'tuceng-xiepobianxing'},
-                    {name:'滑坡',value:'tc_滑坡',src:'http://ogbcvxavq.bkt.clouddn.com/pweblandslide.png?imageslim',id:'tuceng-huapo'},
-                    {name:'泥石流',value:'tc_泥石流',src:'http://ogbcvxavq.bkt.clouddn.com/pwebmudSlides.png?imageslim',id:'tuceng-nishiliu'}
+                    {name:'坍塌',value:'tc_坍塌',src:'//qiniu.jyblue.com/pwebcollapsed.png?imageslim',id:'tuceng-tanta'},
+                    {name:'斜坡变形',value:'tc_斜坡变形',src:'//qiniu.jyblue.com/pwebunstableSlope1.png?imageslim',id:'tuceng-xiepobianxing'},
+                    {name:'滑坡',value:'tc_滑坡',src:'//qiniu.jyblue.com/pweblandslide.png?imageslim',id:'tuceng-huapo'},
+                    {name:'泥石流',value:'tc_泥石流',src:'//qiniu.jyblue.com/pwebmudSlides.png?imageslim',id:'tuceng-nishiliu'}
                 ],
                 tuceng_selected:[]
             }
