@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>Demo 1</title>
+<meta name="Keywords" lang="en" content="voronoi, fortune, javascript, raymond hill"/>
+<script type="text/javascript" src="rhill-voronoi-core.js"></script>
+<style type="text/css">
+body {font-family:tahoma,verdana,arial;font-size:13px;margin:0;padding:0}
+body > div {margin-left:4px;margin-right:4px;}
+body > div > div {margin:0;border:1px solid #ccc;border-top:0;padding:4px;}
+h1 {margin:0 0 0.5em 0;padding: 4px 5em 4px 4px;font:bold large sans-serif;background-color:#c9d7f1;}
+h4 {font-size:14px;margin:0.5em 0 0 0;border:0;border-bottom:solid 1px #c9d7f1;padding:2px;background-color:#e5ecf9;}
+#canvasParent {margin-top:0;margin-bottom:1em;padding:0;border:0}
+</style>
+<script id="script" type="text/javascript">
+var VoronoiDemo = {
+    voronoi: new Voronoi(),
+    sites: [],
+    diagram: null,
+    margin: 0.15,
+    canvas: null,
+    bbox: {xl:0,xr:400,yt:0,yb:400},
+
+    init: function() {
+        this.canvas = document.getElementById('voronoiCanvas');
+        this.randomSites(10,true);
+        this.test()
+        //this.render();
+        },
+    clearSites: function() {
+        this.sites = [];
+        this.diagram = this.voronoi.compute(this.sites, this.bbox);
+        this.updateStats();
+        },
+    randomSites: function(n,clear) {
+        if (clear) {this.sites = [];}
+        // create vertices
+        var xmargin = this.canvas.width*this.margin,
+            ymargin = this.canvas.height*this.margin,
+            xo = xmargin,
+            dx = this.canvas.width-xmargin*2,
+            yo = ymargin,
+            dy = this.canvas.height-ymargin*2;
+        for (var i=0; i<n; i++) {
+            this.sites.push({
+                x: xo + Math.random()*dx + Math.random()/dx,
+                y: yo + Math.random()*dy + Math.random()/dy
+                });
+            }
+        /*this.sites.push({x:109.563936,y:22.260955})
+        this.sites.push({x:109.3441826,y:22.23678004})
+        this.sites.push({x:109.6884757,y:22.43556671})
+        this.sites.push({x:109.4317843,y:22.33575331})
+        this.sites.push({x:109.806612,y:22.35007797})
+        this.sites.push({x:109.637516,y:22.571459})
+        this.sites.push({x:109.5603628,y:22.50438881})
+        this.sites.push({x:109.516695,y:21.98433825})
+        this.sites.push({x:109.2921618,y:22.09925089})
+        this.sites.push({x:109.4886782,y:21.9100967})
+        this.sites.push({x:109.3385698,y:22.02552942})
+        this.sites.push({x:109.5734184,y:22.59159162})
+        this.sites.push({x:109.8052322,y:22.48312058})
+        this.sites.push({x:109.5922715,y:21.95315243})
+        this.sites.push({x:109.4678363,y:22.19425073})
+        this.sites.push({x:109.4514366,y:22.03480238})
+        this.sites.push({x:109.4981466,y:22.38729216})
+        this.sites.push({x:109.6918278,y:22.38473695})
+        this.sites.push({x:109.6621106,y:22.47806716})
+        this.sites.push({x:109.7091108,y:22.53678533})
+        this.sites.push({x:109.6471053,y:22.65196643})
+        this.sites.push({x:109.6896265,y:22.60529912})
+        this.sites.push({x:109.7872021,y:22.55020689})
+        this.sites.push({x:109.7498191,y:22.44194166})
+        this.sites.push({x:109.4928517,y:22.30125952})
+        this.sites.push({x:109.54542,y:22.21320108})
+        this.sites.push({x:109.567301,y:22.36051872})
+        this.sites.push({x:109.350019,y:22.15117312})
+        this.sites.push({x:109.4165447,y:22.13808767})
+        this.sites.push({x:109.416528,y:22.19361794})
+        this.sites.push({x:109.4823283,y:22.23202206})
+        this.sites.push({x:109.5437431,y:22.15597471})
+        this.sites.push({x:109.356983,y:21.94949033})
+        this.sites.push({x:109.4049179,y:22.25702248})
+        this.sites.push({x:109.3073921,y:22.16560163})
+        this.sites.push({x:109.8146259,y:22.41057382})
+        this.sites.push({x:109.5683774,y:22.42577664})*/
+        this.voronoi.recycle(this.diagram);
+        this.diagram = this.voronoi.compute(this.sites, this.bbox);
+        this.updateStats();
+        },
+    updateStats: function() {
+        if (!this.diagram) {return;}
+        var e = document.getElementById('voronoiStats');
+        if (!e) {return;}
+        e.innerHTML = '('+this.diagram.cells.length+' Voronoi cells computed from '+this.diagram.cells.length+' Voronoi sites in '+this.diagram.execTime+' ms &ndash; rendering <i>not</i> included)';
+        },
+
+    render: function() {
+        var ctx = this.canvas.getContext('2d');
+        // background
+        ctx.globalAlpha = 1;
+        ctx.beginPath();
+        ctx.rect(0,0,this.canvas.width,this.canvas.height);
+        ctx.fillStyle = 'white';
+        ctx.fill();
+        ctx.strokeStyle = 'green';
+        ctx.stroke();
+        // voronoi
+        if (!this.diagram) {return;}
+        // edges
+        ctx.beginPath();
+        ctx.strokeStyle = '#000';
+        var edges = this.diagram.edges,
+            iEdge = edges.length,
+            edge, v;
+        while (iEdge--) {
+            edge = edges[iEdge];
+            v = edge.va;
+            ctx.moveTo(v.x,v.y);
+            v = edge.vb;
+            ctx.lineTo(v.x,v.y);
+            }
+        ctx.stroke();
+        // edges
+        ctx.beginPath();
+        ctx.fillStyle = 'red';
+        var vertices = this.diagram.vertices,
+            iVertex = vertices.length;
+        while (iVertex--) {
+            v = vertices[iVertex];
+            ctx.rect(v.x-1,v.y-1,3,3);
+            }
+        ctx.fill();
+        // sites
+        ctx.beginPath();
+        ctx.fillStyle = '#44f';
+        var sites = this.sites,
+            iSite = sites.length;
+        while (iSite--) {
+            v = sites[iSite];
+            ctx.rect(v.x-2/3,v.y-2/3,2,2);
+            }
+        ctx.fill();
+        },
+        test:function(){
+          console.log(this.diagram.cells)
+            var ctx = this.canvas.getContext('2d');
+            // background
+            ctx.globalAlpha = 1;
+            ctx.beginPath();
+            ctx.rect(0,0,this.canvas.width,this.canvas.height);
+            ctx.fillStyle = 'white';
+            ctx.fill();
+            ctx.strokeStyle = 'green';
+            ctx.stroke();
+            // voronoi
+            if (!this.diagram) {return;}
+            for(var i=0;i<this.diagram.cells.length;i++)
+            {
+                var color=''
+                if(i%5==0)
+                    color="red"
+                else if(i%5==1)
+                    color="yellow"
+                else if(i%5==2)
+                    color="orange"
+                else if(i%5==3)
+                    color="green"
+                else if(i%5==4)
+                    color="blue"
+                var halfedges = this.diagram.cells[i].halfedges,nHalfedges = halfedges.length;
+                if (nHalfedges > 2) {
+                    v = halfedges[0].getStartpoint();
+                    ctx.beginPath();
+                    ctx.moveTo(v.x,v.y);
+                    for (var iHalfedge=0; iHalfedge<nHalfedges; iHalfedge++) {
+                        v = halfedges[iHalfedge].getEndpoint();
+                        ctx.lineTo(v.x,v.y);
+                        }
+                    ctx.fillStyle = color;
+                    ctx.fill();
+                    ctx.strokeStyle = 'black';
+                    ctx.stroke();
+                }
+            }
+        }
+    };
+</script>
+</head>
+<body onload="VoronoiDemo.init();">
+  <div class="divinfo" id="voronoiGenerator">
+    <input type="button" value="Generate" onclick="VoronoiDemo.randomSites(parseInt(document.getElementById('voronoiNumberSites').value,10),true);VoronoiDemo.render();"/> or 
+    <input type="button" value="Add" onclick="VoronoiDemo.randomSites(parseInt(document.getElementById('voronoiNumberSites').value,10),false);VoronoiDemo.render();"/>
+    <input id="voronoiNumberSites" type="text" value="10" size="5" maxlength="5"/> sites randomly (Warning: performance might suffer the more sites you add.)
+    <br/>
+    <input id="voronoiClearSites" type="button" value="Clear all sites" onclick="VoronoiDemo.clearSites();VoronoiDemo.render();"/>
+  </div>
+  <h4 class="divhdr">Canvas <span id="voronoiStats" style="font:normal 11px sans"></span></h4>
+  <div id="canvasParent">
+    <canvas id="voronoiCanvas" width="400" height="400"></canvas>
+  </div>
+</div>
+
+<script>
+(function(){
+var srcElem = document.getElementById("script");
+if (srcElem) {
+    var dstElem = document.getElementById("scriptContainer");
+    if (dstElem) {
+        dstElem.innerText = srcElem.innerHTML;
+        }
+    }
+})();
+</script>
+</body>
+</html>
