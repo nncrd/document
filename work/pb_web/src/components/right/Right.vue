@@ -17,7 +17,7 @@
 </style>
 
 <template>
-    <div class="right-block" v-show="now_path==='skjc'||now_path==='zhyb'||now_path==='ylcx'||now_path==='ylfb'">
+    <div class="right-block" v-show="now_path==='skjc'||now_path==='zhyb'||now_path==='ylcx'||now_path==='ylfb'||now_path==='yhdfb'">
         <div class="toolbar-box" v-show="show_toolbar">
             <!--实况监测toolbar-->
             <div class="toolbar-skjc" v-if="now_path==='skjc'">
@@ -31,6 +31,11 @@
             <div class="toolbar-zhyb" v-if="now_path==='zhyb'">
                 <v-hour-pick></v-hour-pick>
                 <v-level-change></v-level-change>
+            </div>
+            <div class="toolbar-yhdfb" v-if="now_path==='yhdfb'">
+                <v-date-pick-extend>
+                    <div slot="title"><i class="fa fa-calendar-plus-o purple-text"></i> 预警时间</div>
+                </v-date-pick-extend>
             </div>
 
             <!--雨量查询toolbar-->
@@ -47,7 +52,7 @@
 
 
             <!--隐患点图例-->
-            <div class="card legend legend-point" v-show="now_path==='skjc'">
+            <div class="card legend legend-point" v-show="now_path==='skjc'||now_path==='yhdfb'">
                 <div class="card-action blue lighten-1 white-text">
                     <i class="fa fa-map-marker purple-text"></i> 隐患点图例
                 </div>

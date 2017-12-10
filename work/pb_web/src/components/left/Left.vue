@@ -39,6 +39,9 @@
                             <div class="menu-min-cell" @click="change_path('zhyb')" :class="{'menu-min-cell-active':now_path==='zhyb'}" id="zhyb">
                                 <i class="fa fa-motorcycle"></i> 灾害预报
                             </div>
+                            <div class="menu-min-cell" @click="change_path('yhdfb')" :class="{'menu-min-cell-active':now_path==='yhdfb'}" id="yhdfb">
+                                <i class="fa fa-motorcycle"></i> 隐患点分布
+                            </div>
                         </div>
                     </li>
                     <li>

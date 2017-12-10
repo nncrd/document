@@ -137,7 +137,7 @@
                 </div>
             </div>
         </div>
-        <div class="map-box middle-box" v-show="now_path==='skjc'||now_path==='zhyb'||now_path==='ylcx'||now_path==='ylfb'">
+        <div class="map-box middle-box" v-show="now_path==='skjc'||now_path==='zhyb'||now_path==='ylcx'||now_path==='ylfb'||now_path==='yhdfb'">
             <div id="map"></div>
             <v-tuceng></v-tuceng>
         </div>
@@ -289,11 +289,14 @@
                                 map.addOverlay(ply);  //添加覆盖物
                             }
                             var circle = rs.boundaries + ";170.672126, -68.045308 ;114.15563, -68.045308;-169.604276, -68.045308;-169.604276, 38.244136;-169.604276,  81.291804;105.913641, 81.291804;170.672126, 81.291804;170.672126, 39.623555;170.672126, -68.045308 ;"
+                            var opacity=0.3
+                            if (_this.now_path==='yhdfb')
+                                opacity=1
                             var polygon2 = new BMap.Polygon(circle, {
                                 strokeColor: "transparent",
                                 strokeWeight: 3,
                                 fillColor:"grey",
-                                fillOpacity:1
+                                fillOpacity:opacity
                             });
                             map.addOverlay(polygon2);
                         });
@@ -307,10 +310,10 @@
                             canvas: null,
                             bbox: {xl:109.24,xr:109.88,yt:21.87,yb:22.69},
                             init: function() {
-                                this.randomSites();
+                                this.fetchSites();
                                 this.drawMap()
                             },
-                            randomSites:function(){
+                            fetchSites:function(){
                                 for(var site=0;site<obj.length;site++)
                                 this.sites.push({x:parseFloat(obj[site].lon),y:parseFloat(obj[site].lat)})
                                 this.diagram = this.voronoi.compute(this.sites, this.bbox);
@@ -329,14 +332,17 @@
                     color=""
                 else if(i%5==4)
                     color="" 
-                                    var polygonLines=''      
+                                    //var polygonLines=''不通过new BMap.Point()构造对象的话就会出现多边形不能全部可见则会消失的现象
+                                    var polygonLines=[]
                                     var halfedges = this.diagram.cells[i].halfedges,nHalfedges = halfedges.length;
                                     if (nHalfedges > 2) {
                                         var v = halfedges[0].getStartpoint();
-                                        var polygonLines=v.x+","+v.y+";"
+                                        //var polygonLines=v.x+","+v.y+";" 
+                                        polygonLines.push(new BMap.Point(v.x,v.y));
                                         for (var iHalfedge=0; iHalfedge<nHalfedges; iHalfedge++) {
                                             v = halfedges[iHalfedge].getEndpoint();
-                                            polygonLines+=v.x+","+v.y+";"
+                                            //polygonLines+=v.x+","+v.y+";"
+                                            polygonLines.push(new BMap.Point(v.x,v.y));
                                         }
                                         var polygon = new BMap.Polygon(polygonLines, 
                                         {strokeColor:"grey", strokeWeight:1, strokeOpacity:1,fillColor:color,fillOpacity:0.2});
@@ -886,7 +892,8 @@
                             dataType:"json",
                             success:function(data){
                                 var json = eval(data);
-                                ditu.getVoronoi(json)
+                                if(_this.now_path==='yhdfb')
+                                    ditu.getVoronoi(json)
                                 ditu.addPoints(json,'ylz');
                             },
                             error:function() {
@@ -1110,6 +1117,17 @@
 
                     });
 
+//                    隐患点分布---------------------------------------
+                    $('.left-block').on('click','#yhdfb',function () {
+                        setTimeout(function () {
+                            ditu.clearMap();
+                          ditu.getBoundry1();
+                          station.addStation();
+                            _this.disasterList=""
+                            _this.isDisasterList=false;
+                        },100);
+
+                    });
 
 //                    雨量查询---------------------------------------
                     $('.left-block').on('click','#ylcx',function () {
