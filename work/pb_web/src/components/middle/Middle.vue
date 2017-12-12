@@ -137,7 +137,7 @@
                 </div>
             </div>
         </div>
-        <div class="map-box middle-box" v-show="now_path==='skjc'||now_path==='zhyb'||now_path==='ylcx'||now_path==='ylfb'||now_path==='yhdfb'">
+        <div class="map-box middle-box" v-show="now_path==='skjc'||now_path==='zhyb'||now_path==='ylcx'||now_path==='ylfb'||now_path==='ylzfb'">
             <div id="map"></div>
             <v-tuceng></v-tuceng>
         </div>
@@ -290,7 +290,7 @@
                             }
                             var circle = rs.boundaries + ";170.672126, -68.045308 ;114.15563, -68.045308;-169.604276, -68.045308;-169.604276, 38.244136;-169.604276,  81.291804;105.913641, 81.291804;170.672126, 81.291804;170.672126, 39.623555;170.672126, -68.045308 ;"
                             var opacity=0.3
-                            if (_this.now_path==='yhdfb')
+                            if (_this.now_path==='ylzfb')
                                 opacity=1
                             var polygon2 = new BMap.Polygon(circle, {
                                 strokeColor: "transparent",
@@ -305,6 +305,7 @@
                         var VoronoiDemo = {
                             voronoi: new Voronoi(),
                             sites: [],
+                            color:[],
                             diagram: null,
                             margin: 0.15,
                             canvas: null,
@@ -315,23 +316,24 @@
                             },
                             fetchSites:function(){
                                 for(var site=0;site<obj.length;site++)
-                                this.sites.push({x:parseFloat(obj[site].lon),y:parseFloat(obj[site].lat)})
+                                {                                  
+                                    if(obj[site].alertdegree==1)
+                                        this.color.push("blue")
+                                    else if(obj[site].alertdegree==2)
+                                        this.color.push("yellow")
+                                    else if(obj[site].alertdegree==3)
+                                        this.color.push("orange")
+                                    else if(obj[site].alertdegree==4)
+                                        this.color.push("red")
+                                    else
+                                        this.color.push("")
+                                    this.sites.push({x:parseFloat(obj[site].lon),y:parseFloat(obj[site].lat)})
+                                }
                                 this.diagram = this.voronoi.compute(this.sites, this.bbox);
                             },
                             drawMap:function(){
                                 for(var i=0;i<this.diagram.cells.length;i++)
-                                {         
-                                var color=''
-                if(i%5==0)
-                    color=""
-                else if(i%5==1)
-                    color=""
-                else if(i%5==2)
-                    color=""
-                else if(i%5==3)
-                    color=""
-                else if(i%5==4)
-                    color="" 
+                                {                                        
                                     //var polygonLines=''不通过new BMap.Point()构造对象的话就会出现多边形不能全部可见则会消失的现象
                                     var polygonLines=[]
                                     var halfedges = this.diagram.cells[i].halfedges,nHalfedges = halfedges.length;
@@ -339,13 +341,19 @@
                                         var v = halfedges[0].getStartpoint();
                                         //var polygonLines=v.x+","+v.y+";" 
                                         polygonLines.push(new BMap.Point(v.x,v.y));
+                                        var colorIndex
+                                        for(var j=0;j<this.sites.length;j++)
+                                        {
+                                            if(this.sites[j].voronoiId==this.diagram.cells[i].site.voronoiId)
+                                            colorIndex=j
+                                        }
                                         for (var iHalfedge=0; iHalfedge<nHalfedges; iHalfedge++) {
                                             v = halfedges[iHalfedge].getEndpoint();
                                             //polygonLines+=v.x+","+v.y+";"
                                             polygonLines.push(new BMap.Point(v.x,v.y));
                                         }
                                         var polygon = new BMap.Polygon(polygonLines, 
-                                        {strokeColor:"grey", strokeWeight:1, strokeOpacity:1,fillColor:color,fillOpacity:0.2});
+                                        {strokeColor:"#aaaaaa", strokeWeight:1, strokeOpacity:1,fillColor:this.color[colorIndex],fillOpacity:0.2});
                                         map.addOverlay(polygon)
                                     }
                                 }
@@ -880,9 +888,16 @@
                 var station = {
                     // 雨量查询
                     addStation:function () {
+                        if(_this.now_path==='skjc'){
                         var year = $('.toolbar-skjc .date_pick_select_year').val();
                         var date = $('.toolbar-skjc .date_pick_select_day').val();
                         var hour = $('.toolbar-skjc .date_pick_select_hour').val();
+                        }
+                        else if(_this.now_path==='ylzfb'){
+                            var year = $('.toolbar-ylzfb .date_pick_select_year').val();
+                            var date = $('.toolbar-ylzfb .date_pick_select_day').val();
+                            var hour = $('.toolbar-ylzfb .date_pick_select_hour').val();
+                        }
                         var full_date = year+date+hour;
                         $.ajax({ type:"GET",
                             url:urlHead+'findByTimeStabtimeHistoryNo',
@@ -892,7 +907,7 @@
                             dataType:"json",
                             success:function(data){
                                 var json = eval(data);
-                                if(_this.now_path==='yhdfb')
+                                if(_this.now_path==='ylzfb')
                                     ditu.getVoronoi(json)
                                 ditu.addPoints(json,'ylz');
                             },
@@ -1089,7 +1104,7 @@
                     $('.left-block').on('click','#zhyb',function () {
                         setTimeout(function () {
                             ditu.clearMap();
-                          ditu.getBoundry1();
+                            ditu.getBoundry1();
                             land.ybcx();
                             _this.disasterList=""
                             _this.isDisasterList=false;
@@ -1099,7 +1114,7 @@
                     $('.right-block').on('change','.toolbar-zhyb .hour-pick select',function () {
                         setTimeout(function () {
                             ditu.clearMap();
-                          ditu.getBoundry1();
+                            ditu.getBoundry1();
                             land.ybcx();
                             _this.disasterList=""
                             _this.isDisasterList=false;
@@ -1109,7 +1124,7 @@
                     $('.right-block').on('click','.toolbar-zhyb .level-change button',function () {
                         setTimeout(function () {
                             ditu.clearMap();
-                          ditu.getBoundry1();
+                            ditu.getBoundry1();
                             land.ybcx();
                             _this.disasterList=""
                             _this.isDisasterList=false;
@@ -1118,11 +1133,22 @@
                     });
 
 //                    隐患点分布---------------------------------------
-                    $('.left-block').on('click','#yhdfb',function () {
+                    $('.left-block').on('click','#ylzfb',function () {
+                        setTimeout(function () {
+                            ditu.clearMap();    
+                            station.addStation();                        
+                            ditu.getBoundry1();                            
+                            _this.points_count()
+                            _this.disasterList=""
+                            _this.isDisasterList=false;
+                        },100);
+                    });
+                    $('.right-block').on('change','.toolbar-ylzfb .date-pick select',function () {
                         setTimeout(function () {
                             ditu.clearMap();
-                          ditu.getBoundry1();
-                          station.addStation();
+                            station.addStation();
+                            ditu.getBoundry1();                            
+                            _this.points_count()
                             _this.disasterList=""
                             _this.isDisasterList=false;
                         },100);
@@ -1213,9 +1239,16 @@
                         else if(this.getAttribute("class")=="legend-blue"){
                             alertDegree=1
                         }
-                        var year = $('.toolbar-skjc .date_pick_select_year').val();
-                        var date = $('.toolbar-skjc .date_pick_select_day').val();
-                        var hour = $('.toolbar-skjc .date_pick_select_hour').val();
+                        if(_this.now_path==='skjc'){
+                            var year = $('.toolbar-skjc .date_pick_select_year').val();
+                            var date = $('.toolbar-skjc .date_pick_select_day').val();
+                            var hour = $('.toolbar-skjc .date_pick_select_hour').val();
+                        }
+                        else if(_this.now_path==='ylzfb'){
+                            var year = $('.toolbar-ylzfb .date_pick_select_year').val();
+                            var date = $('.toolbar-ylzfb .date_pick_select_day').val();
+                            var hour = $('.toolbar-ylzfb .date_pick_select_hour').val();
+                        }
                         var dateCode = year+date+hour;
                         var typeCode_text = $('.toolbar-skjc .level-btn-active').text();
                         var typeCode
@@ -1263,11 +1296,18 @@
 
             },
             points_count(){
-                setTimeout(function () {
-                    var year_select = $('.toolbar-skjc .date_pick_select_year').val().toString();
-                    var date_select = $('.toolbar-skjc .date_pick_select_day').val().toString();
-                    var hour_select = $('.toolbar-skjc .date_pick_select_hour').val().toString();
-                    var dateCode = year_select+date_select+hour_select;
+                if(this.now_path==='skjc'){
+                    var year = $('.toolbar-skjc .date_pick_select_year').val();
+                    var date = $('.toolbar-skjc .date_pick_select_day').val();
+                    var hour = $('.toolbar-skjc .date_pick_select_hour').val();
+                    }
+                else if(this.now_path==='ylzfb'){
+                    var year = $('.toolbar-ylzfb .date_pick_select_year').val();
+                    var date = $('.toolbar-ylzfb .date_pick_select_day').val();
+                    var hour = $('.toolbar-ylzfb .date_pick_select_hour').val();
+                }
+                var dateCode = year+date+hour;
+                setTimeout(function () {                    
                     $.ajax({ type:"GET",
                         url:urlHead+"findLandInfoVilRain",
 //                        url:urlHead+"findLandInfoVilRain",
@@ -1278,17 +1318,17 @@
                             var json = eval(data);
                             var red = 0,orange = 0,yellow = 0,blue = 0;
                             for(var i=0;i<json.length;i++){
-                                if(json[i].alertDegree==='4'){
-                                    red+=1;
-                                }
-                                if(json[i].alertDegree==='3'){
-                                    orange+=1;
+                                if(json[i].alertDegree==='1'){
+                                    blue+=1;
                                 }
                                 if(json[i].alertDegree==='2'){
                                     yellow+=1;
                                 }
-                                if(json[i].alertDegree==='1'){
-                                    blue+=1;
+                                if(json[i].alertDegree==='3'){
+                                    orange+=1;
+                                }
+                                if(json[i].alertDegree==='4'){
+                                    red+=1;
                                 }
                             }
                             console.log(red+'/'+orange+'/'+yellow+'/'+blue)
