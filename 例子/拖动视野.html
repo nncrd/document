@@ -1,0 +1,82 @@
+<!DOCTYPE html><html>
+<head>
+  <style>
+    .a{
+      width:400px;
+      height:400px;
+      border:1px solid #aaa;
+      overflow:auto
+    }
+  </style>
+  <script src="http://qiniu.jyblue.com/js/jquery-2.1.4.min.js"></script>
+</head>
+<body>
+  <div class="a" id="dragWrap">
+  <img src="http://qiniu.jyblue.com/pwebpopulation.png" >
+  </div>
+  <script>
+    $(function(){
+    var drag = function drag(){
+      this.dragWrap = $("#dragWrap");
+      this.init.apply(this,arguments);
+    };
+      drag.prototype = {
+        constructor:drag,
+        _dom : {},
+        _x : 0,
+        _y : 0,
+        _top :0,
+        _left: 0,
+        move : false,
+        down : false,
+        init : function () {
+          this.bindEvent();
+        },
+        bindEvent : function () {
+          var t = this;
+          $('body').on('mousedown','#dragWrap',function(e){
+            e && e.preventDefault();
+            if ( !t.move) {
+              t.mouseDown(e);
+            }
+          });
+          $('body').on('mouseup','#dragWrap',function(e){
+            t.mouseUp(e);
+          });
+  
+          $('body').on('mousemove','#dragWrap',function(e){
+            if (t.down) {
+              t.mouseMove(e);
+            }
+          });
+        },
+        mouseMove : function (e) {
+          e && e.preventDefault();
+          this.move = true;
+          var x = this._x - e.clientX,
+              y = this._y - e.clientY,
+              dom = document.getElementById('dragWrap');
+          dom.scrollLeft = (this._left + x);
+          dom.scrollTop = (this._top + y);
+        },
+        mouseUp : function (e) {
+          e && e.preventDefault();
+          this.move = false;
+          this.down = false;
+          this.dragWrap.css('cursor','');
+        },
+        mouseDown : function (e) {
+          this.move = false;
+          this.down = true;
+          this._x = e.clientX;
+          this._y = e.clientY;
+          this._top = document.getElementById('dragWrap').scrollTop;
+          this._left = document.getElementById('dragWrap').scrollLeft;
+          this.dragWrap.css('cursor','move');
+        }
+      };
+      var drag = new drag();
+    });
+  </script>
+</body>  
+</html>
