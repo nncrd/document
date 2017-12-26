@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+<img src="http://qiniu.uulead.com/pbSeismicHazard.jpg" alt="鼠标放上滑动鼠标滑动放大缩小此图片"
+ title="鼠标放上滑动鼠标滑动放大缩小此图片" onmousewheel="return bbimg(this)"
+ width="400" height="550" style="cursor: url(http://mly-zju.github.io/favicon.ico),auto" border="0" /> 
+<script>
+
+    function bbimg(o){ 
+        var zoom=parseInt(o.style.zoom, 10)||100;
+        zoom+=event.wheelDelta/6;
+        if(zoom<100)
+          zoom=100;
+        else if(zoom>800)
+          zoom=800;
+        o.style.zoom=zoom+'%'; 
+        return false; 
+    } 
+    </script> 
+</body>
+</html>
