@@ -5,7 +5,7 @@
 	<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
 	<style type="text/css">
 	body, html{width: 100%;height: 100%;margin:0;font-family:"微软雅黑";}
-	#allmap {width: 100%; height:800px; overflow: hidden;}
+	#allmap {width: 100%; height:100%; overflow: hidden;}
 	#result {width:100%;font-size:12px;}
 	dl,dt,dd,ul,li{
 		margin:0;
@@ -42,25 +42,60 @@
 	<div id="allmap" style="overflow:hidden;zoom:1;position:relative;">	
 		<div id="map" style="height:100%;-webkit-transition: all 0.5s ease-in-out;transition: all 0.5s ease-in-out;"></div>
 	</div>
-	<div id="result">
+<!--<div id="result">
 		<input type="button" value="获取绘制的覆盖物个数" onclick="alert(overlays.length)"/>
 		<input type="button" value="清除所有覆盖物" onclick="clearAll()"/>
-	</div>
+	</div>-->
 	<script type="text/javascript">
 	// 百度地图API功能
     var map = new BMap.Map('map');
-    var poi = new BMap.Point(116.307852,40.057031);
-    map.centerAndZoom(poi, 16);
-    map.enableScrollWheelZoom();  
+    var poi = new BMap.Point(109.24,23.76);
+    map.centerAndZoom(poi, 8);
+    map.enableScrollWheelZoom();
     var overlays = [];
     var markerArr = [];
     var rectangleArr = [];
     var circleArr = [];
+    var selectPoint = [];
     var selectMarker = [];
     var rectangleIndex=-1
     var circleIndex=-1
+    var overlayType=""
+    var bdary = new BMap.Boundary();
+    bdary.get("广西", function(rs){       //获取行政区域
+        var count = rs.boundaries.length; //行政区域的点有多少个
+        if (count === 0) {
+            alert('未能获取当前输入行政区域');
+            return ;
+        }
+        for (var i = 0; i < count; i++) {
+            var ply = new BMap.Polygon(rs.boundaries[i], {strokeWeight: 2, strokeColor: "darkred",fillColor:'transparent'}); //建立多边形覆盖物
+            map.addOverlay(ply);  //添加覆盖物
+        }
+        var circle = rs.boundaries + ";170.672126, -68.045308 ;114.15563, -68.045308;-169.604276, -68.045308;-169.604276, 38.244136;-169.604276,  81.291804;105.913641, 81.291804;170.672126, 81.291804;170.672126, 39.623555;170.672126, -68.045308 ;"
+        var polygon2 = new BMap.Polygon(circle, {
+            strokeColor: "transparent",
+            strokeWeight: 2,
+            fillColor:"grey",
+            fillOpacity:0.5
+        });
+        map.addOverlay(polygon2);
+    });
+    var points=[["南宁",108.33,22.84],["柳州",109.4 ,24.33],["桂林",110.28,25.29],["梧州",111.34,23.51],["凭祥",106.75,22.11],["邕宁",108.49,22.74],["武鸣",108.27,23.17],["马山",108.2 ,23.73],["上林",108.59,23.44],["宾阳",108.8 ,23.22],["横县",109.2 ,22.69],["扶绥",107.92,22.65],["崇左",107.37,22.42],["宁明",107.08,22.12],["龙州",106.84,22.36],["大新",107.21,22.85],["天等",107.12,23.08],["隆安",107.68,23.18],["河池",108.06,24.7 ],["环江",108.26,24.83],["罗城",108.9 ,24.79],["宜山",108.64,24.47],["东兰",107.36,24.53],["凤山",107.05,24.55],["天峨",107.16,25.01],["南丹",107.54,24.98],["都安",108.09,23.94],["巴马",107.25,24.15],["合山",108.89,23.82],["柳城",109.24,24.67],["融安",109.37,24.24],["鹿寨",109.74,24.49],["象州",109.7 ,23.98],["武宜",109.66,23.6 ],["柳江",109.34,24.27],["来宾",109.24,23.76],["忻城",108.66,24.07],["融水",109.24,25.07],["三江",109.58,25.8 ]]
+    icon = new BMap.Icon('https://qiniu.jyblue.com/cityIcon.png', new BMap.Size(5,5));
+    for(var i=0;i<points.length;i++)
+    {
+      var point = new BMap.Point(points[i][1],points[i][2]);
+      var marker = new BMap.Marker(point,{icon:icon});// 创建标注
+      markerArr.push([points[i][0],marker]);
+      map.addOverlay(marker);// 将标注添加到地图中
+    }
     var overlaycomplete = function(e){
         overlays.push(e.overlay);
+        for(var i = 0; i < selectMarker.length; i++){
+          map.removeOverlay(selectMarker[i]);
+        }
+        selectMarker.length = 0
         if(e.drawingMode=="marker")
         {
           markerArr.push(e.overlay);
@@ -68,42 +103,66 @@
         else if(e.drawingMode=="rectangle"){
           rectangleArr.push(e.overlay);
           rectangleIndex++;
+          overlayType="rectangle"
           //console.log(e.overlay.Nu.Ml,e.overlay.Nu.vl)
           for (var i=0;i<markerArr.length;i++)
           {
-            var result = BMapLib.GeoUtils.isPointInPolygon(markerArr[i].point, e.overlay);
+            var result = BMapLib.GeoUtils.isPointInPolygon(markerArr[i][1].point, e.overlay);
             if(result)
             {
-              selectMarker.push(e.overlay);
+              selectPoint.push([markerArr[i][0],markerArr[i][1].point]);
             }
           }
-        console.log(selectMarker)
+        console.log(selectPoint)
         }
         else{
           circleArr.push(e.overlay);
           circleIndex++;
+          overlayType="circle"
           for (var i=0;i<markerArr.length;i++)
           {
-            var result = BMapLib.GeoUtils.isPointInPolygon(markerArr[i].point, e.overlay);
+            var result = BMapLib.GeoUtils.isPointInPolygon(markerArr[i][1].point, e.overlay);
             if(result)
             {
-              selectMarker.push(e.overlay);
+              selectPoint.push([markerArr[i][0],markerArr[i][1].point]);
             }
           }
-        console.log(selectMarker)
+        console.log(selectPoint)
         }
-        selectMarker=[]
+
+        for(var i=0;i<selectPoint.length;i++)
+        {
+          var point = new BMap.Point(selectPoint[i][1].lng,selectPoint[i][1].lat);
+          var marker = new BMap.Marker(point);// 创建标注
+          selectMarker.push(marker)
+          map.addOverlay(marker);// 将标注添加到地图中
+        }
+        selectPoint=[]
     };
     var rectanglecomplete = function(e){
+      if(overlayType=="circle")
+      {
+        map.removeOverlay(circleArr[circleIndex]);
+      }
+      else
+      {
         map.removeOverlay(rectangleArr[rectangleIndex]);
+      }
     };
     var circlecomplete = function(e){
+      if(overlayType=="circle")
+      {
         map.removeOverlay(circleArr[circleIndex]);
+      }
+      else
+      {
+        map.removeOverlay(rectangleArr[rectangleIndex]);
+      }
     };
     var styleOptions = {
-        strokeColor:"red",    //边线颜色。
+        strokeColor:"#2279B5",    //边线颜色。
         fillColor:"",      //填充颜色。当参数为空时，圆形将没有填充效果。
-        strokeWeight: 1,       //边线的宽度，以像素为单位。
+        strokeWeight: 2,       //边线的宽度，以像素为单位。
         strokeOpacity: 0.8,    //边线透明度，取值范围0 - 1。
         fillOpacity: 0.6,      //填充的透明度，取值范围0 - 1。
         strokeStyle: 'solid' //边线的样式，solid或dashed。
@@ -115,7 +174,7 @@
         drawingToolOptions: {
             anchor: BMAP_ANCHOR_TOP_RIGHT, //位置
             offset: new BMap.Size(5, 5), //偏离值
-            drawingModes:[BMAP_DRAWING_MARKER,BMAP_DRAWING_CIRCLE,BMAP_DRAWING_RECTANGLE],
+            drawingModes:[BMAP_DRAWING_CIRCLE,BMAP_DRAWING_RECTANGLE],
         },
         circleOptions: styleOptions, //圆的样式
         polylineOptions: styleOptions, //线的样式
