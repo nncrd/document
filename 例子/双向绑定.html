@@ -1,0 +1,40 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta name="viewport" content="initial-scale=1, user-scalable=no, maximum-scale=1.0">
+<meta charset="utf-8">
+<script type="text/javascript" src="jquery-1.3.1.js"></script>
+<style>
+</style>
+</head>
+  <body>
+    <input type="text" id="xb">
+    <input type="text" id="xb1">
+    <textarea id="xb2"></textarea>
+    <script>
+      var user = {};
+      var xb = document.getElementById("xb");
+      var xb1 = document.getElementById("xb1");
+      var xb2 = document.getElementById("xb2");
+      Object.defineProperty(user, 'value', {
+          get: function () {
+              return document.getElementById('xb').value+document.getElementById('xb1').value;
+          },
+          set: function (newValue) {
+              document.getElementById('xb').value = newValue;
+          },
+          configurable: true
+      });
+      xb.oninput = function () {
+          xb2.value = user.value;
+      }
+      xb1.oninput = function () {
+          xb2.value = user.value;
+      }
+      xb2.oninput = function () {
+          user.value = xb2.value;
+          xb2.innerHTML = user.value;
+      }
+    </script>
+  </body>
+</html>
