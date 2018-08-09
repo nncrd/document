@@ -1,8 +1,8 @@
 <template>
   <div id="app">
     <v-header></v-header>
-<!--    <router-view/>
-    <div><router-link to="/">哈哈哈</router-link></div>-->
+    <router-view/>
+    <!-- <div><router-link to="/">哈哈哈</router-link></div>-->
   </div>
 </template>
 

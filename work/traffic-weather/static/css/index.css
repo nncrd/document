@@ -1,0 +1,113 @@
+.BMap_cpyCtrl {
+  display: none;
+} 
+.anchorBL {
+  display: none;
+}
+
+
+
+#infoContent span,.popoverContent span{
+  color:#0062cc;
+}
+.infoBox{
+  height: 19rem;
+}
+.infoBoxTab{
+  height: 1.5rem;
+  width: 100%;
+/*  border-bottom: dashed 1px #666666;*/
+  text-align: center;
+  padding-top: .3rem;
+}
+.infoBoxTab label{
+  border-radius: 9px;
+  margin-right: .5rem;
+  padding: .2rem 1.5rem;
+  box-shadow: 1px 1px 3px #666;
+}
+.infoBoxTab label.active{
+  background: #f0ad4e;
+  color:white;
+}
+.infoBox > img{
+  width: 2.5em;
+}
+#infoBoxFooter img{
+  width: 1.5rem;
+}
+#infoBoxFooter{
+  text-align: center;
+}
+#infoBoxFooter img{
+  margin-top: -4px;
+}
+.infoTitle{
+  line-height: 2.5rem;
+  padding-left: 0.5rem;
+  color: #fff;
+  font-size: 1.2rem;
+  font-weight: 900;
+/*  background:#006ec3;*/
+  background:#4c4b4b;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
+#infoBoxBody{
+  height: 13.5rem;
+  background: rgba(255,255,255,0.9);
+  padding:0 1rem 1rem ;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+.infoBoxInfo{display:-webkit-box;border-bottom: dashed 1px #666666;}
+.infoBoxInfo > div:first-child{
+  width: 135px;
+  margin-top:.2rem;
+  font-size:.8rem;
+}
+.infoBoxInfo2{display:none;height: 11.5rem;}
+#infoBoxContent{
+  width:16rem;
+  height:9rem;  
+}
+#infoBoxSta{
+  width: 100%;
+  height: 2rem;
+  padding-left: 1.5rem;
+}
+#infoBoxSta div{
+  float:left;
+  font-size: .6rem;
+  width:1.5rem;
+  margin:0 .1rem 0 0;
+  text-align: center;
+}
+#infoBoxSta img{
+  width:1.5rem;
+}
+.infoBoxImg{width: 110px;height: 100%;overflow: hidden;text-align: center;}
+.infoBoxImg img{width: 110px;height: 110px;}
+.infoBoxText_min{display:-webkit-box;}
+#boxContent{
+  height: 17rem;
+  border:solid 1px #838281;
+  border-radius: 5px;
+  box-shadow: 2px 2px 3px #aaa;
+}
+#condText{
+  color:#fa7a78;
+  font-size: 1.5rem;
+  line-height: 1.5rem;
+  margin: -0.5rem 0 0.2rem 0;
+}
+#condText + div{
+  color:#f0ad4e;
+  font-size: 1.5rem;
+}
+#infoContent table tr td:nth-child(odd),.popoverContent table tr td:nth-child(odd){
+  text-align: right;
+}
+#infoContent table tr td:nth-child(even),.popoverContent table tr td:nth-child(even){
+  text-align: left;
+}

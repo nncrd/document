@@ -6,7 +6,7 @@
       </div>
       <div class="headerContent">
         <span>{{ city }}</span>
-        <span>{{ tmp }}°C</span>
+        <span>{{ tmp }}</span>
         <span>{{ txt }}</span>
         <img v-bind:src="imgUrl"/>
       </div>
@@ -15,12 +15,12 @@
 </template>
 
 <script>
+import global_ from '@/components/Global'
 export default {
   name: '',
   data () {
     return {
-      ajaxAddr:"http://192.168.1.105:8090",
-      city:"",
+      city:"位置获取中...",
       tmp:"",
       imgUrl:"",
       txt:""
@@ -34,16 +34,15 @@ export default {
         if(this.getStatus() == BMAP_STATUS_SUCCESS){
           axios({
             method: 'post',
-            url: _this.ajaxAddr+'/weather/get-weatherNowData-byLocation?location='+r.point.lng+','+r.point.lat,
+            url: global_.ajaxAddr+'/weather/get-weatherNowData-byLocation?location='+r.point.lng+','+r.point.lat,
             data: {
 
             }
           }).then(function (response) {
               var nowData=eval('(' + response.data.data.weatherData + ')').now;
               var img='./../../static/images/weather/'+nowData.cond_code+'-w.png'
-              console.log(img)
               _this.city=response.data.data.city
-              _this.tmp=nowData.tmp
+              _this.tmp=nowData.tmp+"°C"
               _this.txt=nowData.cond_txt
               _this.imgUrl=img
             });
@@ -69,6 +68,7 @@ export default {
     background: #41b883;
     position:relative;
     color:#fff;
+    margin-bottom: 10px;
   }
   .headerInfo{
     width: 1000px;
