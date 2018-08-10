@@ -2,6 +2,28 @@
   <div class="mainContent">
     <div id="map">
     </div>
+    <div class="coverage">
+      <div class="mui-input-row mui-checkbox mui-left">
+        <label>
+                    市县天气
+          <input name="checkbox1" type="checkbox" v-model="checked">
+        </label>
+      </div>
+    </div>
+    <div class="footOption">
+      <select id="footSelect">
+        <option value=5000>5公里</option>
+        <option value=10000>10公里</option>
+        <option value=20000>20公里</option>
+        <option value=50000>50公里</option>
+      </select>
+    </div>
+    <div class="footer">
+      <a href="#bottomPopover1" class="mui-btn mui-btn-link mui-pull-right">东<div id="eastInfo">加载中...</div></a>
+      <a href="#bottomPopover2" class="mui-btn mui-btn-link mui-pull-right">南<div id="southInfo">加载中...</div></a>
+      <a href="#bottomPopover3" class="mui-btn mui-btn-link mui-pull-right">西<div id="westInfo">加载中...</div></a>
+      <a href="#bottomPopover4" class="mui-btn mui-btn-link mui-pull-right">北<div id="northInfo">加载中...</div></a>
+    </div>
   </div>
 </template>
 <script>
@@ -14,7 +36,44 @@ export default {
       infoWindowFlag:false,
       polyline:null,
       winMarker:null,
-      infoBoxTemp:null
+      infoBoxTemp:null,
+      checked:'',
+      selectMarker:[],
+    }
+  },
+  watch: {
+    // 如果 `question` 发生改变，这个函数就会运行
+    checked: function () {
+      var _this=this
+      if(this.checked==true){
+        var apiUrl=''
+        if(this.map.getZoom()>10)
+          apiUrl='get-allCountyWeatherNow-byAreaCode'
+        else
+          apiUrl='get-allWeatherNowData-byAreaCode'
+        axios({
+        method: 'post',
+          url: global_.ajaxAddr+'/weather/'+apiUrl,
+        }).then(function (res) {
+            if(res){
+              var weatherData=''
+              var data=res.data
+              if(data.data)
+              {
+                for(var markerNum=0;markerNum<data.data.length;markerNum++)
+                {
+                  weatherData=eval('(' + data.data[markerNum].weatherData + ')');
+                  _this.addMarker(weatherData)
+                }
+              }
+            }
+        });
+      }
+      else{
+        for(var i = 0; i < this.selectMarker.length; i++){
+          this.map.removeOverlay(this.selectMarker[i]);
+        }
+      }
     }
   },
   methods:{
@@ -109,7 +168,6 @@ export default {
       });
     },
     drawHighway(highwayArray){
-
       var lineArray=[]
       var lineOption={strokeColor:"#ff0000", strokeWeight:8, strokeOpacity:0.6}
       for(var j=1;j<highwayArray.length;j++)
@@ -130,7 +188,7 @@ export default {
       var b = values.gg_lat;
       axios({
         method: 'post',
-        url: global_.ajaxAddr+'/weather/highway/getByXY?x='+a+'&y='+b+'&level='+level,
+        url: global_.ajaxAddr+'/weather/highway/getByXY?x='+a+'&y='+b+'&level=11',
       }).then(function (data) {
           if(data.data)
           {
@@ -168,15 +226,11 @@ export default {
                     '<div class="infoBoxText">'+
                       "<div id='infoContent'>" +
                         "<table>"+
-                          "<tr><td>体感温度：</td><td><span>"+nowData.fl+"°C</span></td></tr>"+
-                          "<tr><td>风向：</td><td><span>"+nowData.wind_dir+"</span></td></tr>"+
-                          "<tr><td>风力：</td><td><span>"+nowData.wind_sc+"级</span></td></tr>"+
-                          "<tr><td>风速：</td><td><span>"+nowData.wind_spd+"公里/时</span></td></tr>"+
+                          "<tr><td>体感温度：</td><td><span>"+nowData.fl+"°C</span></td><td>云量：</td><td><span>"+nowData.cloud+"</span></td></tr>"+
+                          "<tr><td>降雨量：</td><td><span>"+nowData.pcpn+"</span></td><td>风向：</td><td><span>"+nowData.wind_dir+"</span></td></tr>"+
+                          "<tr><td>能见度：</td><td><span>"+nowData.vis+"公里</span></td><td>风速：</td><td><span>"+nowData.wind_spd+"公里/时</span></td></tr>"+
+                          "<tr><td>大气压强：</td><td><span>"+nowData.pres+"</span></td><td>风力：</td><td><span>"+nowData.wind_sc+"级</span></td></tr>"+
                           "<tr><td>相对湿度：</td><td><span>"+nowData.hum+"</span></td></tr>"+
-                          "<tr><td>降雨量：</td><td><span>"+nowData.pcpn+"</span></td></tr>"+
-                          "<tr><td>大气压强：</td><td><span>"+nowData.pres+"</span></td></tr>"+
-                          "<tr><td>能见度：</td><td><span>"+nowData.vis+"公里</span></td></tr>"+
-                          "<tr><td>云量：</td><td><span>"+nowData.cloud+"</span></td></tr>" + 
                         "</table>"+
                       "</div>"+
                     "</div>"+
@@ -197,7 +251,7 @@ export default {
             var opts = {
               boxStyle:{
                   //background:'#f4f4f4',
-                  width:'18rem',
+                  width:'25rem',
                   fontSize:'0.9rem',
                   //border:'solid 1px #dcdcdc',
                   borderRadius:'0.5rem'
@@ -270,6 +324,53 @@ export default {
             },50);
           }
       })
+    },
+    addMarker(weatherData){
+      var _this=this
+      var icon = new BMap.Icon('./../../static/images/weather/'+weatherData.now.cond_code+'-s.png', new BMap.Size(35,35));
+      var img='./../../static/images/weather/'+weatherData.now.cond_code+'.png'
+      var point = new BMap.Point(weatherData.basic.lon,weatherData.basic.lat);
+      var marker = new BMap.Marker(point,{icon:icon});
+      _this.selectMarker.push(marker)
+      var sContent =
+        "<h4 style='margin:0 0 5px 0;padding:0.2em 0'>"+weatherData.basic.location+"</h4>" + 
+        "<img style='float:right;margin:4px:clear:both' id='imgDemo' src='"+img+"' width='100' height='100' title=''/>" + 
+        "<div style='float: right;margin-right: 17px;clear: both;text-align: center;'>"+weatherData.now.cond_txt+"<br><span style='font-size:1.8rem;color: #277ad4;;'>"+weatherData.now.tmp+"°C</span></div>"+
+        "<div id='infoContent' style='margin:0;line-height:1.5;font-size:13px;width:280px'>" +
+          "<table style='margin-left:20px'>"+
+            "<tr><td>体感温度：</td><td><span>"+weatherData.now.fl+"°C</span></td></tr>"+
+            "<tr><td>风向：</td><td><span>"+weatherData.now.wind_dir+"</span></td></tr>"+
+            "<tr><td>风力：</td><td><span>"+weatherData.now.wind_sc+"级</span></td></tr>"+
+            "<tr><td>风速：</td><td><span>"+weatherData.now.wind_spd+"公里/时</span></td></tr>"+
+            "<tr><td>相对湿度：</td><td><span>"+weatherData.now.hum+"</span></td></tr>"+
+            "<tr><td>降雨量：</td><td><span>"+weatherData.now.pcpn+"</span></td></tr>"+
+            "<tr><td>大气压强：</td><td><span>"+weatherData.now.pres+"</span></td></tr>"+
+            "<tr><td>能见度：</td><td><span>"+weatherData.now.vis+"公里</span></td></tr>"+
+            "<tr><td>云量：</td><td><span>"+weatherData.now.cloud+"</span></td></tr>" + 
+          "</table>"+
+        "</div>"
+      var infoWindow = new BMap.InfoWindow(sContent);
+      infoWindow.addEventListener("close",function(){//点击信息窗口的关闭按钮时触发此事件
+        _this.infoWindowFlag=false
+      })
+      marker.addEventListener("click", function(){          
+        this.openInfoWindow(infoWindow);
+        _this.infoWindowFlag=true;
+        document.getElementById('imgDemo').onload = function (){
+          infoWindow.redraw();
+        }
+      });
+      _this.map.addOverlay(marker);
+      var label = new BMap.Label(weatherData.now.tmp+"°C");
+      label.setStyle({
+        background:'rgba(0,0,0,0)',
+        border:'none',
+        color:'#af3b65',
+        fontSize:"18px",
+        fontWeight:"bold"
+      });
+      label.setOffset(new BMap.Size(0,30))
+      marker.setLabel(label);
     },
     initCanvas(timeArr,tmpArr,popArr,weather){
         var dom = document.getElementById("infoBoxContent");
@@ -390,9 +491,63 @@ export default {
     height: 600px;
     margin: 0 auto;
     background: #fafafa;
+    position: relative;
   }
   #map{
     width:100%;
     height: 100%;
   }
+  .coverage{
+    position: absolute;
+    top: .7rem;
+    right: 1rem;
+    height: 24px;
+    width: 5rem;
+    z-index: 10000;
+    color: #666;
+    background: rgba(255,255,255,1);
+    border: solid 1px #aaa;
+    font-size: .7rem;
+    line-height: 24px;  
+    border-radius:4px;
+  }
+  .coverage input{
+    vertical-align: middle;
+  }
+  .footOption{
+  position:absolute;
+  bottom:4rem;
+  left:.2rem;
+  height: 1rem;
+  z-index: 10000;
+  color:#999;
+}
+.footOption select{
+  box-shadow: 0 0 2px rgba(96,96,96,0.5);
+}
+.footOption select{
+  background: rgba(255,255,255,0.7);
+}
+.footer{
+  position:absolute;
+  bottom:0;
+  left:0;
+  height: 3.5rem;
+  width:400px;
+  z-index: 10000;
+  display: flex;
+}
+.footer > a{
+  flex: 1;
+  color:#999;
+  border-radius: .2rem;
+  text-align: center;
+  padding:.3rem .1rem;
+  margin:.2rem;
+  background: rgba(255,255,255,0.7);
+  box-shadow: 0 0 2px rgba(96,96,96,0.5);
+}
+.footer > a div{
+  color:#3daafc;
+}
 </style>

@@ -4,9 +4,7 @@
 .anchorBL {
   display: none;
 }
-
-
-
+/*地图信息弹出窗*/
 #infoContent span,.popoverContent span{
   color:#0062cc;
 }
@@ -18,7 +16,7 @@
   width: 100%;
 /*  border-bottom: dashed 1px #666666;*/
   text-align: center;
-  padding-top: .3rem;
+  padding-top: .5rem;
 }
 .infoBoxTab label{
   border-radius: 9px;
@@ -62,32 +60,40 @@
 }
 .infoBoxInfo{display:-webkit-box;border-bottom: dashed 1px #666666;}
 .infoBoxInfo > div:first-child{
-  width: 135px;
-  margin-top:.2rem;
-  font-size:.8rem;
+  width: 275px;
+  margin:1.2rem 0;
+  font-size:1rem;
 }
 .infoBoxInfo2{display:none;height: 11.5rem;}
 #infoBoxContent{
-  width:16rem;
+  width:23rem;
   height:9rem;  
 }
 #infoBoxSta{
   width: 100%;
   height: 2rem;
-  padding-left: 1.5rem;
+  padding-left: 2.5rem;
 }
 #infoBoxSta div{
   float:left;
   font-size: .6rem;
   width:1.5rem;
-  margin:0 .1rem 0 0;
+  margin:0 .83rem 0 0;
   text-align: center;
 }
 #infoBoxSta img{
   width:1.5rem;
 }
-.infoBoxImg{width: 110px;height: 100%;overflow: hidden;text-align: center;}
-.infoBoxImg img{width: 110px;height: 110px;}
+.infoBoxImg{
+  width: 110px;
+  height: 100%;
+  overflow: hidden;
+  text-align: center;
+}
+.infoBoxImg img{
+  width: 90px;
+  height: 90px;
+}
 .infoBoxText_min{display:-webkit-box;}
 #boxContent{
   height: 17rem;
@@ -99,11 +105,17 @@
   color:#fa7a78;
   font-size: 1.5rem;
   line-height: 1.5rem;
-  margin: -0.5rem 0 0.2rem 0;
+  margin: 0 0 0.2rem 0;
 }
 #condText + div{
   color:#f0ad4e;
   font-size: 1.5rem;
+}
+#infoContent table{
+  width:275px;
+}
+#infoContent table tr{
+  height: 1.5rem;
 }
 #infoContent table tr td:nth-child(odd),.popoverContent table tr td:nth-child(odd){
   text-align: right;
