@@ -257,35 +257,7 @@
     // Services
     var servicesAnimate = function() {
 
-        if ( $('#jyrt-our-services').length > 0 ) { 
-            $('#jyrt-our-services .to-animate').each(function( k ) {
-                
-                var el = $(this);
-                
-                setTimeout ( function () {
-                    el.addClass('fadeInUp animated');
-                },  k * 200, 'easeInOutExpo' );
-                
-            });
-            $('#jyrt-our-services .to-animate2').each(function( k ) {
-                
-                var el = $(this);
-                
-                setTimeout ( function () {
-                    el.addClass('fadeInLeft animated');
-                },  k * 200, 'easeInOutExpo' );
-                
-            });
-            $('#jyrt-our-services .to-animate3').each(function( k ) {
-                
-                var el = $(this);
-                
-                setTimeout ( function () {
-                    el.addClass('fadeInRight animated');
-                },  k * 200, 'easeInOutExpo' );
-                
-            });
-        }
+
 
     };
     var servicesWayPoint = function() {
