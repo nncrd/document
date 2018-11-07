@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+</head>
+
+<body>
+    <div id="echartMap" style="width: 1000px;height:800px;"></div>
+    <script src="jquery.min.js"></script>
+    <script src="echarts.min.js"></script>
+    <script src="guangxi.js"></script>
+    <script type="text/javascript">
+       var myChart = echarts.init(document.getElementById('echartMap'));
+       var option = {
+           geo: {
+               map: '广西',
+               label: {
+                   emphasis: {
+                       show: false
+                   }
+               },
+               roam: true,
+               zoom: 1,
+               itemStyle: {
+                   normal: {
+                       borderColor: '#6efcfe',
+					   borderWidth:2,
+                       shadowColor: 'rgba(0, 0, 0, 0.5)',
+                       shadowBlur: 3,
+                       shadowOffsetX: 3
+                   },
+                   emphasis: {
+                       areaColor: '#63f3f3'
+                   }
+               },
+               regions: [
+                   {
+                       name: '南宁市',
+                       itemStyle: {
+                           normal: {
+                               areaColor: '#050e52'
+                           }
+                       }
+                   }, {
+                       name: '柳州市',
+                       itemStyle: {
+                           normal: {
+                               areaColor: '#050e52'
+                           }
+                       }
+                   }, {
+                       name: '桂林市',
+                       itemStyle: {
+                           normal: {
+                               areaColor: '#050e52'
+                           }
+                       }
+                   }, {
+                       name: '梧州市',
+                       itemStyle: {
+                           normal: {
+                               areaColor: '#050e52'
+                           }
+                       }
+                   }, {
+                       name: '北海市',
+                       itemStyle: {
+                           normal: {
+                               areaColor: '#050e52'
+                           }
+                       }
+                   }, {
+                       name: '防城港市',
+                       itemStyle: {
+                           normal: {
+                               areaColor: '#050e52'
+                           }
+                       }
+                   }, {
+                       name: '钦州市',
+                       itemStyle: {
+                           normal: {
+                               areaColor: '#050e52'
+                           }
+                       }
+                   }, {
+                       name: '贵港市',
+                       itemStyle: {
+                           normal: {
+                               areaColor: '#050e52'
+                           }
+                       }
+                   }, {
+                       name: '玉林市',
+                       itemStyle: {
+                           normal: {
+                               areaColor: '#050e52'
+                           }
+                       }
+                   }, {
+                       name: '百色市',
+                       itemStyle: {
+                           normal: {
+                               areaColor: '#050e52'
+                           }
+                       }
+                   }, {
+                       name: '贺州市',
+                       itemStyle: {
+                           normal: {
+                               areaColor: '#050e52'
+                           }
+                       }
+                   }, {
+                       name: '河池市',
+                       itemStyle: {
+                           normal: {
+                               areaColor: '#050e52'
+                           }
+                       }
+                   }, {
+                       name: '来宾市',
+                       itemStyle: {
+                           normal: {
+                               areaColor: '#050e52'
+                           }
+                       }
+                   }, {
+                       name: '崇左市',
+                       itemStyle: {
+                           normal: {
+                               areaColor: '#050e52'
+                           }
+                       }
+                   }
+               ]
+           }
+       };
+       myChart.setOption(option);
+    </script>
+</body>
+
+</html>
