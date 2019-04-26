@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
+    <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
+  </head>
+  <body>
+    <div id="map" style="height:800px;width:1000px;"></div>
+    <script>
+        $(function(){
+            var map = L.map('map', {
+               crs: L.CRS.EPSG4326
+            }).setView([24, 109], 6);
+            
+            map.panBy(L.point(25.3,110.5));
+             
+            L.tileLayer('http://t1.tianditu.com/vec_c/wmts?layer=vec&style=default&tilematrixset=c&Service=WMTS&Request=GetTile&Version=1.0.0&Format=tiles&TileMatrix={z}&TileCol={x}&TileRow={y}&tk=b35347d66e670d6b67fec5151799af77', {
+               maxZoom: 20,
+               tileSize: 256,
+               zoomOffset: 1
+            }).addTo(map );
+            
+            //地形图层
+             var mountain=L.tileLayer('http://t0.tianditu.gov.cn/img_c/wmts?layer=img&style=default&tilematrixset=c&Service=WMTS&Request=GetTile&Version=1.0.0&Format=tiles&TileMatrix={z}&TileCol={x}&TileRow={y}&tk=b35347d66e670d6b67fec5151799af77', {
+               maxZoom: 20,
+               tileSize: 256,
+               zoomOffset: 1
+            }).addTo(map );
+            
+            //市县图层
+            var road=L.tileLayer('http://t0.tianditu.gov.cn/cva_c/wmts?layer=cva&style=default&tilematrixset=c&Service=WMTS&Request=GetTile&Version=1.0.0&Format=tiles&TileMatrix={z}&TileCol={x}&TileRow={y}&tk=b35347d66e670d6b67fec5151799af77', {
+               maxZoom: 20,
+               tileSize: 256,
+               zoomOffset: 1
+            }).addTo(map );
+            
+            //描边字市县路网图层
+            var city=L.tileLayer('http://t0.tianditu.gov.cn/cia_c/wmts?layer=cia&style=default&tilematrixset=c&Service=WMTS&Request=GetTile&Version=1.0.0&Format=tiles&TileMatrix={z}&TileCol={x}&TileRow={y}&tk=b35347d66e670d6b67fec5151799af77', {
+               maxZoom: 20,
+               tileSize: 256,
+               zoomOffset: 1
+            }).addTo(map );
+
+        //标记点
+        L.marker([24.5,109]).addTo(map)
+            .bindPopup("哈哈哈哈").openPopup();
+        //圆
+        L.circle([24, 109.1], 100000, {
+            color: 'red',
+            fillColor: '#f03',
+            fillOpacity: 0.2,
+            borderRadius: '50%',
+        }).addTo(map).bindPopup("圆");
+        //多边形
+        L.polygon([
+            [25, 110.2],
+            [25.4, 110.4],
+            [25.15,110.6]
+        ]).addTo(map).bindPopup("多边形");
+        //弹出面板
+        var popup = L.popup();
+
+        function onMapClick(e) {
+            popup
+                .setLatLng(e.latlng)
+                .setContent("经纬度：" + e.latlng.toString())
+                .openOn(map);
+        }
+        //添加click时间
+        map.on('click', onMapClick);
+
+        });
+    </script>
+  </body>
+</html>
