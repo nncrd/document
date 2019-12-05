@@ -1,0 +1,123 @@
+﻿<!DOCTYPE html> 
+<html> 
+<head> 
+<meta http-equiv="content-type" content="text/html; charset=utf-8"/> 
+<meta name="keywords" content="天地图"/> 
+<title>天地图－地图API－范例－行政区划</title>
+<style type="text/css">body,html{width:100%;height:100%;margin:0;font-family:"Microsoft YaHei"}#mapDiv{width:100%;height:800px}input,b,p{margin-left:5px;font-size:14px}</style>
+<script type="text/javascript" src="http://api.tianditu.gov.cn/api?v=4.0&tk=您的密钥"></script>
+<script> 
+	var map; 
+	var zoom = 12; 
+	var administrative;
+	var html = "<font style='font-weight:700'>详细信息如下：</font><br/>";
+	function onLoad() 
+	{ 
+		//初始化地图对象 
+	   	map=new T.Map("mapDiv"); 
+	   	//设置显示地图的中心点和级别 
+		map.centerAndZoom(new T.LngLat(116.40969,39.89945),zoom); 
+		 
+      var areaArr=["金城江区","宜州区","南丹县","天峨县","凤山县","东兰县","罗城仫佬族自治县","环江毛南族自治县","巴马瑶族自治县","都安瑶族自治县","大化瑶族自治县","兴宾区","忻城县","象州县","武宣县","金秀瑶族自治县","合山市","江城区","扶绥县","宁明县","龙州县","大新县","天等县","凭祥市","右江区","田阳县","田东县","平果县","德保县","那坡县","凌云县","乐业县","田林县","西林县","隆林各族自治县","靖西县","八步区","平桂区","昭平县","钟山县","富川瑶族自治县","海城区","银海区","铁山港区","合浦县","港口区","防城区","上思县","东兴市","钦南区","钦州市钦北区","灵山县","浦北县","港北区","港南区","覃塘区","平南县","桂平市","玉州区","福绵区","容县","陆川县","博白县","兴业县","北流市","秀峰区","叠彩区","象山区","七星区","雁山区","临桂区","阳朔县","灵川县","全州县","兴安县","永福县","灌阳县","龙胜县","资源县","平乐县","荔浦县","恭城瑶族自治县","万秀区","长洲区","龙圩区","梧州市苍梧县","藤县","蒙山县","岑溪市","兴宁区","青秀区","江南区","西乡塘区","良庆区","邕宁区","武鸣县","隆安县","马山县","上林县","宾阳县","横县","城中区","鱼峰区","柳南区","柳北区","柳江区","柳城县","鹿寨县","融安县","融水苗族自治县","三江县","江州县"]
+      for(var i in areaArr )
+      {
+		//创建对象
+		administrative = new T.AdministrativeDivision();
+		var config = {
+			needSubInfo: false,
+			needAll: false,
+			needPolygon: true,
+			needPre: true,
+			searchType: 1,
+			searchWord:areaArr[i]
+		};
+		administrative.search(config, searchResult);
+      }
+	}
+	
+	function searchResult(result)
+	{
+		if(result.getStatus() == 100) 
+		{
+			var data = result.getData();
+			showMsg(data);
+			document.getElementById("administrativeMsg").innerHTML = html; 
+		}
+		else 
+		{
+			result.getMsg();
+		}
+	}
+	
+	function showMsg(data){
+		for(var j= 0; j < data.length;j++){
+			html += '<br />"'+data[j].name+'":{';
+          for (var i = 0; i < data[j].points.length; i++) {
+            if(i!=0)
+              html +=',"'+ i +'":'
+            else
+         	 html +='"'+ i +'":'
+             for(var k in data[j].points[i])
+               html += '"'+data[j].points[i][k]+'"'
+          }
+          html += '},';
+          
+			
+			//解释上级行政区划
+			if(data[j].parents){
+				var upLevel = "";
+				if(data[j].parents.country){
+					upLevel += data[j].parents.country.name;
+				}
+				if(data[j].parents.province){
+					upLevel += data[j].parents.province.name;
+				}
+			}
+			
+			if(data[j].points){
+				//绘制行政区划
+
+				polygon(data[j].points);
+			}
+			
+			//解释下级行政区划
+			if(data[j].child){
+				html += "<font style='font-weight:700'>下级行政区划：</font><br/>";
+				showMsg(data[i].child);
+				console.log(data[i].child.points);
+				if(data[i].child.points){
+					//绘制行政区划
+                  html +="经纬度2："+data[i].child.points
+					polygon(data[i].child.points);
+				}
+			}
+		}
+	}
+	
+	function polygon(points){
+		var pointsArr = [];
+        for (var i = 0; i < points.length; i++) {
+            var regionLngLats = [];
+            var regionArr = points[i].region.split(",");
+            for (var m = 0; m < regionArr.length; m++) {
+                var lnglatArr = regionArr[m].split(" ");
+                var lnglat = new T.LngLat(lnglatArr[0], lnglatArr[1]);
+                regionLngLats.push(lnglat);
+                pointsArr.push(lnglat);
+            }
+          	//创建面对象
+	        var polygon = new T.Polygon(regionLngLats,{color: "blue", weight: 1, opacity: 1, fillColor: "blue", fillOpacity: 0.3});
+	      	//向地图上添加行政区划面
+	        map.addOverLay(polygon);
+        }
+        //显示最佳比例尺
+        //map.setViewport(pointsArr);
+	}
+</script> 
+</head> 
+<body onLoad="onLoad()"> 
+	<div id="mapDiv"></div> 
+	<p>本示例演示如何使用行政区划接口获得详细信息。</p>
+	<div id="administrativeMsg" style="font-size:14px"></div>
+</body>
+</html>
