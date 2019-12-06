@@ -1,0 +1,24 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>WebSocket Test</title>
+</head>
+<body>
+<script>
+    var wsObj = new WebSocket("ws://192.168.1.9:8080/flood/webSocket");   //建立连接
+    wsObj.onopen = function(){  //发送请求
+        console.log("open");
+        wsObj.send("XB");
+    };
+    wsObj.onmessage = function(ev){  //获取后端响应
+        console.log(ev.data);
+    };
+    wsObj.onclose = function(ev){
+        console.log("close");
+    };
+    wsObj.onerror = function(ev){
+        console.log("error");
+    };
+</script>
+</body>
+</html>
