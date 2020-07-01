@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8' />
+    <title>Add a raster tile source</title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
+    <script src="https://unpkg.com/leaflet@1.3.1/dist/leaflet-src.js"></script>
+    <!--<script src="./vue.js"></script>-->
+    <!--<script src="./leaflet.js"></script>-->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css"
+          integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ=="
+          crossorigin=""/>
+    <style>
+        * { margin:0; padding:0; }
+        html,body,#vue-wrap,#map { height: 100%; }
+    </style>
+</head>
+<body>
+    <div id="vue-wrap">
+        <div id="map">test</div>
+    </div>
+    <svg viewBox="-10 -10 320 120" xmlns="http://www.w3.org/2000/svg">
+      <polygon fill-rule="evenodd" stroke="red" points="50,0 21,90 98,35 2,35 79,90"/>
+    </svg>
+<script>
+    new Vue({
+        el: '#vue-wrap',
+        data: function () {
+            return {
+                map: '',
+                canvas: L.canvas()
+            };
+        },
+        mounted: function () {
+            this.init();
+        },
+        methods: {
+            init () {
+                this.map = new L.Map('map', {
+                    center: [39.928953, 116.389129],
+                    zoom: 11,
+                    maxZoom: 18,
+                    attributionControl: false,
+                    zoomControl: true
+                });
+
+                this.paintMarkers();
+            },
+            paintMarkers () {
+                console.log('start paint');
+                console.time('paint');
+                var mIcon = L.icon({
+                  iconUrl: "https://qiniu.jyblue.com/system/points/dangerSpot.png",
+                  iconSize: [20, 20]
+                });
+                for (let i = 0; i < 20000; i++) {
+                    let marker = L.circleMarker(this.generateLatlng(), {
+                        color: '#000',
+                        weight: 0.5,
+                        opacity: 1,
+                        fillOpacity: 1,
+                        radius: 7,
+                        fillColor: '#ffcc00',
+                        lineJoin: 'round',
+                        fillRule: 'evenodd',
+                        renderer: this.canvas
+                    });
+                    marker.bindTooltip(i + '');
+                    marker.bindPopup(`i: ${i}`);
+                    this.map.addLayer(marker);
+                }
+                console.timeEnd('paint');
+            },
+            generateLatlng () {
+                let lat_min = 39.70111,
+                    lat_max = 40.14660,
+                    lng_min = 116.05843,
+                    lng_max = 116.63521;
+
+                let lat = this.getRandomNum(lat_min, lat_max),
+                    lng = this.getRandomNum(lng_min, lng_max);
+
+                return [lat, lng];
+            },
+            getRandomNum (min, max) {
+                max = Math.max(min, max);
+                min = Math.min(min, max);
+                return Math.random() * (max - min) + min;
+            }
+        }
+    });
+</script>
+
+</body>
+</html>
