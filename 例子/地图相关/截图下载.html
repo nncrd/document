@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8' />
+    <title>Add a raster tile source</title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
+    <script src="./leaflet.js"></script>
+    <!--<script src="./vue.js"></script>-->
+    <!--<script src="./leaflet.js"></script>-->
+    <link rel="stylesheet" href="./leaflet.css"/>
+    <script src="./leaflet.canvas-markers.js"></script>
+    <script src="./html2canvas.js"></script>
+    <style>
+        * { margin:0; padding:0; }
+        html,body,#vue-wrap,#map { height: 100%; }
+        .download {position:absolute;top:10px;left:50px;z-index:1000;cursor:pointer}
+    </style>
+</head>
+<body>
+    <div id="vue-wrap" ref="imageTofile">
+        <div id="map">test</div>
+        <div class="download" @click="toImage" type="button">下载</div>
+    </div>
+<script>
+    new Vue({
+        el: '#vue-wrap',
+        data: function () {
+            return {
+                map: '',
+                ciLayer: null
+            };
+        },
+        mounted: function () {
+            this.init();
+        },
+        methods: {
+            init () {
+                this.map = new L.Map('map', {
+                    center: [39.928953, 116.389129],
+                    zoom: 11,
+                    maxZoom: 18,
+                    attributionControl: false,
+                    zoomControl: true
+                });
+                L.tileLayer("http://webrd01.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=7&x={x}&y={y}&z={z}").addTo(this.map);
+                this.ciLayer = L.canvasIconLayer({}).addTo(this.map);
+                this.ciLayer.addOnClickListener(function (e,data) {
+                  console.log(data[0].data._latlng.lng, data[0].data._latlng.lat)
+                });
+                this.paintMarkers();
+            },
+            paintMarkers () {
+                var mIcon = L.icon({
+                  iconUrl: "https://qiniu.jyblue.com/system/points/dangerSpot.png",
+                  iconSize: [20, 20],
+                  iconAnchor: [8, 8]
+                });
+                var markerArr = []
+                for (let i = 0; i < 20000; i++) {
+                    let marker = L.marker(this.generateLatlng(), {icon: mIcon});
+                  // marker.bindTooltip(i + '');
+                    marker.bindPopup(`i: ${i}`);
+                    markerArr.push(marker)
+                }
+                console.log(markerArr)
+                this.ciLayer.addLayers(markerArr);
+            },
+            generateLatlng () {
+                let lat_min = 39.70111,
+                    lat_max = 40.14660,
+                    lng_min = 116.05843,
+                    lng_max = 116.63521;
+
+                let lat = this.getRandomNum(lat_min, lat_max),
+                    lng = this.getRandomNum(lng_min, lng_max);
+
+                return [lat, lng];
+            },
+            getRandomNum (min, max) {
+                max = Math.max(min, max);
+                min = Math.min(min, max);
+                return Math.random() * (max - min) + min;
+            },
+            // 只能截非canvas元素
+            toImage() {
+              // 第一个参数是需要生成截图的元素,第二个是自己需要配置的参数,宽高等
+              html2canvas(this.$refs.imageTofile, {
+                backgroundColor: null,
+                allowTaint: false,
+                useCORS: true
+              }).then(canvas => {
+                let url = canvas.toDataURL("image/png");
+                this.downloadFile('map.jpg', url);
+              });
+            },
+            // 下载
+            downloadFile(fileName, content) {
+              let aLink = document.createElement('a');
+              let blob = this.base64ToBlob(content); // new Blob([content]);
+              let evt = document.createEvent('HTMLEvents');
+              evt.initEvent('click', true, true);// initEvent 不加后两个参数在FF下会报错  事件类型，是否冒泡，是否阻止浏览器的默认行为
+              aLink.download = fileName;
+              aLink.href = URL.createObjectURL(blob);
+              aLink.dispatchEvent(new MouseEvent('click', {bubbles: true, cancelable: true, view: window}));// 兼容火狐
+            },
+            // base64转blob
+            base64ToBlob(code) {
+              let parts = code.split(';base64,');
+              let contentType = parts[0].split(':')[1];
+              let raw = window.atob(parts[1]);
+              let rawLength = raw.length;
+              let uInt8Array = new Uint8Array(rawLength);
+              for(let i = 0; i < rawLength; ++i) {
+                uInt8Array[i] = raw.charCodeAt(i);
+              }
+              return new Blob([uInt8Array], {type: contentType});
+            }
+        }
+        
+    });
+</script>
+
+</body>
+</html>
