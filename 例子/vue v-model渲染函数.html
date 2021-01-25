@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>v-model</title>
+<script src="vue.min.js"></script>
+</head>
+<body>
+<div id="app">
+  <mycom :value="x" @input="updateValue"></mycom>
+  <div>{{x}}</div>
+</div>
+
+<script>
+Vue.component('mycom',{
+  render: function(createElement){
+    var self = this;
+    return createElement('input',
+    {
+      domProps: {
+        value: self.value
+      },
+      on: {
+        input: function(event){
+          self.$emit('input',event.target.value)
+        }
+      }
+    });
+  },
+  props: {
+    value: '0'
+  }
+});
+var app = new Vue({
+  el: '#app',
+  data: {
+    x: '100'
+  },
+  methods: {
+    updateValue: function(value){
+      this.x = value;
+    }
+  }
+})
+
+</script>
+</body>
+</html>
